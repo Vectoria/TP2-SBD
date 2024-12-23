@@ -75,6 +75,6 @@ public class SaveServlet extends HttpServlet {
             e.printStackTrace();
         }
         
-        request.getRequestDispatcher("form.jsp").include(request, response);
+        request.getRequestDispatcher("Condutor_form.jsp").include(request, response);
     }
 }
