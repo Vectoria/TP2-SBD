@@ -8,7 +8,7 @@ public class Cliente {
 	private String email;
 	private String nome;
 	private int condutorNIF;
-	private Integer codigo; // Nullable
+	private Integer codigo;
 	private String rua;
 	private int codigoPostalP1;
 	private int codigoPostalP2;
@@ -16,6 +16,7 @@ public class Cliente {
 	private String nomeFreguesia;
 	private String nomeConcelho;
 	private String nomeDistrito;
+	private double avaliacaoCliente;
 
 	// Getters e Setters
 	public int getClienteNIF() {
@@ -136,5 +137,13 @@ public class Cliente {
 
 	public void setNomeDistrito(String nomeDistrito) {
 		this.nomeDistrito = nomeDistrito;
+	}
+
+	public double getAvaliacaoCliente() {
+		return avaliacaoCliente;
+	}
+
+	public void setAvaliacaoCliente(double avaliacaoCliente) {
+		this.avaliacaoCliente = avaliacaoCliente;
 	}
 }

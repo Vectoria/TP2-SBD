@@ -7,8 +7,8 @@ import java.util.List;
 
 public class ClienteDao {
 
-	private static final String INSERT_SQL = "INSERT INTO Cliente (clienteNIF, moedaPref, prefLingCult, contactoTel, email, nome, condutorNIF, codigo, rua, codigoPostalP1, codigoPostalP2, numeroPorta, nomeFreguesia, nomeConcelho, nomeDistrito) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String UPDATE_SQL = "UPDATE Cliente SET moedaPref = ?, prefLingCult = ?, contactoTel = ?, email = ?, nome = ?, condutorNIF = ?, codigo = ?, rua = ?, codigoPostalP1 = ?, codigoPostalP2 = ?, numeroPorta = ?, nomeFreguesia = ?, nomeConcelho = ?, nomeDistrito = ? WHERE clienteNIF = ?";
+	private static final String INSERT_SQL = "INSERT INTO Cliente (clienteNIF, moedaPref, prefLingCult, contactoTel, email, nome, condutorNIF, codigo, rua, codigoPostalP1, codigoPostalP2, numeroPorta, nomeFreguesia, nomeConcelho, nomeDistrito, avaliacaoCliente) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String UPDATE_SQL = "UPDATE Cliente SET moedaPref = ?, prefLingCult = ?, contactoTel = ?, email = ?, nome = ?, condutorNIF = ?, codigo = ?, rua = ?, codigoPostalP1 = ?, codigoPostalP2 = ?, numeroPorta = ?, nomeFreguesia = ?, nomeConcelho = ?, nomeDistrito = ?, avaliacaoCliente = ? WHERE clienteNIF = ?";
 	private static final String DELETE_SQL = "DELETE FROM Cliente WHERE clienteNIF = ?";
 	private static final String SELECT_ALL_SQL = "SELECT * FROM Cliente";
 	private static final String SELECT_BY_ID_SQL = "SELECT * FROM Cliente WHERE clienteNIF = ?";
@@ -30,6 +30,7 @@ public class ClienteDao {
 			ps.setString(13, cliente.getNomeFreguesia());
 			ps.setString(14, cliente.getNomeConcelho());
 			ps.setString(15, cliente.getNomeDistrito());
+			ps.setDouble(16, cliente.getAvaliacaoCliente());
 			return ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -53,7 +54,8 @@ public class ClienteDao {
 			ps.setString(12, cliente.getNomeFreguesia());
 			ps.setString(13, cliente.getNomeConcelho());
 			ps.setString(14, cliente.getNomeDistrito());
-			ps.setInt(15, cliente.getClienteNIF());
+			ps.setDouble(15, cliente.getAvaliacaoCliente());
+			ps.setInt(16, cliente.getClienteNIF());
 			return ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -93,6 +95,7 @@ public class ClienteDao {
 				cliente.setNomeFreguesia(rs.getString("nomeFreguesia"));
 				cliente.setNomeConcelho(rs.getString("nomeConcelho"));
 				cliente.setNomeDistrito(rs.getString("nomeDistrito"));
+				cliente.setAvaliacaoCliente(rs.getDouble("avaliacaoCliente"));
 				list.add(cliente);
 			}
 		} catch (SQLException e) {
@@ -122,6 +125,7 @@ public class ClienteDao {
 					cliente.setNomeFreguesia(rs.getString("nomeFreguesia"));
 					cliente.setNomeConcelho(rs.getString("nomeConcelho"));
 					cliente.setNomeDistrito(rs.getString("nomeDistrito"));
+					cliente.setAvaliacaoCliente(rs.getDouble("avaliacaoCliente"));
 					return cliente;
 				}
 			}
