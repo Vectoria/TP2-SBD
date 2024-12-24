@@ -43,6 +43,8 @@ public class SaveServletCliente extends HttpServlet {
 			// Preencher o cliente
 			Cliente cliente = new Cliente();
 			cliente.setClienteNIF(Integer.parseInt(request.getParameter("clienteNIF")));
+			cliente.setMoedaPref(request.getParameter("moedaPref")); // Captura moeda preferida
+			cliente.setPrefLingCult(request.getParameter("prefLingCult")); // Captura língua preferida
 			cliente.setContactoTel(Integer.parseInt(request.getParameter("contactoTel")));
 			cliente.setEmail(request.getParameter("email"));
 			cliente.setNome(request.getParameter("nome"));
