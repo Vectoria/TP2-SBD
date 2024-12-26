@@ -134,4 +134,17 @@ public class ClienteDao {
 		}
 		return null;
 	}
+
+	public int updateAvaliacao(int clienteNIF, double avaliacaoCliente) {
+		String UPDATE_AVALIACAO_SQL = "UPDATE Cliente SET avaliacaoCliente = ? WHERE clienteNIF = ?";
+		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(UPDATE_AVALIACAO_SQL)) {
+			ps.setDouble(1, avaliacaoCliente);
+			ps.setInt(2, clienteNIF);
+			return ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
 }

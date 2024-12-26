@@ -108,4 +108,17 @@ public class CondutorDao {
 		}
 		return null;
 	}
+	
+	public int updateAvaliacao(int condutorNIF, double avaliacaoCondutor) {
+	    String UPDATE_AVALIACAO_SQL = "UPDATE Condutor SET reputacao = ? WHERE condutorNIF = ?";
+	    try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(UPDATE_AVALIACAO_SQL)) {
+	        ps.setDouble(1, avaliacaoCondutor);
+	        ps.setInt(2, condutorNIF);
+	        return ps.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return 0;
+	}
+
 }
