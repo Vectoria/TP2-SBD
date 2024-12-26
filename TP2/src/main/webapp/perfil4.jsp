@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
-<%@page errorPage="error.jsp" %> 
-<%@page import="usr.*"%>
+<%@page errorPage="error.jsp"%>
+<%-- <%@page import="usr.*"%> --%>
+<%@ page import="db.Gerente" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
 <%@page language="java" contentType="text/html; charset=UTF-8"%>
-<%User x=Check.login(request, response, 4);%> 
+<%-- <%User x=Check.login(request, response, 4);%> --%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Language" content="pt-PT, en-US">
@@ -17,32 +20,130 @@
 <title>Example</title>
 <style>
 @font-face {
-    font-family: ChristmasFont;
-    src: url(fonts/MountainsofChristmas-Regular.ttf);
+	font-family: ChristmasFont;
+	src: url(fonts/MountainsofChristmas-Regular.ttf);
 }
-p{
+
+p {
 	font-size: 2em;
 	font-family: 'ChristmasFont', serif;
 	margin: 5px;
 }
+
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+}
+
+.table th, .table td {
+	border: 1px solid #ccc;
+	padding: 10px;
+	text-align: left;
+}
+
+.table th {
+	background-color: #f2f2f2;
+}
+
+input[type="text"], button {
+	padding: 8px;
+	margin: 10px 0;
+}
+
+button {
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+button:hover {
+	background-color: #45a049;
+}
 </style>
 </head>
 <body>
-<h2>(<%=x.getProfile()%>) <%=x.welcome()%></h2>
-<br/>
-<p>
-Congratulations on taking the next big step in your career. Best wishes for your time at [new company] — they're lucky to have you.
-</p>
-<p style="font-family:verdana">
-Gerente<br/>
-1 – Apresentar histórico de um determinado veículo, avaliações e intervenções existentes no registo cronológico.<br/>
-2 – Exibir o ranking das 3 marcas de veículos que geraram menor lucro.<br/>
-3 – Exibir o ranking dos 5 modelos dos veículos com melhor avaliação na semana passada.<br/>
-4 – Exibir o ranking dos 10 veículos que percorreram menos quilómetros no último trimestre.<br/>
-5 – Exibir o ranking dos 100 clientes ordenados por reputação e filtrados por freguesia de morada.<br/>
+	<%-- <h2>(<%=x.getProfile()%>) <%=x.welcome()%></h2> --%>
+	<br />
+	<p>Congratulations on taking the next big step in your career. Best
+		wishes for your time at [new company] — they're lucky to have you.</p>
+	<p style="font-family: verdana">
+		Gerente<br /> 1 – Apresentar histórico de um determinado veículo,
+		avaliações e intervenções existentes no registo cronológico.<br /> 2
+		– Exibir o ranking das 3 marcas de veículos que geraram menor lucro.<br />
+		3 – Exibir o ranking dos 5 modelos dos veículos com melhor avaliação
+		na semana passada.<br /> 4 – Exibir o ranking dos 10 veículos que
+		percorreram menos quilómetros no último trimestre.<br /> 5 – Exibir o
+		ranking dos 100 clientes ordenados por reputação e filtrados por
+		freguesia de morada.<br />
+	</p>
+	<br />
 
-</p>
-<br/>
-<input title="Go back" type="button" value="Back" onClick="javascript:window.history.back()"/>
+	<%-- Filtro por Freguesia --%>
+	<h2>Filtro por Freguesia</h2>
+	<form method="post">
+		<label for="freguesia">Digite o nome da freguesia:</label> <input
+			type="text" id="freguesia" name="freguesia" required>
+		<button type="submit">Pesquisar</button>
+	</form>
+
+	<%
+	// Captura o nome da freguesia inserido pelo usuário
+	String freguesia = request.getParameter("freguesia");
+	if (freguesia != null && !freguesia.isEmpty()) {
+		try {
+			// Instancia a classe Gerente e obtém os clientes filtrados pela freguesia
+			Gerente gerente = new Gerente();
+			List<Map<String, Object>> clientes = gerente.getClientesPorFreguesia(freguesia);
+
+			if (!clientes.isEmpty()) {
+	%>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>NIF</th>
+				<th>Nome</th>
+				<th>Avaliação</th>
+				<th>Freguesia</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%
+			// Itera sobre os resultados e exibe os clientes encontrados
+			for (Map<String, Object> cliente : clientes) {
+			%>
+			<tr>
+				<td><%=cliente.get("id_cliente")%></td>
+				<td><%=cliente.get("nome")%></td>
+				<td><%=cliente.get("avaliacaoCliente")%></td>
+				<td><%=cliente.get("nomefreguesia")%></td>
+			</tr>
+			<%
+			}
+			%>
+		</tbody>
+	</table>
+	<%
+	} else {
+	%>
+	<p>
+		Nenhum cliente encontrado para a freguesia "<%=freguesia%>".
+	</p>
+	<%
+	}
+	} catch (Exception e) {
+	// Trata possíveis erros ao buscar os dados
+	e.printStackTrace();
+	%>
+	<p>Erro ao buscar dados. Por favor, tente novamente mais tarde.</p>
+	<%
+	}
+	}
+	%>
+	<br />
+	<input title="Go back" type="button" value="Back"
+		onClick="javascript:window.history.back()" />
 </body>
 </html>

@@ -1,14 +1,10 @@
 <!DOCTYPE html>
 <html>
 <%@page errorPage="error.jsp"%>
-<%-- <%@page import="usr.*"%> --%>
-<%@page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ page
-	import="pojo.Cliente, pojo.Condutor, db.ClienteDao, db.CondutorDao, java.util.List"%>
-
+<%@ page import="pojo.Cliente, pojo.Condutor, db.ClienteDao, db.CondutorDao, java.util.List"%>
 <%@ page import="java.util.List"%>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<%-- <%User x=Check.login(request, response, 3);%>  --%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Language" content="pt-PT, en-US">
@@ -79,7 +75,6 @@ function searchClient() {
 </script>
 </head>
 <body>
-	<%-- <h2>(<%=x.getProfile()%>) <%=x.welcome()%></h2> --%>
 	<br />
 	<p>Congratulations on taking the next big step in your career. Best
 		wishes for your time at [new company] — they're lucky to have you.</p>
@@ -110,7 +105,6 @@ function searchClient() {
 		</thead>
 		<tbody>
 			<%
-			// Example: Replace this with data fetching logic from ClienteDao
 			ClienteDao clienteDao = new ClienteDao();
 			List<Cliente> clientes = clienteDao.getAll();
 
@@ -148,9 +142,9 @@ function searchClient() {
 		</thead>
 		<tbody>
 			<%
-			CondutorDao condutorDao = new CondutorDao(); // Cria uma instância do DAO
-			List<Condutor> condutores = condutorDao.getAll(); // Obtém todos os condutores
-			for (Condutor condutor : condutores) { // Itera sobre a lista de condutores
+			CondutorDao condutorDao = new CondutorDao(); 
+			List<Condutor> condutores = condutorDao.getAll();
+			for (Condutor condutor : condutores) {
 			%>
 			<tr>
 				<td><%=condutor.getCondutorNIF()%></td>
@@ -169,6 +163,12 @@ function searchClient() {
 		</tbody>
 	</table>
 
+	<!-- Button to Intervencao Form -->
+	<div style="margin-top: 20px;">
+		<button onclick="location.href='Intervencao_form.jsp'">
+			Registrar Intervenção
+		</button>
+	</div>
 
 	<br />
 	<input title="Go back" type="button" value="Back"
