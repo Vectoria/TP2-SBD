@@ -2,9 +2,9 @@
 <html>
 <%@page errorPage="error.jsp"%>
 <%-- <%@page import="usr.*"%> --%>
-<%@ page import="db.Gerente" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.Map" %>
+<%@ page import="db.Gerente"%>
+<%@ page import="java.util.List"%>
+<%@ page import="java.util.Map"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"%>
 <%-- <%User x=Check.login(request, response, 4);%> --%>
 <head>
@@ -17,7 +17,7 @@
 <meta name="createdate" content="20nov2022">
 <meta name="lastupdate" content="11dec2023">
 <meta http-equiv="Pragma" content="no-cache">
-<title>Example</title>
+<title>Gerente - Relatórios</title>
 <style>
 @font-face {
 	font-family: ChristmasFont;
@@ -81,8 +81,86 @@ button:hover {
 	</p>
 	<br />
 
-	<%-- Filtro por Freguesia --%>
-	<h2>Filtro por Freguesia</h2>
+	<%
+	Gerente gerente = new Gerente();
+	%>
+
+	<!-- Ranking das 3 marcas de veículos menos lucrativas -->
+	<h2>2 - Marcas com Menor Lucro</h2>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Marca</th>
+				<th>Lucro Total (€)</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%
+			List<Map<String, Object>> menosLucrativas = gerente.getMenosLucrativas();
+			for (Map<String, Object> linha : menosLucrativas) {
+			%>
+			<tr>
+				<td><%=linha.get("nomeMarca")%></td>
+				<td><%=linha.get("lucro_total")%></td>
+			</tr>
+			<%
+			}
+			%>
+		</tbody>
+	</table>
+
+	<!-- Ranking dos 5 modelos mais bem avaliados na semana passada -->
+	<h2>3 - Modelos Mais Bem Avaliados na Semana Passada</h2>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Modelo</th>
+				<th>Marca</th>
+				<th>Avaliação Média</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%
+			List<Map<String, Object>> maisBemAvaliados = gerente.getModelosMaisBemAvaliadosSemanaPassada();
+			for (Map<String, Object> linha : maisBemAvaliados) {
+			%>
+			<tr>
+				<td><%=linha.get("nomeMod")%></td>
+				<td><%=linha.get("nomeMarca")%></td>
+				<td><%=linha.get("avaliacaoModelo")%></td>
+			</tr>
+			<%
+			}
+			%>
+		</tbody>
+	</table>
+
+	<!-- Ranking dos 10 veículos com menor quilometragem no último trimestre -->
+	<h2>4 - Veículos com Menor Quilometragem no Último Trimestre</h2>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Matrícula</th>
+				<th>Total Quilómetros</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%
+			List<Map<String, Object>> menorQuilometragem = gerente.getVeiculosMenorQuilometragemUltimoTrimestre();
+			for (Map<String, Object> linha : menorQuilometragem) {
+			%>
+			<tr>
+				<td><%=linha.get("matricula")%></td>
+				<td><%=linha.get("total_km")%></td>
+			</tr>
+			<%
+			}
+			%>
+		</tbody>
+	</table>
+
+	<!-- Filtro por Freguesia -->
+	<h2>5 - Filtro por Freguesia</h2>
 	<form method="post">
 		<label for="freguesia">Digite o nome da freguesia:</label> <input
 			type="text" id="freguesia" name="freguesia" required>
@@ -94,8 +172,7 @@ button:hover {
 	String freguesia = request.getParameter("freguesia");
 	if (freguesia != null && !freguesia.isEmpty()) {
 		try {
-			// Instancia a classe Gerente e obtém os clientes filtrados pela freguesia
-			Gerente gerente = new Gerente();
+			// Obtém os clientes filtrados pela freguesia
 			List<Map<String, Object>> clientes = gerente.getClientesPorFreguesia(freguesia);
 
 			if (!clientes.isEmpty()) {
@@ -111,14 +188,13 @@ button:hover {
 		</thead>
 		<tbody>
 			<%
-			// Itera sobre os resultados e exibe os clientes encontrados
 			for (Map<String, Object> cliente : clientes) {
 			%>
 			<tr>
 				<td><%=cliente.get("id_cliente")%></td>
 				<td><%=cliente.get("nome")%></td>
 				<td><%=cliente.get("avaliacaoCliente")%></td>
-				<td><%=cliente.get("nomefreguesia")%></td>
+				<td><%=cliente.get("nomeFreguesia")%></td>
 			</tr>
 			<%
 			}
@@ -134,7 +210,6 @@ button:hover {
 	<%
 	}
 	} catch (Exception e) {
-	// Trata possíveis erros ao buscar os dados
 	e.printStackTrace();
 	%>
 	<p>Erro ao buscar dados. Por favor, tente novamente mais tarde.</p>
@@ -142,6 +217,7 @@ button:hover {
 	}
 	}
 	%>
+
 	<br />
 	<input title="Go back" type="button" value="Back"
 		onClick="javascript:window.history.back()" />
