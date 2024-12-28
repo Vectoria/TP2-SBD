@@ -1,103 +1,133 @@
-<!DOCTYPE html>
-<html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ page
 	import="pojo.CartaConducao, pojo.Condutor, db.CartaConducaoDao, db.CondutorDao, java.time.LocalDate"%>
+<!DOCTYPE html>
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Gerenciar Carta de Condu��o e Condutor</title>
+<title>Gerenciar Carta de Condução e Condutor</title>
+<style>
+table {
+	margin: 20px;
+	border-spacing: 0 10px;
+}
+
+td {
+	padding: 5px;
+}
+
+input[type="text"], input[type="date"] {
+	padding: 5px;
+	width: 200px;
+}
+
+input[type="submit"] {
+	margin-top: 20px;
+	padding: 10px 20px;
+}
+
+h3 {
+	color: #333;
+	margin-top: 20px;
+}
+</style>
 </head>
 <body>
 	<%
-	String numID = request.getParameter("numID");
+	// Get parameters and initialize DAOs
+	String condutorNIF = request.getParameter("condutorNIF");
 	String titulo = "";
 	String accao = "";
 
 	CartaConducaoDao cartaDao = new CartaConducaoDao();
 	CondutorDao condutorDao = new CondutorDao();
-	CartaConducao carta = new CartaConducao();
-	Condutor condutor = new Condutor();
+	CartaConducao carta = null;
+	Condutor condutor = null;
 
-	if (numID != null && !numID.isBlank()) {
+	// Fetch existing data if editing
+	if (condutorNIF != null && !condutorNIF.isEmpty()) {
 		try {
-			int id = Integer.parseInt(numID);
-			carta = cartaDao.getById(id);
-			if (carta != null) {
-		// Get the corresponding condutor using the numID
-		for (Condutor c : condutorDao.getAll()) {
-			if (c.getNumID() == id) {
-				condutor = c;
-				break;
-			}
-		}
-		titulo = "Update Driver's License and Driver";
+			condutor = condutorDao.getById(Integer.parseInt(condutorNIF));
+			if (condutor != null) {
+		carta = cartaDao.getById(condutor.getNumID());
+		titulo = "Atualizar Condutor e Carta de Condução";
 		accao = "EditServletCondutor";
 			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
 	} else {
-		titulo = "Add New Driver's License and Driver";
+		titulo = "Adicionar Novo Condutor";
 		accao = "SaveServletCondutor";
+		carta = new CartaConducao();
+		condutor = new Condutor();
 	}
 	%>
 
-	<h1><%=titulo%>&nbsp; <input title="View records" type="button"
-			value="View" onClick="javascript:window.open('index.jsp')" /> &nbsp;<input
-			title="Go back" type="button" value="Back"
+	<h1>
+		<%=titulo%>&nbsp; <input title="Ver registros" type="button"
+			value="Ver" onClick="javascript:window.open('index.jsp')" />&nbsp; <input
+			title="Voltar" type="button" value="Voltar"
 			onclick="javascript:window.history.back()" />
 	</h1>
 
 	<form action="<%=accao%>" method="post">
 		<input type="hidden" name="from" value="form.jsp" />
 		<table>
-			<!-- Driver's License Section -->
+			<!-- Seção Carta de Condução -->
 			<tr>
-				<td colspan="2"><h3>Driver's License Information</h3></td>
+				<td colspan="2"><h3>Informações da Carta de Condução</h3></td>
 			</tr>
 			<tr>
-				<td><label for="numID">License Number:</label></td>
+				<td><label for="numID">Número da Carta:</label></td>
 				<td><input type="text" id="numID" name="numID"
-					value="<%=carta.getNumID()%>" required /></td>
+					value="<%=carta != null ? carta.getNumID() : ""%>"
+					<%=condutorNIF != null ? "readonly" : ""%> required /></td>
 			</tr>
 			<tr>
-				<td><label for="tipoHab">License Type:</label></td>
+				<td><label for="tipoHab">Tipo de Habilitação:</label></td>
 				<td><input type="text" id="tipoHab" name="tipoHab"
-					value="<%=carta.getTipoHab()%>" required maxlength="20" /></td>
+					value="<%=carta != null ? carta.getTipoHab() : ""%>" required
+					maxlength="20" /></td>
 			</tr>
 			<tr>
-				<td><label for="dataEmissao">Issue Date:</label></td>
+				<td><label for="dataEmissao">Data de Emissão:</label></td>
 				<td><input type="date" id="dataEmissao" name="dataEmissao"
-					value="<%=carta.getDataEmissao() != null ? carta.getDataEmissao().toString() : ""%>"
+					value="<%=carta != null && carta.getDataEmissao() != null ? carta.getDataEmissao().toString() : ""%>"
 					required /></td>
 			</tr>
 			<tr>
-				<td><label for="dataValidade">Expiry Date:</label></td>
+				<td><label for="dataValidade">Data de Validade:</label></td>
 				<td><input type="date" id="dataValidade" name="dataValidade"
-					value="<%=carta.getDataValidade() != null ? carta.getDataValidade().toString() : ""%>"
+					value="<%=carta != null && carta.getDataValidade() != null ? carta.getDataValidade().toString() : ""%>"
 					required /></td>
 			</tr>
 
-			<!-- Driver Section -->
+			<!-- Seção Condutor -->
 			<tr>
-				<td colspan="2"><h3>Driver Information</h3></td>
+				<td colspan="2"><h3>Informações do Condutor</h3></td>
 			</tr>
 			<tr>
-				<td><label for="condutorNIF">Driver NIF:</label></td>
+				<td><label for="condutorNIF">NIF do Condutor:</label></td>
 				<td><input type="text" id="condutorNIF" name="condutorNIF"
-					value="<%=condutor.getCondutorNIF()%>" required /></td>
+					value="<%=condutor != null ? condutor.getCondutorNIF() : ""%>"
+					required maxlength="9" pattern="\d{9}"
+					<%=condutorNIF != null ? "readonly" : ""%> /></td>
 			</tr>
 			<tr>
-				<td><label for="dataNascimento">Birth Date:</label></td>
+				<td><label for="dataNascimento">Data de Nascimento:</label></td>
 				<td><input type="date" id="dataNascimento"
 					name="dataNascimento"
-					value="<%=condutor.getDataNascimento() != null ? condutor.getDataNascimento().toString() : ""%>"
+					value="<%=condutor != null && condutor.getDataNascimento() != null ? condutor.getDataNascimento().toString() : ""%>"
 					required /></td>
 			</tr>
 			<tr>
-				<td colspan="2"><input type="submit" value="Save Records" /></td>
+				<td colspan="2"><input type="submit"
+					value="<%=condutorNIF != null ? "Atualizar Registros" : "Salvar Registros"%>" />
+				</td>
 			</tr>
 		</table>
 	</form>
-
 </body>
 </html>
