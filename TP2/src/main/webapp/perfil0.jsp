@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <%@page errorPage="error.jsp"%>
-<%-- <%@page import="usr.*"%> --%>
+ <%@page import="usr.*"%> 
 <%@page language="java" contentType="text/html; charset=UTF-8"%>
-<%-- <%User x=Check.login(request, response,0);%> --%>
+<%User x=Check.login(request, response,0);%> 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Language" content="pt-PT, en-US">

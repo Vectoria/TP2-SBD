@@ -13,7 +13,7 @@ public class User {
 	private String firstname = null;
 	private String lastname = null;
 	private String email = null;
-	private int NIF; // Novo campo
+	private int nif; // Ajustado para minúsculas
 
 	public BigDecimal getUserid() {
 		return userid;
@@ -81,12 +81,12 @@ public class User {
 		this.email = email;
 	}
 
-	public int getNIF() {
-		return NIF;
+	public int getNif() { // Ajustado para minúsculas
+		return nif;
 	}
 
-	public void setNIF(int NIF) {
-		this.NIF = NIF;
+	public void setNif(int nif) { // Ajustado para minúsculas
+		this.nif = nif;
 	}
 
 	public String welcome() {
@@ -109,7 +109,7 @@ public class User {
 			System.out.println("  firstname: " + firstname);
 			System.out.println("  lastname:  " + lastname);
 			System.out.println("  email:     " + email);
-			System.out.println("  NIF:       " + NIF);
+			System.out.println("  nif:       " + nif);
 		}
 	}
 }
