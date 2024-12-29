@@ -84,7 +84,7 @@ button:hover {
 	<%
 	Gerente gerente = new Gerente();
 	%>
-	
+
 	<!-- Histórico de Veículo -->
 	<h2>1 - Histórico de Veículo</h2>
 	<form method="post" action="">
@@ -102,11 +102,12 @@ button:hover {
 	<table class="table">
 		<thead>
 			<tr>
-				<th>Data</th>
-				<th>Tipo</th>
-				<th>Detalhes</th>
 				<th>Quilômetros</th>
-				<th>Custo/Avaliação</th>
+				<th>Tipo Intervenção</th>
+				<th>Custo Intervenção</th>
+				<th>Data Início</th>
+				<th>Data Fim</th>
+				<th>Avaliação</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -114,34 +115,12 @@ button:hover {
 			for (Map<String, Object> evento : historico) {
 			%>
 			<tr>
-				<%
-				String tipo;
-				String data;
-				String detalhes = "";
-				String km = "";
-				String custoAvaliacao = "";
-
-				if (evento.get("dhRegisto") != null) {
-					// É uma intervenção
-					tipo = "Intervenção";
-					data = evento.get("dhRegisto").toString();
-					detalhes = evento.get("tipoInt") != null ? evento.get("tipoInt").toString() : "";
-					km = evento.get("numKm") != null ? evento.get("numKm").toString() : "";
-					custoAvaliacao = evento.get("custoInt") != null ? "€" + evento.get("custoInt").toString() : "";
-				} else {
-					// É um aluguer
-					tipo = "Aluguer";
-					data = evento.get("dhInicio").toString();
-					detalhes = "Até " + evento.get("dhFim").toString();
-					custoAvaliacao = evento.get("qualidadeServicoAluguer") != null ? evento.get("qualidadeServicoAluguer").toString()
-					: "";
-				}
-				%>
-				<td><%=data%></td>
-				<td><%=tipo%></td>
-				<td><%=detalhes%></td>
-				<td><%=km%></td>
-				<td><%=custoAvaliacao%></td>
+				<td><%=evento.get("numKm") != null ? evento.get("numKm") : ""%></td>
+				<td><%=evento.get("tipoInt") != null ? evento.get("tipoInt") : ""%></td>
+				<td><%=evento.get("custoInt") != null ? evento.get("custoInt") : ""%></td>
+				<td><%=evento.get("dhInicio") != null ? evento.get("dhInicio") : ""%></td>
+				<td><%=evento.get("dhFim") != null ? evento.get("dhFim") : ""%></td>
+				<td><%=evento.get("qualidadeServicoAluguer") != null ? evento.get("qualidadeServicoAluguer") : ""%></td>
 			</tr>
 			<%
 			}
