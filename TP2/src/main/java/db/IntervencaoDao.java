@@ -7,23 +7,24 @@ import java.util.List;
 
 public class IntervencaoDao {
 
-	private static final String INSERT_SQL = "INSERT INTO Intervencao (matricula, dhRegisto, tipoInt, custoInt) VALUES (?, ?, ?, ?)";
+	private static final String INSERT_SQL = "INSERT INTO Intervencao (numKM, matricula, dhRegisto, tipoInt, custoInt) VALUES (?, ?, ?, ?, ?)";
 	private static final String UPDATE_SQL = "UPDATE Intervencao SET dhRegisto = ?, tipoInt = ?, custoInt = ? WHERE numKM = ? AND matricula = ?";
 	private static final String DELETE_SQL = "DELETE FROM Intervencao WHERE numKM = ? AND matricula = ?";
 	private static final String SELECT_ALL_SQL = "SELECT * FROM Intervencao";
 	private static final String SELECT_BY_PK_SQL = "SELECT * FROM Intervencao WHERE numKM = ? AND matricula = ?";
 
 	public int save(Intervencao intervencao) {
-		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(INSERT_SQL)) {
-			ps.setString(1, intervencao.getMatricula());
-			ps.setTimestamp(2, Timestamp.valueOf(intervencao.getDhRegisto()));
-			ps.setString(3, intervencao.getTipoInt());
-			ps.setDouble(4, intervencao.getCustoInt());
-			return ps.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return 0;
+	    try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(INSERT_SQL)) {
+	        ps.setInt(1, intervencao.getNumKM());
+	        ps.setString(2, intervencao.getMatricula());
+	        ps.setTimestamp(3, Timestamp.valueOf(intervencao.getDhRegisto()));
+	        ps.setString(4, intervencao.getTipoInt());
+	        ps.setDouble(5, intervencao.getCustoInt());
+	        return ps.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return 0;
 	}
 
 	public int update(Intervencao intervencao) {

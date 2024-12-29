@@ -1,4 +1,4 @@
-package svr;
+package srv;
 
 import java.io.IOException;
 import jakarta.servlet.ServletException;

@@ -30,12 +30,16 @@ public class Gerente {
 	}
 
 	public List<Map<String, Object>> getModelosMaisBemAvaliadosSemanaPassada() {
-		String query = "SELECT m.nomeMod, m.nomeMarca, m.avaliacaoModelo " + "FROM Aluguer a "
-				+ "JOIN Veiculo v ON a.matricula = v.matricula " + "JOIN Modelo m ON v.nomeMod = m.nomeMod "
-				+ "WHERE (a.dhInicio >= inicioSemanaPassada() AND a.dhInicio < fimSemanaPassada()) "
-				+ "   OR (a.dhFim >= inicioSemanaPassada() AND a.dhFim < fimSemanaPassada()) "
-				+ "   OR (a.dhInicio < inicioSemanaPassada() AND a.dhFim >= fimSemanaPassada()) "
-				+ "ORDER BY m.avaliacaoModelo DESC " + "LIMIT 5;";
+		String query = "SELECT " + "    m.nomeMod, " + "    m.nomeMarca, " + "    AVG( " + "        CASE "
+				+ "            WHEN a.qualidadeServicoAluguer = 'adorei' THEN 10 "
+				+ "            WHEN a.qualidadeServicoAluguer = 'gostei' THEN 5 "
+				+ "            WHEN a.qualidadeServicoAluguer = 'não vou voltar' THEN 0 " + "            ELSE NULL "
+				+ "        END " + "    ) AS avaliacaoSemanaPassada " + "FROM " + "    Aluguer a " + "JOIN "
+				+ "    Veiculo v ON a.matricula = v.matricula " + "JOIN " + "    Modelo m ON v.nomeMod = m.nomeMod "
+				+ "WHERE " + "    (a.dhInicio >= inicioSemanaPassada() AND a.dhInicio < fimSemanaPassada()) "
+				+ "    OR (a.dhFim >= inicioSemanaPassada() AND a.dhFim < fimSemanaPassada()) "
+				+ "    OR (a.dhInicio < inicioSemanaPassada() AND a.dhFim >= fimSemanaPassada()) " + "GROUP BY "
+				+ "    m.nomeMod, m.nomeMarca " + "ORDER BY " + "    avaliacaoSemanaPassada DESC " + "LIMIT 5;";
 		return executeQuery(query);
 	}
 

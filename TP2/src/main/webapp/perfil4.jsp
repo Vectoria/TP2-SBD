@@ -127,7 +127,7 @@ button:hover {
 			<tr>
 				<td><%=linha.get("nomeMod")%></td>
 				<td><%=linha.get("nomeMarca")%></td>
-				<td><%=linha.get("avaliacaoModelo")%></td>
+				<td><%=linha.get("avaliacaoSemanaPassada")%></td>
 			</tr>
 			<%
 			}

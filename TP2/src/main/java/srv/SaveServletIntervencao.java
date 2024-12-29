@@ -25,6 +25,7 @@ public class SaveServletIntervencao extends HttpServlet {
 			String dhRegistoStr = request.getParameter("dhRegisto");
 			String tipoInt = request.getParameter("tipoInt");
 			double custoInt = Double.parseDouble(request.getParameter("custoInt"));
+			int numKM = Integer.parseInt(request.getParameter("numKM"));
 
 			// Convert data and time
 			LocalDateTime dhRegisto = LocalDateTime.parse(dhRegistoStr,
@@ -32,6 +33,7 @@ public class SaveServletIntervencao extends HttpServlet {
 
 			// Create and populate Intervencao object
 			Intervencao intervencao = new Intervencao();
+			intervencao.setNumKM(numKM);
 			intervencao.setMatricula(matricula);
 			intervencao.setDhRegisto(dhRegisto);
 			intervencao.setTipoInt(tipoInt);

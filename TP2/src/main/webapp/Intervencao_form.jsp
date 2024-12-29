@@ -45,15 +45,16 @@ button:hover {
 <body>
 	<h1>Registar Intervenção</h1>
 	<form action="SaveServletIntervencao" method="post">
-		<label for="matricula">Matrícula do Veículo:</label> <input
-			type="text" id="matricula" name="matricula" required maxlength="6"
-			pattern="[A-Za-z0-9]{1,6}" /> <label for="dhRegisto">Data e
-			Hora do Registo:</label> <input type="datetime-local" id="dhRegisto"
-			name="dhRegisto" required /> <label for="tipoInt">Tipo de
-			Intervenção:</label> <input type="text" id="tipoInt" name="tipoInt" required
-			maxlength="50" /> <label for="custoInt">Custo da
-			Intervenção:</label> <input type="number" id="custoInt" name="custoInt"
-			required step="0.01" min="0" />
+		<label for="numKM">Número de Quilômetros:</label> <input type="number"
+			id="numKM" name="numKM" required min="1" /> <label for="matricula">Matrícula
+			do Veículo:</label> <input type="text" id="matricula" name="matricula"
+			required maxlength="6" pattern="[A-Za-z0-9]{1,6}" /> <label
+			for="dhRegisto">Data e Hora do Registo:</label> <input
+			type="datetime-local" id="dhRegisto" name="dhRegisto" required /> <label
+			for="tipoInt">Tipo de Intervenção:</label> <input type="text"
+			id="tipoInt" name="tipoInt" required maxlength="50" /> <label
+			for="custoInt">Custo da Intervenção:</label> <input type="number"
+			id="custoInt" name="custoInt" required step="0.01" min="0" />
 
 		<button type="submit">Salvar</button>
 	</form>
