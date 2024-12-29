@@ -212,6 +212,7 @@ public class Db {
 	public static void main(String[] args) throws SQLException {
 		Db.init(true, false); // força a criação da BD com senha em claro
 		// Db.init(true, true); // força a criação da BD com senha cifrada
+		
 	}
 
 }
