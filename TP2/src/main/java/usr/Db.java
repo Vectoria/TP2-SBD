@@ -89,31 +89,26 @@ public class Db {
 	}
 
 	private static boolean createTB() {
-	    try (Connection conn = getConn(); Statement stmt = conn.createStatement();) {
-	        String sql = "DROP TABLE IF EXISTS user; " +
-	                "CREATE TABLE user (" +
-	                "userid BIGINT NOT NULL AUTO_INCREMENT," +
-	                "updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP," +
-	                "blocked BOOLEAN DEFAULT true," + // inicialmente bloqueado
-	                "profile SMALLINT DEFAULT 0 CHECK(profile<10)," + // sem perfil atribuido
-	                "username CHAR(15) NOT NULL CHECK (username REGEXP '[a-zA-Z1-9]')," + // Alterado para 15 caracteres
-	                "password VARCHAR(" + (encript ? "64" : "20") + ") NOT NULL," +
-	                "firstname VARCHAR(60) NOT NULL CHECK (firstname REGEXP '[a-zA-Z ''-]')," +
-	                "lastname VARCHAR(60) NOT NULL CHECK(lastname REGEXP '[a-zA-Z ''-]')," +
-	                "email VARCHAR(45) NULL CHECK(email REGEXP '^[a-zA-Z0-9][+a-zA-Z0-9._-]*@[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]*\\.[a-zA-Z]{2,4}$')," +
-	                "nif INT CHECK (nif BETWEEN 100000000 AND 999999999)," +
-	                "PRIMARY KEY (userid)," +
-	                "UNIQUE (username)," +
-	                "UNIQUE (email)," +
-	                "UNIQUE (nif)" +
-	                ")";
-	        stmt.executeUpdate(sql);
-	        System.out.println("Table 'user' created in the database...");
-	        return true;
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	    return false;
+		try (Connection conn = getConn(); Statement stmt = conn.createStatement();) {
+			String sql = "DROP TABLE IF EXISTS user; " + "CREATE TABLE user ("
+					+ "userid BIGINT NOT NULL AUTO_INCREMENT,"
+					+ "updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
+					+ "blocked BOOLEAN DEFAULT true," + // inicialmente bloqueado
+					"profile SMALLINT DEFAULT 0 CHECK(profile<10)," + // sem perfil atribuido
+					"username CHAR(15) NOT NULL CHECK (username REGEXP '[a-zA-Z1-9]')," + // Alterado para 15 caracteres
+					"password VARCHAR(" + (encript ? "64" : "20") + ") NOT NULL,"
+					+ "firstname VARCHAR(60) NOT NULL CHECK (firstname REGEXP '[a-zA-Z ''-]'),"
+					+ "lastname VARCHAR(60) NOT NULL CHECK(lastname REGEXP '[a-zA-Z ''-]'),"
+					+ "email VARCHAR(45) NULL CHECK(email REGEXP '^[a-zA-Z0-9][+a-zA-Z0-9._-]*@[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]*\\.[a-zA-Z]{2,4}$'),"
+					+ "nif INT CHECK (nif BETWEEN 100000000 AND 999999999)," + "PRIMARY KEY (userid),"
+					+ "UNIQUE (username)," + "UNIQUE (email)," + "UNIQUE (nif)" + ")";
+			stmt.executeUpdate(sql);
+			System.out.println("Table 'user' created in the database...");
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	private static boolean createTG() {
@@ -174,11 +169,6 @@ public class Db {
 			stmt.executeUpdate("UPDATE user SET profile=3, blocked=false WHERE email like '%.us%'");
 			stmt.executeUpdate("UPDATE user SET profile=4, blocked=false WHERE username = 'pegasus'");
 
-//	        stmt.executeUpdate("INSERT INTO user (username, password, firstname, lastname, email, gender) VALUES " +
-//	                "('robotik','p13','Engracia','Gwyther Ximenez','egwyther0@redcross.org','F')," +
-//	                "('daybreak','p14','Marielle','Bonicelli MacNeachtain','mbonicelli2@sitemeter.com','F')," +
-//	                "('astroboy','p15','Blakelee','Wilcot Watkinson','bwilcot4@twitpic.com','M')");
-
 			// Perfis 1
 			stmt.executeUpdate("INSERT INTO user (username, password, firstname, lastname, email, nif, profile) VALUES "
 					+ "('joao123','p1','João','Silva','joao@example.com', 409376182, 1),"
@@ -190,7 +180,9 @@ public class Db {
 			// Perfis 2
 			stmt.executeUpdate("INSERT INTO user (username, password, firstname, lastname, email, nif, profile) VALUES "
 					+ "('cond1','p1','Carlos','Vieira','carlos.v@example.com', 209837123, 2),"
-					+ "('cond2','p2','António','Sousa','antonio.s@example.com', 304020030, 2)");
+					+ "('cond2','p2','António','Sousa','antonio.s@example.com', 304020030, 2),"
+					+ "('cond3','p3','Ana','Monteiro','ana.monteiro@example.com', 120398654, 2),"
+					+ "('cond4','p4','Paulo','Silva','paulo.silva@example.com', 120918267, 2)");
 
 			System.out.println("Users loaded into database...");
 

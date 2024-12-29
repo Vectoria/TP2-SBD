@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
 <%@page errorPage="error.jsp"%>
-<%@ page import="pojo.Cliente, pojo.Condutor, db.ClienteDao, db.CondutorDao, java.util.List"%>
+<%@ page
+	import="pojo.Cliente, pojo.Condutor, db.ClienteDao, db.CondutorDao, java.util.*"%>
+	<%@ page import="java.time.LocalDateTime" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="db.AluguerDao" %>
 <%@ page import="java.util.List"%>
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
@@ -142,7 +146,7 @@ function searchClient() {
 		</thead>
 		<tbody>
 			<%
-			CondutorDao condutorDao = new CondutorDao(); 
+			CondutorDao condutorDao = new CondutorDao();
 			List<Condutor> condutores = condutorDao.getAll();
 			for (Condutor condutor : condutores) {
 			%>
@@ -162,35 +166,77 @@ function searchClient() {
 			%>
 		</tbody>
 	</table>
-	
-	<h1>Gerar Desconto Aleatório</h1>
-    <form method="post" action="GerarDescontoServlet">
-        <button type="submit">Gerar Desconto</button>
-    </form>
 
-    <%-- Mensagem de sucesso ou erro --%>
-    <div class="message">
-        <%
-        String message = request.getParameter("message");
-        String error = request.getParameter("error");
-        if (message != null) {
-        %>
-            <p style="color: green;"><%= message %></p>
-        <%
-        } else if (error != null) {
-        %>
-            <p style="color: red;"><%= error %></p>
-        <%
-        }
-        %>
-    </div>
+	<h1>Gerar Desconto Aleatório</h1>
+	<form method="post" action="GerarDescontoServlet">
+		<button type="submit">Gerar Desconto</button>
+	</form>
+
+	<%-- Mensagem de sucesso ou erro --%>
+	<div class="message">
+		<%
+		String message = request.getParameter("message");
+		String error = request.getParameter("error");
+		if (message != null) {
+		%>
+		<p style="color: green;"><%=message%></p>
+		<%
+		} else if (error != null) {
+		%>
+		<p style="color: red;"><%=error%></p>
+		<%
+		}
+		%>
+	</div>
 
 	<!-- Button to Intervencao Form -->
 	<div style="margin-top: 20px;">
 		<button onclick="location.href='Intervencao_form.jsp'">
-			Registrar Intervenção
-		</button>
+			Registrar Intervenção</button>
 	</div>
+
+	<h1>Identificar Condutor de um Veículo</h1>
+	<form method="get">
+		<label for="matricula">Matrícula do Veículo:</label> <input
+			type="text" id="matricula" name="matricula" required maxlength="6"
+			pattern="[A-Za-z0-9]{1,6}" /> <label for="date">Data e Hora:</label>
+		<input type="datetime-local" id="date" name="date" required />
+
+		<button type="submit">Identificar Condutor</button>
+	</form>
+
+	<%-- Processamento da Lógica no JSP --%>
+	<%
+	String matricula = request.getParameter("matricula");
+	String dateStr = request.getParameter("date");
+	if (matricula != null && dateStr != null) {
+		try {
+			LocalDateTime date = LocalDateTime.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+			AluguerDao aluguerDao = new AluguerDao();
+			Integer condutorNIF = aluguerDao.findConductorByVehicleAndDate(matricula, date);
+
+			if (condutorNIF != null) {
+	%>
+	<div class="message success">
+		Condutor identificado:
+		<%=condutorNIF%>
+	</div>
+	<%
+	} else {
+	%>
+	<div class="message error">O veículo não esteve alugado na
+		data/hora especificada.</div>
+	<%
+	}
+	} catch (Exception e) {
+	%>
+	<div class="message error">Erro ao processar a solicitação.
+		Verifique os dados e tente novamente.</div>
+	<%
+	}
+	}
+	%>
+
 
 	<br />
 	<input title="Go back" type="button" value="Back"
