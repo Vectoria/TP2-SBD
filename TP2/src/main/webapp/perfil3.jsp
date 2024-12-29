@@ -162,6 +162,28 @@ function searchClient() {
 			%>
 		</tbody>
 	</table>
+	
+	<h1>Gerar Desconto Aleatório</h1>
+    <form method="post" action="GerarDescontoServlet">
+        <button type="submit">Gerar Desconto</button>
+    </form>
+
+    <%-- Mensagem de sucesso ou erro --%>
+    <div class="message">
+        <%
+        String message = request.getParameter("message");
+        String error = request.getParameter("error");
+        if (message != null) {
+        %>
+            <p style="color: green;"><%= message %></p>
+        <%
+        } else if (error != null) {
+        %>
+            <p style="color: red;"><%= error %></p>
+        <%
+        }
+        %>
+    </div>
 
 	<!-- Button to Intervencao Form -->
 	<div style="margin-top: 20px;">
