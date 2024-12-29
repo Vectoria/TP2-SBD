@@ -167,11 +167,11 @@ public class Db {
 
 			// Perfis 1
 			stmt.executeUpdate("INSERT INTO user (username, password, firstname, lastname, email, nif, profile) VALUES "
-					+ "('joao123','p1','João','Silva','joao@example.com', 409376182, 1),"
-					+ "('manel456','p2','Manel','Pereira','manel@gmail.com', 304020033, 1),"
-					+ "('ze789','p3','Ze','Ferreira','mano@gmail.com', 304020032, 1),"
-					+ "('gervasio001','p4','Gervasio','Antunes','maril82403@luxyss.com', 304020031, 1),"
-					+ "('roberto111','p5','Roberto','Lopes','roberto@gmail.com', 290123876, 1)");
+					+ "('joao123','p1','João','Silva','joao@example.com', 304020033, 1),"
+					+ "('manel456','p2','Manel','Pereira','manel@gmail.com', 304020032, 1),"
+					+ "('ze789','p3','Ze','Ferreira','mano@gmail.com', 409376182, 1),"
+					+ "('gervasio001','p4','Gervasio','Antunes','maril82403@luxyss.com', 290123876, 1),"
+					+ "('roberto111','p5','Roberto','Lopes','roberto@gmail.com', 304020031, 1)");
 
 			// Perfis 2
 			stmt.executeUpdate("INSERT INTO user (username, password, firstname, lastname, email, nif, profile) VALUES "
