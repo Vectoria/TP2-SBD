@@ -84,7 +84,80 @@ button:hover {
 	<%
 	Gerente gerente = new Gerente();
 	%>
+	
+	<!-- Histórico de Veículo -->
+	<h2>1 - Histórico de Veículo</h2>
+	<form method="post" action="">
+		<label for="matricula">Digite a matrícula do veículo:</label> <input
+			type="text" id="matricula" name="matricula" required>
+		<button type="submit">Buscar Histórico</button>
+	</form>
 
+	<%
+	String matricula = request.getParameter("matricula");
+	if (matricula != null && !matricula.isEmpty()) {
+		List<Map<String, Object>> historico = gerente.getHistoricoVeiculo(matricula);
+		if (!historico.isEmpty()) {
+	%>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Data</th>
+				<th>Tipo</th>
+				<th>Detalhes</th>
+				<th>Quilômetros</th>
+				<th>Custo/Avaliação</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%
+			for (Map<String, Object> evento : historico) {
+			%>
+			<tr>
+				<%
+				String tipo;
+				String data;
+				String detalhes = "";
+				String km = "";
+				String custoAvaliacao = "";
+
+				if (evento.get("dhRegisto") != null) {
+					// É uma intervenção
+					tipo = "Intervenção";
+					data = evento.get("dhRegisto").toString();
+					detalhes = evento.get("tipoInt") != null ? evento.get("tipoInt").toString() : "";
+					km = evento.get("numKm") != null ? evento.get("numKm").toString() : "";
+					custoAvaliacao = evento.get("custoInt") != null ? "€" + evento.get("custoInt").toString() : "";
+				} else {
+					// É um aluguer
+					tipo = "Aluguer";
+					data = evento.get("dhInicio").toString();
+					detalhes = "Até " + evento.get("dhFim").toString();
+					custoAvaliacao = evento.get("qualidadeServicoAluguer") != null ? evento.get("qualidadeServicoAluguer").toString()
+					: "";
+				}
+				%>
+				<td><%=data%></td>
+				<td><%=tipo%></td>
+				<td><%=detalhes%></td>
+				<td><%=km%></td>
+				<td><%=custoAvaliacao%></td>
+			</tr>
+			<%
+			}
+			%>
+		</tbody>
+	</table>
+	<%
+	} else {
+	%>
+	<p>
+		Nenhum histórico encontrado para o veículo com matrícula "<%=matricula%>".
+	</p>
+	<%
+	}
+	}
+	%>
 	<!-- Ranking das 3 marcas de veículos menos lucrativas -->
 	<h2>2 - Marcas com Menor Lucro</h2>
 	<table class="table">

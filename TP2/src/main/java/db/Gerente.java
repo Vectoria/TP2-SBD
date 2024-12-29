@@ -11,6 +11,37 @@ public class Gerente {
 		this.conn = Db.getConn();
 	}
 
+	public List<Map<String, Object>> getHistoricoVeiculo(String matricula) {
+		String query = "SELECT " + "    v.matricula, " + "    i.numKm AS numKm, " + "    i.dhRegisto AS dhRegisto, "
+				+ "    i.tipoInt AS tipoInt, " + "    i.custoInt AS custoInt, " + "    NULL AS dhInicio, "
+				+ "    NULL AS dhFim, " + "    NULL AS qualidadeServicoAluguer " + "FROM " + "    Veiculo v "
+				+ "LEFT JOIN " + "    Intervencao i ON v.matricula = i.matricula " + "WHERE " + "    v.matricula = ? "
+				+ "UNION ALL " + "SELECT " + "    v.matricula, " + "    NULL AS numKm, " + "    NULL AS dhRegisto, "
+				+ "    NULL AS tipoInt, " + "    NULL AS custoInt, " + "    a.dhInicio AS dhInicio, "
+				+ "    a.dhFim AS dhFim, " + "    a.qualidadeServicoAluguer AS qualidadeServicoAluguer " + "FROM "
+				+ "    Veiculo v " + "LEFT JOIN " + "    Aluguer a ON v.matricula = a.matricula " + "WHERE "
+				+ "    v.matricula = ? " + "ORDER BY " + "    COALESCE(dhRegisto, dhInicio)";
+
+		List<Map<String, Object>> result = new ArrayList<>();
+		try (PreparedStatement ps = conn.prepareStatement(query)) {
+			ps.setString(1, matricula);
+			ps.setString(2, matricula);
+			try (ResultSet rs = ps.executeQuery()) {
+				ResultSetMetaData metaData = rs.getMetaData();
+				while (rs.next()) {
+					Map<String, Object> row = new HashMap<>();
+					for (int i = 1; i <= metaData.getColumnCount(); i++) {
+						row.put(metaData.getColumnLabel(i), rs.getObject(i));
+					}
+					result.add(row);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	public List<Map<String, Object>> getMenosLucrativas() {
 		String query = "SELECT v.nomeMarca, SUM(a.custoFinal) AS lucro_total " + "FROM Veiculo v "
 				+ "JOIN Aluguer a ON v.matricula = a.matricula " + "GROUP BY v.nomeMarca " + "ORDER BY lucro_total ASC "
