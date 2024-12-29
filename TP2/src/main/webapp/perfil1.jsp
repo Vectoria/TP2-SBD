@@ -157,13 +157,13 @@ select {
 				<td><%=custoPrevisto%></td>
 				<td><%=aluguer.getCustoFinal() != null ? aluguer.getCustoFinal() : "N/A"%></td>
 				<td>
-					<form method="post">
+					<form method="post" action="perfil1.jsp">
 						<input type="hidden" name="dhInicio"
-							value="<%=aluguer.getDhInicio()%>"> <input
-							type="hidden" name="dhFim" value="<%=aluguer.getDhFim()%>">
-						<input type="hidden" name="clienteNIF"
+							value="<%=aluguer.getDhInicio()%>"> <input type="hidden"
+							name="dhFim" value="<%=aluguer.getDhFim()%>"> <input
+							type="hidden" name="clienteNIF"
 							value="<%=aluguer.getClienteNIF()%>"> <select
-							name="qualidadeServicoAluguer" onchange="this.form.submit()">
+							name="qualidadeServicoAluguer">
 							<option value="não vou voltar"
 								<%="não vou voltar".equals(aluguer.getQualidadeServicoAluguer()) ? "selected" : ""%>>não
 								vou voltar</option>
@@ -172,7 +172,9 @@ select {
 							<option value="adorei"
 								<%="adorei".equals(aluguer.getQualidadeServicoAluguer()) ? "selected" : ""%>>adorei</option>
 						</select>
+						<button type="submit">Atualizar</button>
 					</form>
+
 				</td>
 			</tr>
 			<%
