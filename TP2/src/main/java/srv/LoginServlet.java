@@ -40,6 +40,7 @@ public class LoginServlet extends HttpServlet {
 		if(name!=null && password!=null && Check.isLogin(name, password)){
 			HttpSession session=request.getSession(true);
 			User x=UserDao.getByName(name);
+			System.out.print(x);
 			session.setAttribute("user", x);
 			// salta para a página ligada ao respetivo perfil
 			request.getRequestDispatcher(jumpTo(x)).forward(request, response);

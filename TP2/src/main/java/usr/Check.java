@@ -39,6 +39,7 @@ public class Check {
 			rs = stmt.executeQuery();
 			if (rs.next())
 				userID = rs.getBigDecimal("userid");
+			System.out.println(userID);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -48,6 +49,7 @@ public class Check {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		System.out.println(userID);
 		return userID;
 	}
 	

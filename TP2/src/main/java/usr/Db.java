@@ -163,11 +163,7 @@ public class Db {
 					+ "('rush','p11','Natacha','Caetano Prego','Nat.Prego@mail.es'),"
 					+ "('bird','p12','Isabela','Peres da Ponte','Isa.Ponte@mail.pt')";
 			stmt.executeUpdate(sql);
-			stmt.executeUpdate("UPDATE user SET profile=0, blocked=false WHERE username = 'opera'");
-			stmt.executeUpdate("UPDATE user SET profile=1, blocked=false WHERE email like '%.pt%'");
-			stmt.executeUpdate("UPDATE user SET profile=2, blocked=false WHERE email like '%.es%'");
-			stmt.executeUpdate("UPDATE user SET profile=3, blocked=false WHERE email like '%.us%'");
-			stmt.executeUpdate("UPDATE user SET profile=4, blocked=false WHERE username = 'pegasus'");
+			
 
 			// Perfis 1
 			stmt.executeUpdate("INSERT INTO user (username, password, firstname, lastname, email, nif, profile) VALUES "
@@ -184,6 +180,12 @@ public class Db {
 					+ "('cond3','p3','Ana','Monteiro','ana.monteiro@example.com', 120398654, 2),"
 					+ "('cond4','p4','Paulo','Silva','paulo.silva@example.com', 120918267, 2)");
 
+			stmt.executeUpdate("UPDATE user SET profile=0, blocked=false WHERE username = 'opera'");
+			stmt.executeUpdate("UPDATE user SET profile=1, blocked=false WHERE email like '%.pt%'");
+			stmt.executeUpdate("UPDATE user SET  blocked=false WHERE email like '%.com%'");
+			stmt.executeUpdate("UPDATE user SET profile=2, blocked=false WHERE email like '%.es%'");
+			stmt.executeUpdate("UPDATE user SET profile=3, blocked=false WHERE email like '%.us%'");
+			stmt.executeUpdate("UPDATE user SET profile=4, blocked=false WHERE username = 'pegasus'");
 			System.out.println("Users loaded into database...");
 
 			return true;
