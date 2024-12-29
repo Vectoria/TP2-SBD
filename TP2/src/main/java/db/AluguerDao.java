@@ -2,6 +2,7 @@ package db;
 
 import pojo.Aluguer;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -99,6 +100,41 @@ public class AluguerDao {
 		return null;
 	}
 
+	public List<Aluguer> getByClienteNIF(int clienteNIF) {
+		List<Aluguer> alugueres = new ArrayList<>();
+		String query = "SELECT * FROM Aluguer WHERE clienteNIF = ?";
+
+		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(query)) {
+			ps.setInt(1, clienteNIF);
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					Aluguer aluguer = new Aluguer();
+					aluguer.setDhInicio(rs.getTimestamp("dhInicio").toLocalDateTime());
+					aluguer.setDhFim(rs.getTimestamp("dhFim").toLocalDateTime());
+					aluguer.setClienteNIF(rs.getInt("clienteNIF"));
+					aluguer.setCondutorNIF(rs.getInt("condutorNIF"));
+					aluguer.setMatricula(rs.getString("matricula"));
+					aluguer.setLocalidade(rs.getString("localidade"));
+					aluguer.setDhEntrega(
+							rs.getTimestamp("dhEntrega") != null ? rs.getTimestamp("dhEntrega").toLocalDateTime()
+									: null);
+					aluguer.setCustoFinal(rs.getBigDecimal("custoFinal"));
+					aluguer.setMoedaPref(rs.getString("moedaPref"));
+					aluguer.setCodigo(rs.getInt("codigo"));
+					aluguer.setDataTarifa(
+							rs.getDate("dataTarifa") != null ? rs.getDate("dataTarifa").toLocalDate() : null);
+					aluguer.setValorDiaUtil(rs.getBigDecimal("valorDiaUtil"));
+					aluguer.setValorDiaNaoUtil(rs.getBigDecimal("valorDiaNaoUtil"));
+					aluguer.setQualidadeServicoAluguer(rs.getString("qualidadeServicoAluguer"));
+					alugueres.add(aluguer);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return alugueres;
+	}
+
 	private Aluguer mapResultSetToAluguer(ResultSet rs) throws SQLException {
 		Aluguer aluguer = new Aluguer();
 		aluguer.setDhInicio(rs.getTimestamp("dhInicio").toLocalDateTime());
@@ -136,4 +172,38 @@ public class AluguerDao {
 		}
 		return null; // No conductor found
 	}
+
+	public BigDecimal calcularCustoPrevisto(LocalDateTime dhInicio, LocalDateTime dhFim, BigDecimal valorDiaUtil,
+			BigDecimal valorDiaNaoUtil) {
+		String query = "SELECT custo(?, ?, ?, ?) AS custoPrevisto";
+		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(query)) {
+			ps.setTimestamp(1, Timestamp.valueOf(dhInicio));
+			ps.setTimestamp(2, Timestamp.valueOf(dhFim));
+			ps.setBigDecimal(3, valorDiaUtil);
+			ps.setBigDecimal(4, valorDiaNaoUtil);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return rs.getBigDecimal("custoPrevisto");
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return BigDecimal.ZERO;
+	}
+
+	public int updateQualidadeServico(Aluguer aluguer) {
+		String sql = "UPDATE Aluguer SET qualidadeServicoAluguer = ? WHERE dhInicio = ? AND dhFim = ? AND clienteNIF = ?";
+		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, aluguer.getQualidadeServicoAluguer());
+			ps.setTimestamp(2, Timestamp.valueOf(aluguer.getDhInicio()));
+			ps.setTimestamp(3, Timestamp.valueOf(aluguer.getDhFim()));
+			ps.setInt(4, aluguer.getClienteNIF());
+			return ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
 }
