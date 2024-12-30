@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
 <%@page errorPage="error.jsp"%>
- <%@page import="usr.*"%> 
+<%@page import="usr.*"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"%>
-<%User x=Check.login(request, response,0);%> 
+<%
+User x = Check.login(request, response, 0);
+%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Language" content="pt-PT, en-US">
@@ -92,6 +94,7 @@ th {
 	%>
 
 	<!-- Tabela de Clientes -->
+	<!-- Tabela de Clientes -->
 	<h2>Lista de Clientes</h2>
 	<table>
 		<tr>
@@ -131,6 +134,10 @@ th {
 		}
 		%>
 	</table>
+	<!-- Botão para criar novo cliente -->
+	<div style="margin: 20px 0;">
+		<a href="Cliente_form.jsp" class="but">Criar Cliente</a>
+	</div>
 
 	<!-- Tabela de Condutores -->
 	<h2>Lista de Condutores</h2>
@@ -164,62 +171,71 @@ th {
 		}
 		%>
 	</table>
-	
+	<!-- Botão para criar novo condutor -->
+	<div style="margin: 20px 0;">
+		<a href="Condutor_form.jsp" class="but">Criar Condutor</a>
+	</div>
+
 	<!-- Tabela de Veículos -->
-<h2>Lista de Veículos</h2>
-<table>
-	<tr>
-		<th>Matricula</th>
-		<th>Marca</th>
-		<th>Modelo</th>
-		<th>Cor</th>
-		<th>Potência</th>
-		<th>Capacidade de Carga</th>
-		<th>Num de Lugares</th>
-		<th>Num de Portas</th>
-		<th>Num de Eixos</th>
-		<th>Combustível</th>
-		<th>Valor por Dia (Útil)</th>
-		<th>Valor por Dia (Não Útil)</th>
-		<th>Data de Tarifa</th>
-		<th>Ação</th>
-	</tr>
-	<%@ page
-		import="java.util.List, pojo.Veiculo,db.VeiculoDao"%>
-	<%
-	// Código para obter os veículos do banco de dados
-	VeiculoDao veiculoDao = new VeiculoDao();
-	List<Veiculo> veiculos = veiculoDao.getAll();  // Obtém todos os veículos da base de dados
-	
-	// Loop para exibir cada veículo na tabela
-	for (Veiculo veiculo : veiculos) {
-	%>
-	<tr>
-		<td><%= veiculo.getMatricula() %></td>
-		<td><%= veiculo.getNomeMarca() %></td>
-		<td><%= veiculo.getNomeMod() %></td>
-		<td><%= veiculo.getCor() %></td>
-		<td><%= veiculo.getPotencia() %> CV</td>
-		<td><%= veiculo.getCapacidadeCarga() %> kg</td>
-		<td><%= veiculo.getNumLugares() %></td>
-		<td><%= veiculo.getNumPortas() %></td>
-		<td><%= veiculo.getNumEixos() %></td>
-		<td><%= veiculo.getCombustivel() %></td>
-		<td><%= veiculo.getValorDiaUtil() %> €</td>
-		<td><%= veiculo.getValorDiaNaoUtil() %> €</td>
-		<td><%= veiculo.getDataTarifa() != null ? veiculo.getDataTarifa() : "N/A" %></td>
-		<td>
-			<form method="post" action="Veiculo_form.jsp">
-				<input type="hidden" name="matricula" value="<%= veiculo.getMatricula() %>" />
-				<a class="but" onclick="this.parentNode.submit();">Editar</a>
-			</form>
-		</td>
-	</tr>
-	<%
-	}
-	%>
-</table>
-	
+	<h2>Lista de Veículos</h2>
+	<table>
+		<tr>
+			<th>Matricula</th>
+			<th>Marca</th>
+			<th>Modelo</th>
+			<th>Cor</th>
+			<th>Potência</th>
+			<th>Capacidade de Carga</th>
+			<th>Num de Lugares</th>
+			<th>Num de Portas</th>
+			<th>Num de Eixos</th>
+			<th>Combustível</th>
+			<th>Valor por Dia (Útil)</th>
+			<th>Valor por Dia (Não Útil)</th>
+			<th>Data de Tarifa</th>
+			<th>Ação</th>
+		</tr>
+		<%@ page import="java.util.List, pojo.Veiculo,db.VeiculoDao"%>
+		<%
+		// Código para obter os veículos do banco de dados
+		VeiculoDao veiculoDao = new VeiculoDao();
+		List<Veiculo> veiculos = veiculoDao.getAll(); // Obtém todos os veículos da base de dados
+
+		// Loop para exibir cada veículo na tabela
+		for (Veiculo veiculo : veiculos) {
+		%>
+		<tr>
+			<td><%=veiculo.getMatricula()%></td>
+			<td><%=veiculo.getNomeMarca()%></td>
+			<td><%=veiculo.getNomeMod()%></td>
+			<td><%=veiculo.getCor()%></td>
+			<td><%=veiculo.getPotencia()%> CV</td>
+			<td><%=veiculo.getCapacidadeCarga()%> kg</td>
+			<td><%=veiculo.getNumLugares()%></td>
+			<td><%=veiculo.getNumPortas()%></td>
+			<td><%=veiculo.getNumEixos()%></td>
+			<td><%=veiculo.getCombustivel()%></td>
+			<td><%=veiculo.getValorDiaUtil()%> €</td>
+			<td><%=veiculo.getValorDiaNaoUtil()%> €</td>
+			<td><%=veiculo.getDataTarifa() != null ? veiculo.getDataTarifa() : "N/A"%></td>
+			<td>
+				<form method="post" action="Veiculo_form.jsp">
+					<input type="hidden" name="matricula"
+						value="<%=veiculo.getMatricula()%>" /> <a class="but"
+						onclick="this.parentNode.submit();">Editar</a>
+				</form>
+			</td>
+		</tr>
+		<%
+		}
+		%>
+	</table>
+	<!-- Botão para criar novo veículo -->
+	<div style="margin: 20px 0;">
+		<a href="Veiculo_form.jsp" class="but">Criar Veículo</a>
+	</div>
+
+
 
 </body>
 </html>

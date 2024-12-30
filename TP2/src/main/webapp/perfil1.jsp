@@ -157,7 +157,7 @@ select {
 				<td><%=custoPrevisto%></td>
 				<td><%=aluguer.getCustoFinal() != null ? aluguer.getCustoFinal() : "N/A"%></td>
 				<td>
-					<form method="post" action="perfil1.jsp">
+					<form method="post" action="AtualizarQualidadeServicoServlet">
 						<input type="hidden" name="dhInicio"
 							value="<%=aluguer.getDhInicio()%>"> <input type="hidden"
 							name="dhFim" value="<%=aluguer.getDhFim()%>"> <input
@@ -174,8 +174,8 @@ select {
 						</select>
 						<button type="submit">Atualizar</button>
 					</form>
-
 				</td>
+
 			</tr>
 			<%
 			}
