@@ -1,19 +1,25 @@
 <%@page errorPage="error.jsp"%>
 <%@page import="usr.*"%>
 <%@page import="java.util.List"%>
-<%@page
-	import="java.util.List, pojo.Cliente, pojo.Condutor, db.ClienteDao, db.CondutorDao, pojo.Veiculo, db.VeiculoDao"%>
+<%@page import="pojo.Cliente, pojo.Condutor, pojo.Veiculo"%>
+<%@page import="db.ClienteDao, db.CondutorDao, db.VeiculoDao"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"%>
-<%
-User x = Check.login(request, response, 0);
-ClienteDao clienteDao = new ClienteDao();
-CondutorDao condutorDao = new CondutorDao();
-VeiculoDao veiculoDao = new VeiculoDao();
 
-List<Cliente> clientes = clienteDao.getAll();
-List<Condutor> condutores = condutorDao.getAll();
-List<Veiculo> veiculos = veiculoDao.getAll();
+<%
+// Lógica de Backend antes da saída HTML
+User x = Check.login(request, response, 0);
+try {
+	if (x != null) {
+
+		ClienteDao clienteDao = new ClienteDao();
+		CondutorDao condutorDao = new CondutorDao();
+		VeiculoDao veiculoDao = new VeiculoDao();
+
+		List<Cliente> clientes = clienteDao.getAll();
+		List<Condutor> condutores = condutorDao.getAll();
+		List<Veiculo> veiculos = veiculoDao.getAll();
 %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -197,3 +203,13 @@ input[type="button"]:hover, button:hover, a.button:hover {
 
 </body>
 </html>
+
+<%
+} else {
+out.println("<div style='color: red;'># NIF inválido ou não logado.</div>");
+}
+} catch (Exception e) {
+e.printStackTrace();
+out.println("<div style='color: red;'>Ocorreu um erro ao processar a solicitação.</div>");
+}
+%>
