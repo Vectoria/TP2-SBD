@@ -14,17 +14,17 @@ public class IntervencaoDao {
 	private static final String SELECT_BY_PK_SQL = "SELECT * FROM Intervencao WHERE numKM = ? AND matricula = ?";
 
 	public int save(Intervencao intervencao) {
-	    try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(INSERT_SQL)) {
-	        ps.setInt(1, intervencao.getNumKM());
-	        ps.setString(2, intervencao.getMatricula());
-	        ps.setTimestamp(3, Timestamp.valueOf(intervencao.getDhRegisto()));
-	        ps.setString(4, intervencao.getTipoInt());
-	        ps.setDouble(5, intervencao.getCustoInt());
-	        return ps.executeUpdate();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	    return 0;
+		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(INSERT_SQL)) {
+			ps.setInt(1, intervencao.getNumKM());
+			ps.setString(2, intervencao.getMatricula());
+			ps.setTimestamp(3, Timestamp.valueOf(intervencao.getDhRegisto()));
+			ps.setString(4, intervencao.getTipoInt());
+			ps.setDouble(5, intervencao.getCustoInt());
+			return ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 	public int update(Intervencao intervencao) {
@@ -92,4 +92,27 @@ public class IntervencaoDao {
 		}
 		return null;
 	}
+
+	public List<Intervencao> getByMatricula(String matricula) {
+		List<Intervencao> list = new ArrayList<>();
+		String query = "SELECT * FROM Intervencao WHERE matricula = ?";
+		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(query)) {
+			ps.setString(1, matricula);
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					Intervencao intervencao = new Intervencao();
+					intervencao.setNumKM(rs.getInt("numKM"));
+					intervencao.setMatricula(rs.getString("matricula"));
+					intervencao.setDhRegisto(rs.getTimestamp("dhRegisto").toLocalDateTime());
+					intervencao.setTipoInt(rs.getString("tipoInt"));
+					intervencao.setCustoInt(rs.getDouble("custoInt"));
+					list.add(intervencao);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 }

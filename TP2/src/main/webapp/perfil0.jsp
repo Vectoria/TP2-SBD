@@ -1,22 +1,24 @@
-<!DOCTYPE html>
-<html>
 <%@page errorPage="error.jsp"%>
 <%@page import="usr.*"%>
+<%@page import="java.util.List"%>
+<%@page
+	import="java.util.List, pojo.Cliente, pojo.Condutor, db.ClienteDao, db.CondutorDao, pojo.Veiculo, db.VeiculoDao"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"%>
 <%
 User x = Check.login(request, response, 0);
+ClienteDao clienteDao = new ClienteDao();
+CondutorDao condutorDao = new CondutorDao();
+VeiculoDao veiculoDao = new VeiculoDao();
+
+List<Cliente> clientes = clienteDao.getAll();
+List<Condutor> condutores = condutorDao.getAll();
+List<Veiculo> veiculos = veiculoDao.getAll();
 %>
+<!DOCTYPE html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Language" content="pt-PT, en-US">
-<meta name="keywords" content="ISEL, DEETC, JSP, Users">
-<meta name="description" content="Edição de Utilizadores">
-<meta name="owner" content="ISEL/DEETC - Doutor Porfírio Filipe">
-<meta name="copyright" content="ISEL/DEETC/2022">
-<meta name="createdate" content="20nov2022">
-<meta name="lastupdate" content="11dec2023">
-<meta http-equiv="Pragma" content="no-cache">
-<title>Example</title>
+<meta charset="UTF-8">
+<title>Perfil Administrativo</title>
 <style>
 @font-face {
 	font-family: ChristmasFont;
@@ -29,74 +31,54 @@ p {
 	margin: 5px;
 }
 
-table {
+.table {
 	width: 100%;
 	border-collapse: collapse;
-	margin: 20px 0;
-	font-size: 18px;
-	text-align: left;
+	margin-top: 20px;
 }
 
-table, th, td {
-	border: 1px solid #ddd;
-}
-
-th, td {
-	padding: 12px;
+.table th, .table td {
+	border: 1px solid #ccc;
+	padding: 10px;
 	text-align: center;
 }
 
-th {
+.table th {
 	background-color: #f2f2f2;
 }
 
-.but {
+input[type="button"], button, a.button {
+	padding: 8px 12px;
 	background-color: Khaki;
-	padding: 8px 20px;
+	color: black;
 	text-decoration: none;
-	font-weight: bold;
 	border-radius: 5px;
 	cursor: pointer;
+	border: none;
+	font-weight: bold;
+}
+
+input[type="button"]:hover, button:hover, a.button:hover {
+	background-color: #FFD700;
 }
 </style>
 </head>
 <body>
-	<%-- <h2>(<%=x.getProfile()%>) <%=x.welcome()%></h2> --%>
-	<br />
-	<p>Best wishes for this exciting new job! We'll always remember you
-		as a great boss.</p>
-	<br>
-	<p style="font-family: verdana">
-		Administrador<br /> 1 – Criar/Atualizar dados/fichas dos clientes e
-		dos respetivos condutores.<br /> 2 – Criar/Atualizar dados dos
-		veículos incluído conteúdos multimédia.<br /> 3 – Exportar para um
+	<h2>
+		(<%=x.getProfile()%>)
+		<%=x.welcome()%></h2>
+	<p>
+		Administrador<br> 1 – Criar/Atualizar dados/fichas dos clientes e
+		dos respetivos condutores.<br> 2 – Criar/Atualizar dados dos
+		veículos incluído conteúdos multimédia.<br> 3 – Exportar para um
 		documento XML/JSON dados de um veículo incluindo o registo
-		cronológico.<br /> 4 – Importar de um documento XML/JSON dados de um
-		veículo incluindo o registo cronológico.<br /> <a href="view.jsp">Gestão
-			de Perfis dos Utilizadores</a><br />
+		cronológico.<br> 4 – Importar de um documento XML/JSON dados de
+		um veículo incluindo o registo cronológico.<br>
 	</p>
-	<br />
-	<input title="Go back" type="button" value="Back"
-		onClick="javascript:window.history.back()" />
 
-	<%-- Adição das tabelas de Clientes e Condutores abaixo do parágrafo 1.1 --%>
-	<hr>
-
-	<%-- Código para carregar listas de Clientes e Condutores --%>
-	<%@ page
-		import="java.util.List, pojo.Cliente, pojo.Condutor, db.ClienteDao, db.CondutorDao"%>
-	<%
-	ClienteDao clienteDao = new ClienteDao();
-	CondutorDao condutorDao = new CondutorDao();
-
-	List<Cliente> clientes = clienteDao.getAll();
-	List<Condutor> condutores = condutorDao.getAll();
-	%>
-
-	<!-- Tabela de Clientes -->
 	<!-- Tabela de Clientes -->
 	<h2>Lista de Clientes</h2>
-	<table>
+	<table class="table">
 		<tr>
 			<th>NIF</th>
 			<th>Moeda Preferida</th>
@@ -125,8 +107,8 @@ th {
 			<td>
 				<form method="post" action="Cliente_form.jsp">
 					<input type="hidden" name="clienteNIF"
-						value="<%=cliente.getClienteNIF()%>" /> <a class="but"
-						onclick="this.parentNode.submit();">Editar</a>
+						value="<%=cliente.getClienteNIF()%>" />
+					<button type="submit">Editar</button>
 				</form>
 			</td>
 		</tr>
@@ -134,14 +116,11 @@ th {
 		}
 		%>
 	</table>
-	<!-- Botão para criar novo cliente -->
-	<div style="margin: 20px 0;">
-		<a href="Cliente_form.jsp" class="but">Criar Cliente</a>
-	</div>
+	<a href="Cliente_form.jsp" class="button">Criar Cliente</a>
 
 	<!-- Tabela de Condutores -->
 	<h2>Lista de Condutores</h2>
-	<table>
+	<table class="table">
 		<tr>
 			<th>NIF</th>
 			<th>Data de Nascimento</th>
@@ -162,8 +141,8 @@ th {
 			<td>
 				<form method="post" action="Condutor_form.jsp">
 					<input type="hidden" name="condutorNIF"
-						value="<%=condutor.getCondutorNIF()%>" /> <a class="but"
-						onclick="this.parentNode.submit();">Editar</a>
+						value="<%=condutor.getCondutorNIF()%>" />
+					<button type="submit">Editar</button>
 				</form>
 			</td>
 		</tr>
@@ -171,37 +150,20 @@ th {
 		}
 		%>
 	</table>
-	<!-- Botão para criar novo condutor -->
-	<div style="margin: 20px 0;">
-		<a href="Condutor_form.jsp" class="but">Criar Condutor</a>
-	</div>
+	<a href="Condutor_form.jsp" class="button">Criar Condutor</a>
 
 	<!-- Tabela de Veículos -->
-	<h2>Lista de Veículos</h2>
-	<table>
+	<h2>Veículos</h2>
+	<table class="table">
 		<tr>
-			<th>Matricula</th>
+			<th>Matrícula</th>
 			<th>Marca</th>
 			<th>Modelo</th>
 			<th>Cor</th>
-			<th>Potência</th>
-			<th>Capacidade de Carga</th>
-			<th>Num de Lugares</th>
-			<th>Num de Portas</th>
-			<th>Num de Eixos</th>
-			<th>Combustível</th>
-			<th>Valor por Dia (Útil)</th>
-			<th>Valor por Dia (Não Útil)</th>
-			<th>Data de Tarifa</th>
-			<th>Ação</th>
+			<th>Editar</th>
+			<th>Exportar</th>
 		</tr>
-		<%@ page import="java.util.List, pojo.Veiculo,db.VeiculoDao"%>
 		<%
-		// Código para obter os veículos do banco de dados
-		VeiculoDao veiculoDao = new VeiculoDao();
-		List<Veiculo> veiculos = veiculoDao.getAll(); // Obtém todos os veículos da base de dados
-
-		// Loop para exibir cada veículo na tabela
 		for (Veiculo veiculo : veiculos) {
 		%>
 		<tr>
@@ -209,20 +171,18 @@ th {
 			<td><%=veiculo.getNomeMarca()%></td>
 			<td><%=veiculo.getNomeMod()%></td>
 			<td><%=veiculo.getCor()%></td>
-			<td><%=veiculo.getPotencia()%> CV</td>
-			<td><%=veiculo.getCapacidadeCarga()%> kg</td>
-			<td><%=veiculo.getNumLugares()%></td>
-			<td><%=veiculo.getNumPortas()%></td>
-			<td><%=veiculo.getNumEixos()%></td>
-			<td><%=veiculo.getCombustivel()%></td>
-			<td><%=veiculo.getValorDiaUtil()%> €</td>
-			<td><%=veiculo.getValorDiaNaoUtil()%> €</td>
-			<td><%=veiculo.getDataTarifa() != null ? veiculo.getDataTarifa() : "N/A"%></td>
 			<td>
 				<form method="post" action="Veiculo_form.jsp">
 					<input type="hidden" name="matricula"
-						value="<%=veiculo.getMatricula()%>" /> <a class="but"
-						onclick="this.parentNode.submit();">Editar</a>
+						value="<%=veiculo.getMatricula()%>" />
+					<button type="submit">Editar</button>
+				</form>
+			</td>
+			<td>
+				<form method="get" action="ExportarVeiculoXML.jsp">
+					<input type="hidden" name="matricula"
+						value="<%=veiculo.getMatricula()%>">
+					<button type="submit">Exportar XML</button>
 				</form>
 			</td>
 		</tr>
@@ -230,12 +190,10 @@ th {
 		}
 		%>
 	</table>
-	<!-- Botão para criar novo veículo -->
 	<div style="margin: 20px 0;">
-		<a href="Veiculo_form.jsp" class="but">Criar Veículo</a>
+		<a href="ImportarVeiculoXML.jsp" class="button">Importar Veículo
+			XML</a> <a href="Veiculo_form.jsp" class="button">Criar Veículo</a>
 	</div>
-
-
 
 </body>
 </html>
