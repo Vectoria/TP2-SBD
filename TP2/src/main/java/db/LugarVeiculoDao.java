@@ -155,12 +155,29 @@ public class LugarVeiculoDao {
 		return veiculos;
 	}
 
+	public List<String> getAllLocalidades() {
+		List<String> localidades = new ArrayList<>();
+		String sql = "SELECT DISTINCT localidade FROM Lugar_Veiculo ORDER BY localidade";
+
+		try (Connection conn = Db.getConn();
+				PreparedStatement ps = conn.prepareStatement(sql);
+				ResultSet rs = ps.executeQuery()) {
+			while (rs.next()) {
+				localidades.add(rs.getString("localidade"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return localidades;
+	}
+
 	public static void main(String[] args) {
 		LugarVeiculoDao lugarVeiculoDao = new LugarVeiculoDao();
 		List<Veiculo> veiculos = lugarVeiculoDao.getVeiculosPorLocalidadeEModelo("Parque Central de Coimbra", "BMW_X5");
 
 		for (Veiculo veiculo : veiculos) {
-		    System.out.println(veiculo.getMatricula() + " - " + veiculo.getNomeMarca() + " - " + veiculo.getNomeMod());
+			System.out.println(veiculo.getMatricula() + " - " + veiculo.getNomeMarca() + " - " + veiculo.getNomeMod());
 		}
 	}
 

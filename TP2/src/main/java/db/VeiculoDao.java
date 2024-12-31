@@ -122,4 +122,40 @@ public class VeiculoDao {
 		}
 		return list;
 	}
+
+	public List<String> getAllMarcas() {
+		List<String> marcas = new ArrayList<>();
+		String sql = "SELECT DISTINCT nomeMarca FROM Veiculo ORDER BY nomeMarca";
+
+		try (Connection conn = Db.getConn();
+				PreparedStatement ps = conn.prepareStatement(sql);
+				ResultSet rs = ps.executeQuery()) {
+			while (rs.next()) {
+				marcas.add(rs.getString("nomeMarca"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return marcas;
+	}
+
+	public List<String> getModelosByMarca(String marca) {
+		List<String> modelos = new ArrayList<>();
+		String sql = "SELECT DISTINCT nomeMod FROM Veiculo WHERE nomeMarca = ? ORDER BY nomeMod";
+
+		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, marca); // Marca do veículo passada como parâmetro
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					modelos.add(rs.getString("nomeMod")); // Adicionar o modelo à lista
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace(); // Log de erro
+		}
+
+		return modelos; // Retorna os modelos encontrados
+	}
+
 }

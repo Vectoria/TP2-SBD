@@ -1,8 +1,8 @@
 <%@page import="usr.*"%>
 <%@page
-	import="db.ClienteDao, db.AluguerDao, db.DescontoDao, db.QualidadeServicoDao"%>
+	import="db.ClienteDao, db.AluguerDao, db.DescontoDao, db.QualidadeServicoDao, db.LugarVeiculoDao, db.VeiculoDao"%>
 <%@page
-	import="pojo.Cliente, pojo.Aluguer, pojo.Desconto, pojo.QualidadeServico"%>
+	import="pojo.Cliente, pojo.Aluguer, pojo.Desconto, pojo.QualidadeServico, pojo.Veiculo"%>
 <%@page import="java.util.List, java.math.BigDecimal"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"%>
 <%@page errorPage="error.jsp"%>
@@ -27,6 +27,26 @@ try {
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Language" content="pt-PT, en-US">
 <title>Perfil</title>
+<script>
+function updateModelos() {
+    const marca = document.getElementById('marca').value;
+    const modeloSelect = document.getElementById('modelo');
+    modeloSelect.innerHTML = '<option value="">Carregando...</option>';
+    fetch(`GetModelosServlet?marca=${marca}`)
+        .then(response => response.json())
+        .then(data => {
+            modeloSelect.innerHTML = '<option value="">Selecione o modelo</option>';
+            data.forEach(modelo => {
+                const option = document.createElement('option');
+                option.value = modelo;
+                option.textContent = modelo;
+                modeloSelect.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Erro ao carregar modelos:', error));
+}
+
+</script>
 <style>
 p {
 	font-size: 1.2em;
@@ -80,6 +100,106 @@ select {
 
 	<%
 	if (cliente != null) {
+	%>
+
+	<h1>Buscar Veículos</h1>
+
+	<%
+	LugarVeiculoDao lugarVeiculoDao = new LugarVeiculoDao();
+	VeiculoDao veiculoDao = new VeiculoDao();
+
+	List<String> localidades = lugarVeiculoDao.getAllLocalidades();
+	List<String> marcas = veiculoDao.getAllMarcas();
+
+	String selectedLocalidade = request.getParameter("localidade");
+	String selectedMarca = request.getParameter("marca");
+	String selectedModelo = request.getParameter("modelo");
+	List<Veiculo> veiculos = null;
+
+	if (selectedLocalidade != null && selectedMarca != null && selectedModelo != null) {
+		veiculos = lugarVeiculoDao.getVeiculosPorLocalidadeEModelo(selectedLocalidade, selectedModelo);
+	}
+	%>
+
+	<form method="get">
+		<!-- Dropdown para Localidades -->
+		<label for="localidade">Localidade:</label> <select name="localidade"
+			id="localidade" required>
+			<option value="">Selecione uma localidade</option>
+			<%
+			for (String localidade : localidades) {
+			%>
+			<option value="<%=localidade%>"
+				<%=localidade.equals(selectedLocalidade) ? "selected" : ""%>>
+				<%=localidade%>
+			</option>
+			<%
+			}
+			%>
+		</select> <br> <br>
+
+		<!-- Dropdown para Marcas -->
+		<label for="marca">Marca:</label> <select name="marca" id="marca"
+			onchange="updateModelos()" required>
+			<option value="">Selecione uma marca</option>
+			<%
+			for (String marca : marcas) {
+			%>
+			<option value="<%=marca%>"
+				<%=marca.equals(selectedMarca) ? "selected" : ""%>>
+				<%=marca%>
+			</option>
+			<%
+			System.out.println(selectedMarca);}
+			%>
+		</select> <br> <br>
+
+		<!-- Dropdown para Modelos -->
+		<label for="modelo">Modelo:</label> <select name="modelo" id="modelo"
+			required>
+			<option value="">Selecione um modelo</option>
+			<%
+			System.out.println(selectedMarca);
+			System.out.println(selectedLocalidade);
+			if (selectedMarca != null) {
+				System.out.println("Entrou");
+				List<String> modelos = veiculoDao.getModelosByMarca(selectedMarca);
+				System.out.println(modelos);
+				for (String modelo : modelos) {
+			%>
+			<option value="<%=modelo%>"
+				<%=modelo.equals(selectedModelo) ? "selected" : ""%>>
+				<%=modelo%>
+			</option>
+			<%
+			}
+			}
+			%>
+		</select> <br> <br>
+
+		<button type="submit">Buscar Veículos</button>
+	</form>
+
+	<%
+	if (veiculos != null && !veiculos.isEmpty()) {
+	%>
+	<h2>Lista de Veículos Disponíveis</h2>
+	<ul>
+		<%
+		for (Veiculo veiculo : veiculos) {
+		%>
+		<li>Matricula <%=veiculo.getMatricula()%>, modelo <%=veiculo.getNomeMod()%>,
+			cor <%=veiculo.getCor()%></li>
+		<%
+		}
+		%>
+	</ul>
+	<%
+	} else if (selectedLocalidade != null && selectedMarca != null && selectedModelo != null) {
+	%>
+	<p>Nenhum veículo encontrado para os critérios selecionados.</p>
+	<%
+	}
 	%>
 	<h2>Reputação</h2>
 	<div>
