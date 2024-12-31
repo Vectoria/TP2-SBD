@@ -1,7 +1,6 @@
 package db;
 
 import pojo.LugarVeiculo;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,4 +118,88 @@ public class LugarVeiculoDao {
 		return null;
 	}
 
+	public List<String> getAllLocalidades() {
+		List<String> localidades = new ArrayList<>();
+		String sql = "SELECT DISTINCT localidade FROM Lugar_Veiculo";
+
+		try (Connection conn = Db.getConn();
+				PreparedStatement ps = conn.prepareStatement(sql);
+				ResultSet rs = ps.executeQuery()) {
+
+			while (rs.next()) {
+				localidades.add(rs.getString("localidade"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return localidades;
+	}
+
+	public List<String> getAllMarcas() {
+		List<String> marcas = new ArrayList<>();
+		String sql = "SELECT DISTINCT marca FROM Veiculo WHERE matricula IN (SELECT matricula FROM Lugar_Veiculo)";
+
+		try (Connection conn = Db.getConn();
+				PreparedStatement ps = conn.prepareStatement(sql);
+				ResultSet rs = ps.executeQuery()) {
+
+			while (rs.next()) {
+				marcas.add(rs.getString("marca"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return marcas;
+	}
+
+	public List<String> getModelosByMarca(String marca) {
+		List<String> modelos = new ArrayList<>();
+		String sql = "SELECT DISTINCT modelo FROM Veiculo WHERE marca = ? AND matricula IN (SELECT matricula FROM Lugar_Veiculo)";
+
+		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+			ps.setString(1, marca);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					modelos.add(rs.getString("modelo"));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return modelos;
+	}
+
+	public List<LugarVeiculo> getVeiculosDisponiveis(String localidade, String modelo) {
+		List<LugarVeiculo> veiculos = new ArrayList<>();
+		String sql = "SELECT lv.localidade, lv.piso, lv.fila, lv.posFila, v.matricula, v.modelo, v.cor "
+				+ "FROM Lugar_Veiculo lv " + "JOIN Veiculo v ON lv.matricula = v.matricula "
+				+ "WHERE lv.localidade = ? AND v.modelo = ?";
+
+		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+			ps.setString(1, localidade);
+			ps.setString(2, modelo);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					LugarVeiculo lugar = new LugarVeiculo();
+					lugar.setLocalidade(rs.getString("localidade"));
+					lugar.setPiso(rs.getInt("piso"));
+					lugar.setFila(rs.getString("fila"));
+					lugar.setPosFila(rs.getInt("posFila"));
+					lugar.setMatricula(rs.getString("matricula"));
+					veiculos.add(lugar);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return veiculos;
+	}
 }
