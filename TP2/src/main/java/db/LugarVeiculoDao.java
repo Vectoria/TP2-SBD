@@ -1,6 +1,8 @@
 package db;
 
 import pojo.LugarVeiculo;
+import pojo.Veiculo;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -118,88 +120,48 @@ public class LugarVeiculoDao {
 		return null;
 	}
 
-	public List<String> getAllLocalidades() {
-		List<String> localidades = new ArrayList<>();
-		String sql = "SELECT DISTINCT localidade FROM Lugar_Veiculo";
+	public List<Veiculo> getVeiculosPorLocalidadeEModelo(String localidade, String modelo) {
+		List<Veiculo> veiculos = new ArrayList<>();
 
-		try (Connection conn = Db.getConn();
-				PreparedStatement ps = conn.prepareStatement(sql);
-				ResultSet rs = ps.executeQuery()) {
-
-			while (rs.next()) {
-				localidades.add(rs.getString("localidade"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return localidades;
-	}
-
-	public List<String> getAllMarcas() {
-		List<String> marcas = new ArrayList<>();
-		String sql = "SELECT DISTINCT marca FROM Veiculo WHERE matricula IN (SELECT matricula FROM Lugar_Veiculo)";
-
-		try (Connection conn = Db.getConn();
-				PreparedStatement ps = conn.prepareStatement(sql);
-				ResultSet rs = ps.executeQuery()) {
-
-			while (rs.next()) {
-				marcas.add(rs.getString("marca"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return marcas;
-	}
-
-	public List<String> getModelosByMarca(String marca) {
-		List<String> modelos = new ArrayList<>();
-		String sql = "SELECT DISTINCT modelo FROM Veiculo WHERE marca = ? AND matricula IN (SELECT matricula FROM Lugar_Veiculo)";
+		String sql = "SELECT v.matricula, v.nomeMarca, v.nomeMod, v.cor, v.numLugares, v.capacidadeCarga, v.numPortas, v.numEixos, v.potencia, v.combustivel "
+				+ "FROM Veiculo v " + "JOIN Lugar_Veiculo lv ON v.matricula = lv.matricula "
+				+ "WHERE lv.localidade = ? " + "AND v.nomeMod = ? " + "ORDER BY v.matricula";
 
 		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
-
-			ps.setString(1, marca);
+			// Definir parâmetros
+			ps.setString(1, localidade); // Localidade
+			ps.setString(2, modelo); // Modelo do veículo
 
 			try (ResultSet rs = ps.executeQuery()) {
+				// Processar os resultados
 				while (rs.next()) {
-					modelos.add(rs.getString("modelo"));
+					Veiculo veiculo = new Veiculo();
+					veiculo.setMatricula(rs.getString("matricula"));
+					veiculo.setNomeMarca(rs.getString("nomeMarca"));
+					veiculo.setNomeMod(rs.getString("nomeMod"));
+					veiculo.setCor(rs.getString("cor"));
+					veiculo.setNumLugares(rs.getInt("numLugares"));
+					veiculo.setCapacidadeCarga(rs.getDouble("capacidadeCarga"));
+					veiculo.setNumPortas(rs.getInt("numPortas"));
+					veiculo.setNumEixos(rs.getInt("numEixos"));
+					veiculo.setPotencia(rs.getInt("potencia"));
+					veiculo.setCombustivel(rs.getString("combustivel"));
+					veiculos.add(veiculo);
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		return modelos;
-	}
-
-	public List<LugarVeiculo> getVeiculosDisponiveis(String localidade, String modelo) {
-		List<LugarVeiculo> veiculos = new ArrayList<>();
-		String sql = "SELECT lv.localidade, lv.piso, lv.fila, lv.posFila, v.matricula, v.modelo, v.cor "
-				+ "FROM Lugar_Veiculo lv " + "JOIN Veiculo v ON lv.matricula = v.matricula "
-				+ "WHERE lv.localidade = ? AND v.modelo = ?";
-
-		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
-
-			ps.setString(1, localidade);
-			ps.setString(2, modelo);
-
-			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next()) {
-					LugarVeiculo lugar = new LugarVeiculo();
-					lugar.setLocalidade(rs.getString("localidade"));
-					lugar.setPiso(rs.getInt("piso"));
-					lugar.setFila(rs.getString("fila"));
-					lugar.setPosFila(rs.getInt("posFila"));
-					lugar.setMatricula(rs.getString("matricula"));
-					veiculos.add(lugar);
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
 		return veiculos;
 	}
+
+	public static void main(String[] args) {
+		LugarVeiculoDao lugarVeiculoDao = new LugarVeiculoDao();
+		List<Veiculo> veiculos = lugarVeiculoDao.getVeiculosPorLocalidadeEModelo("Parque Central de Coimbra", "BMW_X5");
+
+		for (Veiculo veiculo : veiculos) {
+		    System.out.println(veiculo.getMatricula() + " - " + veiculo.getNomeMarca() + " - " + veiculo.getNomeMod());
+		}
+	}
+
 }
