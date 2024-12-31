@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html>
+<%@page import="usr.*"%>
 <%@page errorPage="error.jsp"%>
 <%@ page
 	import="pojo.Cliente, pojo.Condutor, db.ClienteDao, db.CondutorDao, java.util.*"%>
-	<%@ page import="java.time.LocalDateTime" %>
-<%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page import="db.AluguerDao" %>
+<%@ page import="java.time.LocalDateTime"%>
+<%@ page import="java.time.format.DateTimeFormatter"%>
+<%@ page import="db.AluguerDao"%>
 <%@ page import="java.util.List"%>
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%
+User x = Check.login(request, response, 3);%>
+<% 
+try {
+	if (x != null) {
+		%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Language" content="pt-PT, en-US">
@@ -91,6 +97,53 @@ function searchClient() {
 		atribuir, caso julgue conveniente, um desconto.<br /> 6 – Identificar
 		o condutor de um veículo numa determinada data.<br />
 	</p>
+
+	<h1>Localizar Veículo</h1>
+	<form method="get">
+		<label for="matriculaLocalizar">Matrícula do Veículo:</label> <input
+			type="text" id="matriculaLocalizar" name="matriculaLocalizar"
+			required maxlength="6" pattern="[A-Za-z0-9]{1,6}" />
+		<button type="submit">Localizar</button>
+	</form>
+
+	<%-- Lógica para localizar o veículo --%>
+	<%
+	String matriculaLocalizar = request.getParameter("matriculaLocalizar");
+	if (matriculaLocalizar != null) {
+		try {
+			db.LugarVeiculoDao lugarVeiculoDao = new db.LugarVeiculoDao();
+			pojo.LugarVeiculo lugar = lugarVeiculoDao.getByMatricula(matriculaLocalizar);
+
+			if (lugar != null) {
+	%>
+	<div class="message success">
+		O veículo com matrícula
+		<%=matriculaLocalizar%>
+		está localizado no lugar: <br /> Localidade:
+		<%=lugar.getLocalidade()%>, Piso:
+		<%=lugar.getPiso()%>, Fila:
+		<%=lugar.getFila()%>, Posição na Fila:
+		<%=lugar.getPosFila()%>
+	</div>
+	<%
+	} else {
+	%>
+	<div class="message info">
+		O veículo com matrícula
+		<%=matriculaLocalizar%>
+		está alugado no momento.
+	</div>
+	<%
+	}
+	} catch (Exception e) {
+	%>
+	<div class="message error">Erro ao processar a solicitação.
+		Verifique os dados e tente novamente.</div>
+	<%
+	e.printStackTrace();
+	}
+	}
+	%>
 
 	<!-- Client Table with Search -->
 	<h2>Clientes</h2>
@@ -243,3 +296,13 @@ function searchClient() {
 		onClick="javascript:window.history.back()" />
 </body>
 </html>
+
+<%
+} else {
+out.println("<div style='color: red;'># NIF inválido ou não logado.</div>");
+}
+} catch (Exception e) {
+e.printStackTrace();
+out.println("<div style='color: red;'>Ocorreu um erro ao processar a solicitação.</div>");
+}
+%>
