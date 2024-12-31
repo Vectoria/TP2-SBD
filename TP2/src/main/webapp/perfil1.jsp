@@ -31,9 +31,27 @@ try {
 function updateModelos() {
     const marca = document.getElementById('marca').value;
     const modeloSelect = document.getElementById('modelo');
+    
+    // Limpa o dropdown de modelos
     modeloSelect.innerHTML = '<option value="">Carregando...</option>';
-    fetch(`GetModelosServlet?marca=${marca}`)
-        .then(response => response.json())
+    
+    if (!marca) {
+        modeloSelect.innerHTML = '<option value="">Selecione um modelo</option>';
+        return;
+    }
+    
+    // Codifica a marca para a URL e faz a chamada ao servlet
+    const encodedMarca = marca.replace(/[^a-zA-Z0-9]/g, function(c) {
+        return encodeURIComponent(c);
+    });
+    
+    fetch('GetModelosServlet?marca=' + encodedMarca)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro na resposta da rede');
+            }
+            return response.json();
+        })
         .then(data => {
             modeloSelect.innerHTML = '<option value="">Selecione o modelo</option>';
             data.forEach(modelo => {
@@ -43,9 +61,19 @@ function updateModelos() {
                 modeloSelect.appendChild(option);
             });
         })
-        .catch(error => console.error('Erro ao carregar modelos:', error));
+        .catch(error => {
+            console.error('Erro ao carregar modelos:', error);
+            modeloSelect.innerHTML = '<option value="">Erro ao carregar modelos</option>';
+        });
 }
 
+// Adicione um event listener para quando a página carregar
+document.addEventListener('DOMContentLoaded', function() {
+    const marca = document.getElementById('marca').value;
+    if (marca) {
+        updateModelos();
+    }
+});
 </script>
 <style>
 p {
@@ -121,7 +149,7 @@ select {
 	}
 	%>
 
-	<form method="get">
+	<form method="get" action="perfil1.jsp">
 		<!-- Dropdown para Localidades -->
 		<label for="localidade">Localidade:</label> <select name="localidade"
 			id="localidade" required>
@@ -130,13 +158,14 @@ select {
 			for (String localidade : localidades) {
 			%>
 			<option value="<%=localidade%>"
-				<%=localidade.equals(selectedLocalidade) ? "selected" : ""%>>
+				<%=localidade != null && localidade.equals(selectedLocalidade) ? "selected" : ""%>>
 				<%=localidade%>
 			</option>
 			<%
 			}
 			%>
-		</select> <br> <br>
+		</select> <br>
+		<br>
 
 		<!-- Dropdown para Marcas -->
 		<label for="marca">Marca:</label> <select name="marca" id="marca"
@@ -146,42 +175,50 @@ select {
 			for (String marca : marcas) {
 			%>
 			<option value="<%=marca%>"
-				<%=marca.equals(selectedMarca) ? "selected" : ""%>>
+				<%=marca != null && marca.equals(selectedMarca) ? "selected" : ""%>>
 				<%=marca%>
 			</option>
 			<%
-			System.out.println(selectedMarca);}
+			}
 			%>
-		</select> <br> <br>
+		</select> <br>
+		<br>
 
 		<!-- Dropdown para Modelos -->
 		<label for="modelo">Modelo:</label> <select name="modelo" id="modelo"
 			required>
 			<option value="">Selecione um modelo</option>
 			<%
-			System.out.println(selectedMarca);
-			System.out.println(selectedLocalidade);
-			if (selectedMarca != null) {
-				System.out.println("Entrou");
+			if (selectedMarca != null && !selectedMarca.isEmpty()) {
 				List<String> modelos = veiculoDao.getModelosByMarca(selectedMarca);
-				System.out.println(modelos);
 				for (String modelo : modelos) {
 			%>
 			<option value="<%=modelo%>"
-				<%=modelo.equals(selectedModelo) ? "selected" : ""%>>
+				<%=modelo != null && modelo.equals(selectedModelo) ? "selected" : ""%>>
 				<%=modelo%>
 			</option>
 			<%
 			}
 			}
 			%>
-		</select> <br> <br>
+		</select> <br>
+		<br>
 
 		<button type="submit">Buscar Veículos</button>
 	</form>
 
+	<!-- Seção de resultados -->
 	<%
-	if (veiculos != null && !veiculos.isEmpty()) {
+	if (request.getParameter("localidade") != null && request.getParameter("marca") != null
+			&& request.getParameter("modelo") != null) {
+
+		String localidadeBusca = request.getParameter("localidade");
+		String modeloBusca = request.getParameter("modelo");
+
+		if (!localidadeBusca.isEmpty() && !modeloBusca.isEmpty()) {
+veiculos = lugarVeiculoDao.getVeiculosPorLocalidadeEModelo(localidadeBusca, modeloBusca);
+
+			if (veiculos != null && !veiculos.isEmpty()) {
 	%>
 	<h2>Lista de Veículos Disponíveis</h2>
 	<ul>
@@ -189,16 +226,19 @@ select {
 		for (Veiculo veiculo : veiculos) {
 		%>
 		<li>Matricula <%=veiculo.getMatricula()%>, modelo <%=veiculo.getNomeMod()%>,
-			cor <%=veiculo.getCor()%></li>
+			cor <%=veiculo.getCor()%>
+		</li>
 		<%
 		}
 		%>
 	</ul>
 	<%
-	} else if (selectedLocalidade != null && selectedMarca != null && selectedModelo != null) {
+	} else {
 	%>
 	<p>Nenhum veículo encontrado para os critérios selecionados.</p>
 	<%
+	}
+	}
 	}
 	%>
 	<h2>Reputação</h2>
