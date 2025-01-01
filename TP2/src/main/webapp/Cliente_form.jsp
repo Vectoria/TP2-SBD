@@ -1,6 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="pojo.Cliente, pojo.Morada, db.ClienteDao, db.MoradaDao"%>
+<%@page import="usr.*"%>
+<%
+// Lógica de Backend antes da saída HTML
+User x = Check.login(request, response, 0);
+try {
+	if (x != null) {
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -56,8 +63,8 @@ input[type="submit"] {
 			<legend>Dados do Cliente</legend>
 			<label for="clienteNIF">NIF do Cliente:</label> <input type="text"
 				id="clienteNIF" name="clienteNIF"
-				value="<%=cliente != null ? cliente.getClienteNIF() : ""%>"
-				required maxlength="9" pattern="\d{9}"
+				value="<%=cliente != null ? cliente.getClienteNIF() : ""%>" required
+				maxlength="9" pattern="\d{9}"
 				<%=clienteNIF != null ? "readonly" : ""%> /><br> <label
 				for="moedaPref">Moeda Preferida:</label> <select id="moedaPref"
 				name="moedaPref" required>
@@ -82,10 +89,9 @@ input[type="submit"] {
 				value="<%=cliente != null ? cliente.getContactoTel() : ""%>"
 				required maxlength="9" pattern="\d{9}" /><br> <label
 				for="email">E-mail:</label> <input type="email" id="email"
-				name="email"
-				value="<%=cliente != null ? cliente.getEmail() : ""%>" required
-				maxlength="100" /><br> <label for="nome">Nome:</label> <input
-				type="text" id="nome" name="nome"
+				name="email" value="<%=cliente != null ? cliente.getEmail() : ""%>"
+				required maxlength="100" /><br> <label for="nome">Nome:</label>
+			<input type="text" id="nome" name="nome"
 				value="<%=cliente != null ? cliente.getNome() : ""%>" required
 				maxlength="200" pattern="[a-zA-Z '-]+" /><br> <label
 				for="condutorNIF">NIF do Condutor:</label> <input type="text"
@@ -110,8 +116,8 @@ input[type="submit"] {
 				required maxlength="3" pattern="\d{3}" /><br> <label
 				for="numeroPorta">Número da Porta:</label> <input type="text"
 				id="numeroPorta" name="numeroPorta"
-				value="<%=morada != null ? morada.getNumeroPorta() : ""%>"
-				required maxlength="3" pattern="\d{1,3}" /><br> <label
+				value="<%=morada != null ? morada.getNumeroPorta() : ""%>" required
+				maxlength="3" pattern="\d{1,3}" /><br> <label
 				for="nomeFreguesia">Freguesia:</label> <input type="text"
 				id="nomeFreguesia" name="nomeFreguesia"
 				value="<%=morada != null ? morada.getNomeFreguesia() : ""%>"
@@ -131,3 +137,12 @@ input[type="submit"] {
 	</form>
 </body>
 </html>
+<%
+} else {
+out.println("<div style='color: red;'># NIF inválido ou não logado.</div>");
+}
+} catch (Exception e) {
+e.printStackTrace();
+out.println("<div style='color: red;'>Ocorreu um erro ao processar a solicitação.</div>");
+}
+%>

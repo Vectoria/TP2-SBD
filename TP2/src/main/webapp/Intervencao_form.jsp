@@ -2,6 +2,13 @@
 <html>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="usr.*"%>
+<%
+// Lógica de Backend antes da saída HTML
+User x = Check.login(request, response, 3);
+try {
+	if (x != null) {
+%>
 <head>
 <meta charset="UTF-8">
 <title>Registar Intervenção</title>
@@ -60,3 +67,12 @@ button:hover {
 	</form>
 </body>
 </html>
+<%
+} else {
+out.println("<div style='color: red;'># NIF inválido ou não logado.</div>");
+}
+} catch (Exception e) {
+e.printStackTrace();
+out.println("<div style='color: red;'>Ocorreu um erro ao processar a solicitação.</div>");
+}
+%>

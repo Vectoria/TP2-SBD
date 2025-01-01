@@ -2,6 +2,13 @@
 	pageEncoding="UTF-8"%>
 <%@ page
 	import="pojo.CartaConducao, pojo.Condutor, db.CartaConducaoDao, db.CondutorDao, java.time.LocalDate"%>
+<%@page import="usr.*"%>
+<%
+// Lógica de Backend antes da saída HTML
+User x = Check.login(request, response, 0);
+try {
+	if (x != null) {
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -131,3 +138,12 @@ h3 {
 	</form>
 </body>
 </html>
+<%
+} else {
+out.println("<div style='color: red;'># NIF inválido ou não logado.</div>");
+}
+} catch (Exception e) {
+e.printStackTrace();
+out.println("<div style='color: red;'>Ocorreu um erro ao processar a solicitação.</div>");
+}
+%>
