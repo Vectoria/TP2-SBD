@@ -32,7 +32,8 @@ public class SaveServletClienteFuncionario extends HttpServlet {
 			int result = clienteDao.updateAvaliacao(clienteNIF, avaliacaoCliente);
 
 			if (result > 0) {
-				response.getWriter().println("<h1>Avaliação salva com sucesso!</h1>");
+				//response.getWriter().println("<h1>Avaliação salva com sucesso!</h1>");
+				response.sendRedirect("perfil0.jsp");
 			} else {
 				response.getWriter().println("<h1>Erro: Cliente não encontrado!</h1>");
 			}

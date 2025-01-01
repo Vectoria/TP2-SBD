@@ -47,7 +47,8 @@ public class SaveServletIntervencao extends HttpServlet {
 			if (result > 0) {
 				response.sendRedirect("perfil3.jsp"); // Replace with the appropriate success page
 			} else {
-				response.sendRedirect("Intervencao_form.jsp?error=save_failed");
+				//response.sendRedirect("Intervencao_form.jsp?error=save_failed");
+				response.getWriter().println("<h1>Erro</h1>");
 			}
 
 		} catch (Exception e) {

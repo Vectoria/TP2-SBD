@@ -38,11 +38,13 @@ public class GerarDescontoServlet extends HttpServlet {
 			if (result > 0) {
 				response.sendRedirect("perfil3.jsp");
 			} else {
-				response.sendRedirect("Descontos.jsp?error=Erro ao criar desconto.");
+				//response.sendRedirect("Descontos.jsp?error=Erro ao criar desconto.");
+				response.getWriter().println("<h1>Erro</h1>");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			response.sendRedirect("Descontos.jsp?error=Exceção ao criar desconto.");
+			//response.sendRedirect("Descontos.jsp?error=Exceção ao criar desconto.");
+			response.getWriter().println("<h1>Erro: " + e.getMessage() + "</h1>");
 		}
 	}
 }

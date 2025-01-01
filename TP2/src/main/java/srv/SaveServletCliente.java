@@ -60,11 +60,12 @@ public class SaveServletCliente extends HttpServlet {
 			// Salvar o cliente
 			clienteDao.save(cliente);
 
-			response.sendRedirect("index.jsp");
+			response.sendRedirect("perfil0.jsp");
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			response.sendRedirect("Cliente_form.jsp");
+			//response.sendRedirect("Cliente_form.jsp");
+			response.getWriter().println("<h1>Erro: " + e.getMessage() + "</h1>");
 		}
 	}
 }

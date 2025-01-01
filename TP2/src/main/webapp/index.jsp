@@ -1,150 +1,190 @@
 <!DOCTYPE html>
 <html>
-<%@ page import="one.*, java.io.IOException, java.util.List"%>
-<%@ page import="pojo.Pojo, db.Dao, java.util.List, java.io.IOException" %>
-
+<%@page errorPage="error.jsp"%>
+<%@page import="usr.*, java.math.BigDecimal"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"%>
+<%User x=Check.login(request, response);%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Language" content="pt-PT, en-US">
-<meta name="keywords" content="ISEL, DEETC, JSP, Coffee">
-<meta name="description" content="Visualiza��o de caf�s">
-<meta name="owner" content="ISEL/DEETC - Doutor Porf�rio Filipe">
+<meta name="keywords" content="ISEL, DEETC, JSP, Users">
+<meta name="description" content="Edição de Utilizadores">
+<meta name="owner" content="ISEL/DEETC - Doutor Porfírio Filipe">
 <meta name="copyright" content="ISEL/DEETC/2022">
 <meta name="createdate" content="20nov2022">
-<meta name="lastupdate" content="14dec2023">
+<meta name="lastupdate" content="07dec2023">
 <meta http-equiv="Pragma" content="no-cache">
-<title>View Coffees</title>
-<link rel="stylesheet" type="text/css" href="style.css" media="all"/>
-<link rel="icon" type="image/x-icon">
-<style>
-.but {
-	background-color: Khaki;
-    padding: 8px 20px;
-    text-decoration:none;
-    font-weight:bold;
-    border-radius:5px;
-    cursor:pointer;
-}
-</style>
+<title>Edit Users</title>
+<!-- Exemplo vulgarmente designado por: CRUD 
+												Create					INSERT
+												Read (Retrieve)			SELECT
+												Update					UPDATE
+												Delete (Destroy)		DELETE 
+-->
+
+<!-- 
+		ABCD: Add, Browse, Change and Delete
+	 	BREAD: Browse, Read, Edit, Add and Delete
+	 	VADE(R): View, Add, Delete, Edit (e Restore, para sistemas com processos transacionais)
+	 	VEIA: Visualizar, Excluir, Inserir, Alterar 
+-->
 </head>
 <body>
-<h1>Coffees List&nbsp;
-<input title="Add New Coffee" type="button" value="New" onClick="javascript:window.open('form.jsp')"/>
-&nbsp;<input title="Go back" type="button" value="Back" onclick="javascript:window.history.back()"/>
-</h1>
-<%
-/* COF_NAME VARCHAR(32), SUP_DATE DATE, PRICE FLOAT, SALES INTEGER, TOTAL INTEGER */
-
-String where=request.getParameter("where");
-if(where==null)
-	where = "";
-
-String by="";
-String param=null;
-String order=request.getParameter("OrderByAsc");
-if(order==null) {
-	order=request.getParameter("OrderByDesc");
-	if(order!=null)
-		by=order+" DESC";
-	param="OrderByAsc";
+	<%
+String old_username = request.getParameter("old_username");
+if(old_username==null || old_username.isBlank())
+	old_username = request.getParameter("username");
+String old_userid = request.getParameter("userid");
+String titulo="Update User";
+String accao="EditServlet";
+User u = null;
+if(old_username!=null && !old_username.isBlank())
+	u = UserDao.getByName(old_username);
+else 
+	if(old_userid!=null && !old_userid.isBlank()) {
+		u = UserDao.getById(new BigDecimal(old_userid)); 
+		if(u!=null)
+			old_username = u.getUsername();
+	}
+if(u==null) {
+	old_username="";
+	titulo="Add New User";
+	accao="SaveServlet";
+	u = new User();
+	u.setUsername("");
+	u.setPassword("");
+	u.setFirstname("");
+	u.setLastname("");
+	u.setEmail("");
 }
-else {
-	by=order+" ASC";
-	param="OrderByDesc";
-}
-List<Pojo> list=Dao.getAll(where, by);
 %>
-<table border='1' class="styled-table">
-	<tr>
-		<th nowrap style="text-align: left">
-			<form method="post">
-  				<input type="hidden" name="<%=param%>" value="cof_name" /> 
-  				<a class="but" onclick="this.parentNode.submit();">Name</a>
-  				<img id="cof_name"/>
-			</form>
-		</th>
-		<th nowrap>
-			<form method="post">
-  				<input type="hidden" name="<%=param%>" value="sup_date" /> 
-  				<a class="but" onclick="this.parentNode.submit();">Sup Date</a>
-  				<img id="sup_date"/>
-			</form>
-		</th>
-		<th nowrap>
-			<form method="post">
-  				<input type="hidden" name="<%=param%>" value="price" /> 
-  				<a class="but" onclick="this.parentNode.submit();">Price &euro;</a>
-  				<img id="price"/>
-			</form>
-		</th>
-		<th nowrap>
-			<form method="post">
-  				<input type="hidden" name="<%=param%>" value="sales" /> 
-  				<a class="but" onclick="this.parentNode.submit();">Sales</a>
-  				<img id="sales"/>
-			</form>		
-		</th>
-		<th nowrap>
-			<form method="post">
-  				<input type="hidden" name="<%=param%>" value="total" /> 
-  				<a class="but" onclick="this.parentNode.submit();">Total</a>
-  				<img id="total"/>
-			</form>	
-		</th>		
-		<th colspan='2'>Command</th>
-	</tr>
-<%
-for(Pojo c:list){
-%>
-	<tr><td style="text-align: left"><%=c.getName()%></td>
-		<td style="text-align: center"><%=c.getSup_date()%></td>
-		<td style="text-align: right"><%=c.getPrice()%></td>
-		<td style="text-align: right"><%=c.getSales()%></td>
-		<td style="text-align: right"><%=c.getTotal()%></td>
-		<td>
-			<form method="post" action="form.jsp">
-  				<input type="hidden" name="old_cof_name" value="<%=c.getName()%>" />
-  				<a class="but" onclick="this.parentNode.submit();">Edit</a>
-			</form>	
-		</td>
-		<td>
-			<form method="post" action="DeleteServlet">
-  				<input type="hidden" value="<%=c.getName()%>" 		id="old_cof_name" 	name="old_cof_name" />
-  				<input type="hidden" value="<%=c.getSup_date()%>"  	id="old_sup_date" 	name="old_sup_date"/>
-				<input type="hidden" value="<%=c.getPrice()%>" 		id="old_price" 		name="old_price"/>
-				<input type="hidden" value="<%=c.getSales()%>" 		id="old_sales" 		name="old_sales"/>
-				<input type="hidden" value="<%=c.getTotal()%>" 		id="old_total" 		name="old_total"/>
-  				<input value="index.jsp" type="hidden" name="to" id="to"/>
-  				<script>
-  					document.getElementById("to").value=
-  						window.location.pathname.slice(window.location.pathname.lastIndexOf('/') + 1);
-  				</script>
-  				<a class="but" onclick="this.parentNode.submit();">Delete</a>
-			</form>	
-		</td>
-		<%}%>
-</table>
-<%
-order=request.getParameter("OrderByAsc");
-if(order==null) {
-	order=request.getParameter("OrderByDesc");
-	if(order!=null){
-	%>
-	<script>
-		document.getElementById('<%=order%>').src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDowMTgwMTE3NDA3MjA2ODExQjM4MkY2QzVGRUYwRTJDNCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo4MkFEQzYxQTIyQzExMUUxQTFGMUFEQUQ1QjJBNTM4QyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo4MkFEQzYxOTIyQzExMUUxQTFGMUFEQUQ1QjJBNTM4QyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjAyODAxMTc0MDcyMDY4MTFCMzgyRjZDNUZFRjBFMkM0IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjAxODAxMTc0MDcyMDY4MTFCMzgyRjZDNUZFRjBFMkM0Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+1fsfwAAAAJdJREFUeNpi/P//PwO1ABMDFcGoYaOG0cMwFmyC1Y33IoHUAiD+h8MBGa31SvOJddk6IN4PxBxY8FEgXkO0N4G2/gRSLUD8GU3qPRA3A+U/kxpmIBege2U9EB/ApYERX6kBDDtlILUDiFWA+AkQuwNddY2s2ARqvAukJgDxbyCehM8gnLGJBmYDsSoQTyWkkHHQFo4AAQYAAA0piq4hbqwAAAAASUVORK5CYII=";
-		document.getElementById('<%=order%>').title="Descending order!"
-	</script>
+	<h1><%=titulo%></h1>
+	<%
+	if(u.getUserid()==null) {
+		%>New record!<%
+	}
+	else {
+		%>Updated at
+	<%=u.getUpdated()%>
 	<%
 	}
-}
-else {
 %>
-<script>
-	document.getElementById('<%=order%>').src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDowMTgwMTE3NDA3MjA2ODExQjM4MkY2QzVGRUYwRTJDNCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo4MkFEQzYxNjIyQzExMUUxQTFGMUFEQUQ1QjJBNTM4QyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo4MkFEQzYxNTIyQzExMUUxQTFGMUFEQUQ1QjJBNTM4QyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjAyODAxMTc0MDcyMDY4MTFCMzgyRjZDNUZFRjBFMkM0IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjAxODAxMTc0MDcyMDY4MTFCMzgyRjZDNUZFRjBFMkM0Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+z5ABTAAAAI5JREFUeNpi/P//PwO1ABMDFQELIQXVjfe4gFQbEJe11iv9otRl2UCcBcSphBQy4gszoKu0gNROIJYB4jtA7AF03V2SXQY0iBFIFUMNAgEVIM6DipPsTQcgDkQTSwRia5IMA9rOC6RqgVgQTQokXgOUZyfFZSFQF/zAgh2BOIjkCBjQRDtq2Khh9DAMIMAAT9AmNBDSXegAAAAASUVORK5CYII=";
-	document.getElementById('<%=order%>').title="Ascending ordering!"
+	<form id="search" name="search" method="get">
+		<input type="hidden" id="param" />
+	</form>
+	<script>
+function go(name, to) {
+	if(name==='gender') {
+		document.getElementById('param').value='X';
+		if(document.getElementById('Female').checked)
+			document.getElementById('param').value='F';
+		else if(document.getElementById('Male').checked)
+				document.getElementById('param').value='M';
+	}
+	else
+		document.getElementById('param').value=document.getElementById(name).value;
+	document.getElementById('param').name=name; 
+	document.getElementById('search').action=to; 
+	document.getElementById('search').submit();
+}
 </script>
-<%
-}
-%>
+	<form action="<%=accao%>" method="post" autocomplete="off">
+		<input value="<%=old_username%>" type="hidden" id="old_username"
+			name="old_username" />
+		<table>
+			<tr>
+				<td><label for="userid">User ID:</label></td>
+				<td><input value="<%=u.getUserid()%>" type="number" min='1'
+					id="userid" name="userid" maxlength="12" size="10"
+					title="User ID (2^63 - 1), auto incremented..." />&nbsp;&nbsp;
+					&nbsp;<input type="button" value="Search"
+					onclick="go('userid','');" /></td>
+			</tr>
+			
+			<tr>
+				<td><label for="profile">Profile:</label></td>
+				<td><select required id="profile" name="profile"
+					title="Profile level...">
+						<option value="0">Administrador</option>
+						<option value="1">Cliente</option>
+						<option value="2">Condutor</option>
+						<option value="3">Funcionário</option>
+						<option value="4">Gerente</option>
+				</select> <script>
+				function selectItemByValue(elmnt, value){
+				  for(var i=0; i < elmnt.options.length; i++)
+				  {
+				    if(elmnt.options[i].value === value) {
+				      elmnt.selectedIndex = i;
+				      break;
+				    }
+				  }
+				}
+				selectItemByValue(document.getElementById("profile"),'<%=u.getProfile()%>');
+			</script> &nbsp;&nbsp;<input type="button" value="Search"
+					onclick="go('profile','view.jsp')" /></td>
+			</tr>
+			<tr>
+				<td><label for="username">Name:</label></td>
+				<td><input autocomplete="off" autofocus tabindex="1" required
+					value="<%=u.getUsername()%>" type="text" id="username"
+					name="username" maxlength="10" size="30"
+					pattern="[0-9a-zA-Z]{4,10}" title="User name (4..10)" />
+					&nbsp;&nbsp;<input type="button" value="Search"
+					onclick="go('username','')" /></td>
+			</tr>
+			<tr>
+				<td><label for="password">Password:</label></td>
+				<td><script>
+		 		function myFunction() {
+		 		 	 var x = document.getElementById("password");
+		 		  	if (x.type === "password") {
+		 		   	 x.type = "text";
+		 		 	 } else {
+		 		   	 x.type = "password";
+		 		  }
+		 		}
+		 	</script> <input autocomplete="off" tabindex="2" type="password" value=""
+					id="password" name="password" maxlength="20" size="30"
+					title="Password..." />&nbsp; <input tabindex="20" type="checkbox"
+					onclick="myFunction()"
+					title="Toggle between password visibility...">Show Password
+				</td>
+			</tr>
+			<tr>
+				<td><label for="firstname">First Name:</label></td>
+				<td><input tabindex="3" required type="text"
+					value="<%=u.getFirstname()%>" id="firstname" name="firstname"
+					maxlength="60" size="30"
+					pattern="[a-zA-Z _ÁÉÍÓÚàáãâéêíóõôúç']{2,60}"
+					title="First Name (2..60)" /> &nbsp;&nbsp;<input type="button"
+					value="Search" onclick="go('firstname','view.jsp')" /></td>
+			</tr>
+			<tr>
+				<td><label for="lastname">Last Name:</label></td>
+				<td><input tabindex="4" required type="text"
+					value="<%=u.getLastname()%>" id="lastname" name="lastname"
+					maxlength="60" size="30"
+					pattern="[a-zA-Z _ÁÉÍÓÚàáãâéêíóõôúç']{2,60}"
+					title="Last Name (2..60)" /> &nbsp;&nbsp;<input type="button"
+					value="Search" onclick="go('lastname','view.jsp')" /></td>
+			</tr>
+			<tr>
+				<td><label for="email">Email:</label></td>
+				<td><input tabindex="5" type="email" value="<%=u.getEmail()%>"
+					id="email" name="email" maxlength="45" size="30" title="Email..." />
+					&nbsp;&nbsp;<input type="button" value="Search"
+					onclick="go('email','view.jsp')" /></td>
+			</tr>
+			<tr>
+				<td colspan="2"><br /> <input title="Save data" type="submit"
+					value="Save" />&nbsp; <input title="View users" type="button"
+					value="View" onClick="javascript:window.open('view.jsp')" />&nbsp;
+					<input title="Go back" type="button" value="Back"
+					onClick="javascript:window.history.back()" /></td>
+			</tr>
+		</table>
+	</form>
+
 </body>
 </html>

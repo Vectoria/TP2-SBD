@@ -77,11 +77,12 @@ public class EditServletCliente extends HttpServlet {
 				// Atualizar o cliente na base de dados
 				int clienteResult = clienteDao.update(cliente);
 				if (clienteResult == 0) {
+					response.getWriter().println("<h1>Erro:</h1>");
 					throw new Exception("Falha ao atualizar o cliente");
+				} else {
+					// Se tudo correu bem, redirecionar para a página principal
+					response.sendRedirect("perfil0.jsp");
 				}
-
-				// Se tudo correu bem, redirecionar para a página principal
-				response.sendRedirect("index.jsp");
 			} else {
 				throw new Exception("Cliente não encontrado");
 			}
@@ -90,6 +91,7 @@ public class EditServletCliente extends HttpServlet {
 			// Erro específico para problemas de conversão de números
 			request.setAttribute("error", "Erro de formato nos dados numéricos: " + e.getMessage());
 			request.getRequestDispatcher("Cliente_form.jsp").forward(request, response);
+			response.getWriter().println("<h1>Erro: " + e.getMessage() + "</h1>");
 		} catch (Exception e) {
 			// Log do erro para debugging
 			e.printStackTrace();
@@ -97,6 +99,7 @@ public class EditServletCliente extends HttpServlet {
 			// Enviar mensagem de erro para a página
 			request.setAttribute("error", "Erro ao atualizar dados: " + e.getMessage());
 			request.getRequestDispatcher("Cliente_form.jsp").forward(request, response);
+			response.getWriter().println("<h1>Erro: " + e.getMessage() + "</h1>");
 		}
 	}
 

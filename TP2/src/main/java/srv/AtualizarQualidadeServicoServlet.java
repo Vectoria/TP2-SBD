@@ -53,6 +53,7 @@ public class AtualizarQualidadeServicoServlet extends HttpServlet {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			response.getWriter().println("<h1>Erro:</h1>");
 		}
 
 		// Redireciona de volta para perfil1.jsp

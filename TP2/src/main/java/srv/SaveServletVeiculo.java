@@ -26,14 +26,15 @@ public class SaveServletVeiculo extends HttpServlet {
 
 			int status = veiculoDao.save(veiculo);
 			if (status > 0) {
-				response.sendRedirect("Veiculo_list.jsp");
+				response.sendRedirect("perfil0.jsp");
 			} else {
 				out.println("Erro ao salvar veículo.");
-				response.sendRedirect("Veiculo_form.jsp");
+				//response.sendRedirect("Veiculo_form.jsp");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			response.sendRedirect("Veiculo_form.jsp");
+			//response.sendRedirect("Veiculo_form.jsp");
+			out.println("<h1>Erro: " + e.getMessage() + "</h1>");
 		}
 	}
 }

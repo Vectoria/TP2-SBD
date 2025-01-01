@@ -73,7 +73,7 @@ h3 {
 	</h1>
 
 	<form action="<%=accao%>" method="post">
-		<input type="hidden" name="from" value="form.jsp" />
+		<input type="hidden" name="from" value="perfil0.jsp" />
 		<table>
 			<!-- Seção Carta de Condução -->
 			<tr>

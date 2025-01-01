@@ -87,16 +87,18 @@ public class SaveServletCondutor extends HttpServlet {
 				}
 
 				if (condutorResult > 0) {
-					response.sendRedirect("index.jsp");
+					response.sendRedirect("perfil0.jsp");
 					return;
 				}
 			}
 
-			response.sendRedirect("Condutor_form.jsp");
+			//response.sendRedirect("Condutor_form.jsp");
+			response.getWriter().println("<h1>Erro</h1>");
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			response.sendRedirect("Condutor_form.jsp");
+			//response.sendRedirect("Condutor_form.jsp");
+			response.getWriter().println("<h1>Erro: " + e.getMessage() + "</h1>");
 		}
 	}
 }

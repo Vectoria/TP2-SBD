@@ -26,18 +26,19 @@ public class EditServletVeiculo extends HttpServlet {
 
 				int status = veiculoDao.update(veiculo);
 				if (status > 0) {
-					response.sendRedirect("Veiculo_list.jsp");
+					response.sendRedirect("perfil0.jsp");
 				} else {
 					out.println("Erro ao atualizar veículo.");
 					response.sendRedirect("Veiculo_form.jsp?matricula=" + veiculo.getMatricula());
 				}
 			} else {
 				out.println("Veículo não encontrado.");
-				response.sendRedirect("Veiculo_list.jsp");
+				//response.sendRedirect("Veiculo_list.jsp");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			response.sendRedirect("Veiculo_form.jsp");
+			//response.sendRedirect("Veiculo_form.jsp");
+			out.println("<h1>Erro: " + e.getMessage() + "</h1>");
 		}
 	}
 }

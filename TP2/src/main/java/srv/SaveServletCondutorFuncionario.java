@@ -32,7 +32,8 @@ public class SaveServletCondutorFuncionario extends HttpServlet {
 			int result = condutorDao.updateAvaliacao(condutorNIF, avaliacaoCondutor);
 
 			if (result > 0) {
-				response.getWriter().println("<h1>Avaliação salva com sucesso!</h1>");
+				//response.getWriter().println("<h1>Avaliação salva com sucesso!</h1>");
+				response.sendRedirect("perfil0.jsp");
 			} else {
 				response.getWriter().println("<h1>Erro: Condutor não encontrado!</h1>");
 			}

@@ -72,7 +72,7 @@ public class EditServletCondutor extends HttpServlet {
 				}
 			}
 
-			response.sendRedirect("index.jsp");
+			response.sendRedirect("perfil0.jsp");
 
 		} catch (Exception e) {
 			e.printStackTrace();
