@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html>
 <%@page errorPage="error.jsp"%>
-<%-- <%@page import="usr.*"%> --%>
+<%@page import="usr.*"%>
 <%@ page import="db.Gerente"%>
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.Map"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"%>
-<%-- <%User x=Check.login(request, response, 4);%> --%>
+<%
+User x = Check.login(request, response, 4);
+%>
+<%
+try {
+	if (x != null) {
+%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Language" content="pt-PT, en-US">
@@ -87,7 +93,7 @@ button:hover {
 
 	<!-- Histórico de Veículo -->
 	<h2>1 - Histórico de Veículo</h2>
-	<form method="post" action="">
+	<form method="post" action="perfil4.jsp">
 		<label for="matricula">Digite a matrícula do veículo:</label> <input
 			type="text" id="matricula" name="matricula" required>
 		<button type="submit">Buscar Histórico</button>
@@ -213,7 +219,7 @@ button:hover {
 
 	<!-- Filtro por Freguesia -->
 	<h2>5 - Filtro por Freguesia</h2>
-	<form method="post">
+	<form method="post" action="perfil4.jsp">
 		<label for="freguesia">Digite o nome da freguesia:</label> <input
 			type="text" id="freguesia" name="freguesia" required>
 		<button type="submit">Pesquisar</button>
@@ -275,3 +281,12 @@ button:hover {
 		onClick="javascript:window.history.back()" />
 </body>
 </html>
+<%
+} else {
+out.println("<div style='color: red;'># NIF inválido ou não logado.</div>");
+}
+} catch (Exception e) {
+e.printStackTrace();
+out.println("<div style='color: red;'>Ocorreu um erro ao processar a solicitação.</div>");
+}
+%>

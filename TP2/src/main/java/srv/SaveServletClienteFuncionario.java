@@ -33,7 +33,7 @@ public class SaveServletClienteFuncionario extends HttpServlet {
 
 			if (result > 0) {
 				//response.getWriter().println("<h1>Avaliação salva com sucesso!</h1>");
-				response.sendRedirect("perfil0.jsp");
+				response.sendRedirect("perfil3.jsp");
 			} else {
 				response.getWriter().println("<h1>Erro: Cliente não encontrado!</h1>");
 			}

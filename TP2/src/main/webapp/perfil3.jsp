@@ -10,11 +10,12 @@
 <%@ page import="java.util.List"%>
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-User x = Check.login(request, response, 3);%>
-<% 
+User x = Check.login(request, response, 3);
+%>
+<%
 try {
 	if (x != null) {
-		%>
+%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Language" content="pt-PT, en-US">
@@ -99,7 +100,7 @@ function searchClient() {
 	</p>
 
 	<h1>Localizar Veículo</h1>
-	<form method="get">
+	<form method="post" action="perfil3.jsp">
 		<label for="matriculaLocalizar">Matrícula do Veículo:</label> <input
 			type="text" id="matriculaLocalizar" name="matriculaLocalizar"
 			required maxlength="6" pattern="[A-Za-z0-9]{1,6}" />
@@ -249,7 +250,7 @@ function searchClient() {
 	</div>
 
 	<h1>Identificar Condutor de um Veículo</h1>
-	<form method="get">
+	<form method="post" action="perfil3.jsp">
 		<label for="matricula">Matrícula do Veículo:</label> <input
 			type="text" id="matricula" name="matricula" required maxlength="6"
 			pattern="[A-Za-z0-9]{1,6}" /> <label for="date">Data e Hora:</label>
