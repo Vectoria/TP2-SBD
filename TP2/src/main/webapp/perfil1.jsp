@@ -149,8 +149,8 @@ select {
 	}
 	%>
 
-	<form method="get" action="perfil1.jsp">
-		<!-- Dropdown para Localidades -->
+	<form method="post" action="perfil1.jsp">
+		<!-- Campo para Localidade -->
 		<label for="localidade">Localidade:</label> <select name="localidade"
 			id="localidade" required>
 			<option value="">Selecione uma localidade</option>
@@ -158,16 +158,15 @@ select {
 			for (String localidade : localidades) {
 			%>
 			<option value="<%=localidade%>"
-				<%=localidade != null && localidade.equals(selectedLocalidade) ? "selected" : ""%>>
+				<%=localidade.equals(selectedLocalidade) ? "selected" : ""%>>
 				<%=localidade%>
 			</option>
 			<%
 			}
 			%>
-		</select> <br>
-		<br>
+		</select> <br> <br>
 
-		<!-- Dropdown para Marcas -->
+		<!-- Campo para Marca -->
 		<label for="marca">Marca:</label> <select name="marca" id="marca"
 			onchange="updateModelos()" required>
 			<option value="">Selecione uma marca</option>
@@ -175,37 +174,45 @@ select {
 			for (String marca : marcas) {
 			%>
 			<option value="<%=marca%>"
-				<%=marca != null && marca.equals(selectedMarca) ? "selected" : ""%>>
+				<%=marca.equals(selectedMarca) ? "selected" : ""%>>
 				<%=marca%>
 			</option>
 			<%
 			}
 			%>
-		</select> <br>
-		<br>
+		</select> <br> <br>
 
-		<!-- Dropdown para Modelos -->
+		<!-- Campo para Modelo -->
 		<label for="modelo">Modelo:</label> <select name="modelo" id="modelo"
 			required>
 			<option value="">Selecione um modelo</option>
 			<%
-			if (selectedMarca != null && !selectedMarca.isEmpty()) {
+			if (selectedMarca != null) {
 				List<String> modelos = veiculoDao.getModelosByMarca(selectedMarca);
 				for (String modelo : modelos) {
 			%>
 			<option value="<%=modelo%>"
-				<%=modelo != null && modelo.equals(selectedModelo) ? "selected" : ""%>>
+				<%=modelo.equals(selectedModelo) ? "selected" : ""%>>
 				<%=modelo%>
 			</option>
 			<%
 			}
 			}
 			%>
-		</select> <br>
-		<br>
+		</select> <br> <br>
+
+		<!-- Campo para Tempo de Aluguer -->
+		<label for="tempoAluguer">Tempo de Aluguer:</label> <input
+			type="datetime-local" id="tempoAluguer" name="tempoAluguer" required
+			min="<%=java.time.LocalDateTime.now().plusHours(1)
+		.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"))%>"
+			max="<%=java.time.LocalDateTime.now().plusWeeks(2)
+		.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"))%>">
+		<br> <br>
 
 		<button type="submit">Buscar Veículos</button>
 	</form>
+
 
 	<!-- Seção de resultados -->
 	<%
@@ -214,9 +221,15 @@ select {
 
 		String localidadeBusca = request.getParameter("localidade");
 		String modeloBusca = request.getParameter("modelo");
+		String selectedTempoAluguer = request.getParameter("tempoAluguer");
+
+		if (selectedTempoAluguer == null || selectedTempoAluguer.isEmpty()) {
+			selectedTempoAluguer = java.time.LocalDateTime.now().plusHours(1)
+			.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+		}
 
 		if (!localidadeBusca.isEmpty() && !modeloBusca.isEmpty()) {
-veiculos = lugarVeiculoDao.getVeiculosPorLocalidadeEModelo(localidadeBusca, modeloBusca);
+			veiculos = lugarVeiculoDao.getVeiculosPorLocalidadeEModelo(localidadeBusca, modeloBusca);
 
 			if (veiculos != null && !veiculos.isEmpty()) {
 	%>
@@ -224,14 +237,56 @@ veiculos = lugarVeiculoDao.getVeiculosPorLocalidadeEModelo(localidadeBusca, mode
 	<ul>
 		<%
 		for (Veiculo veiculo : veiculos) {
+			System.out.println(veiculo);
+			java.time.LocalDateTime dhInicio = java.time.LocalDateTime.now();
+			java.time.LocalDateTime dhFim = java.time.LocalDateTime.parse(selectedTempoAluguer,
+			java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+
+			BigDecimal valorDiaUtil = BigDecimal.valueOf(veiculo.getValorDiaUtil());
+			BigDecimal valorDiaNaoUtil = BigDecimal.valueOf(veiculo.getValorDiaNaoUtil());
+			System.out.println(valorDiaUtil);
+			System.out.println(veiculo.getValorDiaNaoUtil());
+
+			BigDecimal custoPrevisto = aluguerDao.calcularCustoPrevisto(dhInicio, dhFim, valorDiaUtil, valorDiaNaoUtil);
+			System.out.println(custoPrevisto);
 		%>
-		<li>Matricula <%=veiculo.getMatricula()%>, modelo <%=veiculo.getNomeMod()%>,
-			cor <%=veiculo.getCor()%>
+		<li>
+			<form method="post" action="FazerAluguerServlet">
+				<strong>Matrícula:</strong>
+				<%=veiculo.getMatricula()%>, <strong>Modelo:</strong>
+				<%=veiculo.getNomeMod()%>, <strong>Cor:</strong>
+				<%=veiculo.getCor()%><br> <label
+					for="desconto_<%=veiculo.getMatricula()%>">Código de
+					Desconto (6 dígitos):</label> <input type="text"
+					id="desconto_<%=veiculo.getMatricula()%>" name="desconto"
+					pattern="\\d{6}" maxlength="6" placeholder="Opcional"><br>
+
+				<strong>Custo Previsto:</strong>
+				<%=custoPrevisto%>€<br>
+
+				<!-- Campos ocultos para enviar os dados necessários -->
+				<input type="hidden" name="matricula"
+					value="<%=veiculo.getMatricula()%>"> <input type="hidden"
+					name="dhInicio"
+					value="<%=dhInicio.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"))%>">
+				<input type="hidden" name="dhFim"
+					value="<%=dhFim.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"))%>">
+				<input type="hidden" name="localidade"
+					value="<%=selectedLocalidade%>"> <input type="hidden"
+					name="clienteNIF" value="<%=cliente.getClienteNIF()%>"> <input
+					type="hidden" name="condutorNIF"
+					value="<%=cliente.getCondutorNIF()%>"> <input type="hidden"
+					name="moedaPref" value="<%=cliente.getMoedaPref()%>">
+
+				<!-- Botão para fazer aluguel do veículo -->
+				<button type="submit">Fazer Aluguer</button>
+			</form>
 		</li>
 		<%
 		}
 		%>
 	</ul>
+
 	<%
 	} else {
 	%>
@@ -241,6 +296,9 @@ veiculos = lugarVeiculoDao.getVeiculosPorLocalidadeEModelo(localidadeBusca, mode
 	}
 	}
 	%>
+
+
+
 	<h2>Reputação</h2>
 	<div>
 		<%=cliente.getAvaliacaoCliente()%>/10,0

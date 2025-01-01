@@ -133,20 +133,14 @@ public class LugarVeiculoDao {
 			ps.setString(2, modelo); // Modelo do veículo
 
 			try (ResultSet rs = ps.executeQuery()) {
+				VeiculoDao veiculoDao = new VeiculoDao();
 				// Processar os resultados
 				while (rs.next()) {
-					Veiculo veiculo = new Veiculo();
-					veiculo.setMatricula(rs.getString("matricula"));
-					veiculo.setNomeMarca(rs.getString("nomeMarca"));
-					veiculo.setNomeMod(rs.getString("nomeMod"));
-					veiculo.setCor(rs.getString("cor"));
-					veiculo.setNumLugares(rs.getInt("numLugares"));
-					veiculo.setCapacidadeCarga(rs.getDouble("capacidadeCarga"));
-					veiculo.setNumPortas(rs.getInt("numPortas"));
-					veiculo.setNumEixos(rs.getInt("numEixos"));
-					veiculo.setPotencia(rs.getInt("potencia"));
-					veiculo.setCombustivel(rs.getString("combustivel"));
-					veiculos.add(veiculo);
+					String matricula = rs.getString("matricula");
+	                Veiculo veiculo = veiculoDao.getById(matricula); // Busca o veículo completo usando a matrícula
+	                if (veiculo != null) {
+	                    veiculos.add(veiculo); // Adiciona à lista se encontrado
+	                }
 				}
 			}
 		} catch (SQLException e) {

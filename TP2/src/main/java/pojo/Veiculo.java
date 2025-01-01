@@ -139,4 +139,8 @@ public class Veiculo {
 	public void setTipoHab(String tipoHab) {
 		this.tipoHab = tipoHab;
 	}
+	
+	public String toString() {
+		return "Matricula:" + matricula + " cor "+ cor + " valor dia util "+ valorDiaUtil+ " valor dia nao util " + valorDiaNaoUtil;
+	}
 }
