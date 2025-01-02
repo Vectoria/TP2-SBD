@@ -45,11 +45,11 @@ public class Aluguer {
 		this.clienteNIF = clienteNIF;
 	}
 
-	public Integer getCondutorNIF() {
+	public int getCondutorNIF() {
 		return condutorNIF;
 	}
 
-	public void setCondutorNIF(Integer condutorNIF) {
+	public void setCondutorNIF(int condutorNIF) {
 		this.condutorNIF = condutorNIF;
 	}
 

@@ -1,6 +1,7 @@
 package db;
 
 import pojo.Aluguer;
+import pojo.Veiculo;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -20,7 +21,7 @@ public class AluguerDao {
 			ps.setTimestamp(1, Timestamp.valueOf(aluguer.getDhInicio()));
 			ps.setTimestamp(2, Timestamp.valueOf(aluguer.getDhFim()));
 			ps.setInt(3, aluguer.getClienteNIF());
-			ps.setObject(4, aluguer.getCondutorNIF(), Types.INTEGER);
+			ps.setInt(4, aluguer.getCondutorNIF());
 			ps.setString(5, aluguer.getMatricula());
 			ps.setString(6, aluguer.getLocalidade());
 			ps.setTimestamp(7, aluguer.getDhEntrega() != null ? Timestamp.valueOf(aluguer.getDhEntrega()) : null);
@@ -204,6 +205,51 @@ public class AluguerDao {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+
+	public Veiculo procurarVeiculoCondutorPendente(int condutorNIF) {
+
+		String sql = "SELECT a.matricula, v.nomeMod, v.nomeMarca, v.cor, v.numLugares, v.capacidadeCarga "
+				+ "FROM Aluguer a " + "JOIN Veiculo v ON a.matricula = v.matricula "
+				+ "WHERE a.condutorNIF = ? AND a.dhEntrega IS NULL";
+
+		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			// Configurar o parâmetro do NIF do condutor
+			ps.setInt(1, condutorNIF);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				// Processar o resultado da consulta
+				while (rs.next()) {
+					VeiculoDao veiculoDao = new VeiculoDao();
+					Veiculo veiculo = veiculoDao.getById(rs.getString("matricula"));
+
+					return veiculo;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace(); // Registrar erro
+		}
+
+		return null;
+	}
+
+	public boolean verificarClienteComAluguerPendente(int clienteNIF) {
+		String sql = "SELECT 1 " + "FROM Aluguer " + "WHERE clienteNIF = ? AND dhEntrega IS NULL";
+
+		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			// Configurar o parâmetro do NIF do cliente
+			ps.setInt(1, clienteNIF);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				// Retorna true se houver pelo menos um resultado
+				return rs.next();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace(); // Registrar erro
+		}
+
+		// Retorna false em caso de exceção ou nenhum resultado encontrado
+		return false;
 	}
 
 }

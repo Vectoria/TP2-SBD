@@ -16,6 +16,7 @@ try {
 		ClienteDao clienteDao = new ClienteDao();
 		Cliente cliente = clienteDao.getById(x.getNif());
 		AluguerDao aluguerDao = new AluguerDao();
+		boolean duranteAluguer = aluguerDao.verificarClienteComAluguerPendente(cliente.getClienteNIF());
 		List<Aluguer> alugueres = aluguerDao.getByClienteNIF(x.getNif());
 		DescontoDao descontoDao = new DescontoDao();
 		List<Desconto> descontos = descontoDao.getAll();
@@ -128,6 +129,13 @@ select {
 
 	<%
 	if (cliente != null) {
+		if (duranteAluguer) {
+	%>
+	<h2>Aluguer Pendente</h2>
+	<p>Você possui um aluguel em andamento. É necessário finalizar o
+		aluguel atual antes de buscar novos veículos.</p>
+	<%
+	} else{
 	%>
 
 	<h1>Buscar Veículos</h1>
@@ -292,6 +300,7 @@ select {
 	%>
 	<p>Nenhum veículo encontrado para os critérios selecionados.</p>
 	<%
+	}
 	}
 	}
 	}
