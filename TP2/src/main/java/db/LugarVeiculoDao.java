@@ -137,10 +137,10 @@ public class LugarVeiculoDao {
 				// Processar os resultados
 				while (rs.next()) {
 					String matricula = rs.getString("matricula");
-	                Veiculo veiculo = veiculoDao.getById(matricula); // Busca o veículo completo usando a matrícula
-	                if (veiculo != null) {
-	                    veiculos.add(veiculo); // Adiciona à lista se encontrado
-	                }
+					Veiculo veiculo = veiculoDao.getById(matricula); // Busca o veículo completo usando a matrícula
+					if (veiculo != null) {
+						veiculos.add(veiculo); // Adiciona à lista se encontrado
+					}
 				}
 			}
 		} catch (SQLException e) {
@@ -173,6 +173,61 @@ public class LugarVeiculoDao {
 		for (Veiculo veiculo : veiculos) {
 			System.out.println(veiculo.getMatricula() + " - " + veiculo.getNomeMarca() + " - " + veiculo.getNomeMod());
 		}
+	}
+
+	public boolean removerMatriculaPorLugar(String matricula) {
+		String sql = "UPDATE Lugar_Veiculo SET matricula = NULL WHERE matricula = ?";
+
+		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, matricula);
+
+			int rowsAffected = ps.executeUpdate();
+			return rowsAffected > 0; // Retorna true se pelo menos uma linha foi afetada
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false; // Retorna false em caso de erro
+	}
+
+	public List<LugarVeiculo> getLugaresVazios() {
+		List<LugarVeiculo> lugaresVazios = new ArrayList<>();
+		String sql = "SELECT * FROM Lugar_Veiculo WHERE matricula IS NULL";
+
+		try (Connection conn = Db.getConn();
+				PreparedStatement ps = conn.prepareStatement(sql);
+				ResultSet rs = ps.executeQuery()) {
+
+			while (rs.next()) {
+				LugarVeiculo lugar = new LugarVeiculo();
+				lugar.setLocalidade(rs.getString("localidade"));
+				lugar.setPiso(rs.getInt("piso"));
+				lugar.setFila(rs.getString("fila"));
+				lugar.setPosFila(rs.getInt("posFila"));
+				lugar.setMatricula(rs.getString("matricula"));
+				lugaresVazios.add(lugar);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return lugaresVazios;
+	}
+
+	public boolean inserirVeiculoNoLugar(String matricula, String localidade, int piso, String fila, int posFila) {
+		String sql = "UPDATE Lugar_Veiculo SET matricula = ? WHERE localidade = ? AND piso = ? AND fila = ? AND posFila = ?";
+
+		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, matricula);
+			ps.setString(2, localidade);
+			ps.setInt(3, piso);
+			ps.setString(4, fila);
+			ps.setInt(5, posFila);
+
+			return ps.executeUpdate() > 0; // Retorna true se pelo menos uma linha foi afetada
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 }

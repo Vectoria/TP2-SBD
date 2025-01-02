@@ -141,6 +141,6 @@ public class Veiculo {
 	}
 	
 	public String toString() {
-		return "Matricula:" + matricula + " cor "+ cor + " valor dia util "+ valorDiaUtil+ " valor dia nao util " + valorDiaNaoUtil;
+		return "Matricula " + matricula + ", a sua cor é "+ cor + " da marca " + nomeMarca + ", modelo "+ nomeMod;
 	}
 }

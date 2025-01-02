@@ -252,4 +252,19 @@ public class AluguerDao {
 		return false;
 	}
 
+	public boolean atualizarDataEntrega(String matricula, int condutorNIF, LocalDateTime dataEntrega) {
+		String sql = "UPDATE Aluguer SET dhEntrega = ? WHERE matricula = ? AND condutorNIF = ? AND dhEntrega IS NULL";
+
+		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setTimestamp(1, Timestamp.valueOf(dataEntrega)); // Define a data de entrega
+			ps.setString(2, matricula); // Define a matrícula
+			ps.setInt(3, condutorNIF); // Define o NIF do condutor
+
+			return ps.executeUpdate() > 0; // Retorna true se ao menos uma linha foi atualizada
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false; // Retorna false em caso de erro
+	}
+
 }
