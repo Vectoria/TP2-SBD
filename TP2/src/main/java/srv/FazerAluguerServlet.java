@@ -29,7 +29,7 @@ public class FazerAluguerServlet extends HttpServlet {
 			String clienteNIFStr = request.getParameter("clienteNIF");
 			String condutorNIFStr = request.getParameter("condutorNIF");
 			String moedaPref = request.getParameter("moedaPref");
-			String descontoStr = request.getParameter("desconto_" + matricula);
+			String descontoStr = request.getParameter("desconto");
 
 			// Converter os dados recebidos
 			int clienteNIF = Integer.parseInt(clienteNIFStr);

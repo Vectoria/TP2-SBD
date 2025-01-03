@@ -264,9 +264,9 @@ select {
 				<%=veiculo.getMatricula()%>, <strong>Modelo:</strong>
 				<%=veiculo.getNomeMod()%>, <strong>Cor:</strong>
 				<%=veiculo.getCor()%><br> <label
-					for="desconto_<%=veiculo.getMatricula()%>">Código de
+					for="desconto<%=veiculo.getMatricula()%>">Código de
 					Desconto (6 dígitos):</label> <input type="text"
-					id="desconto_<%=veiculo.getMatricula()%>" name="desconto"
+					id="desconto<%=veiculo.getMatricula()%>" name="desconto"
 					pattern="\d{6}" maxlength="6" placeholder="Opcional"><br>
 
 				<strong>Custo Previsto:</strong>
