@@ -267,10 +267,10 @@ select {
 					for="desconto_<%=veiculo.getMatricula()%>">Código de
 					Desconto (6 dígitos):</label> <input type="text"
 					id="desconto_<%=veiculo.getMatricula()%>" name="desconto"
-					pattern="\\d{6}" maxlength="6" placeholder="Opcional"><br>
+					pattern="\d{6}" maxlength="6" placeholder="Opcional"><br>
 
 				<strong>Custo Previsto:</strong>
-				<%=custoPrevisto%>€<br>
+				<%=Cliente.conversao(custoPrevisto, cliente.getMoedaPref()).setScale(2, BigDecimal.ROUND_CEILING)%>€<br>
 
 				<!-- Campos ocultos para enviar os dados necessários -->
 				<input type="hidden" name="matricula"
@@ -381,8 +381,8 @@ select {
 				<td><%=aluguer.getDhInicio()%></td>
 				<td><%=aluguer.getDhFim()%></td>
 				<td><%=aluguer.getDhEntrega() != null ? aluguer.getDhEntrega() : "N/A"%></td>
-				<td><%=custoPrevisto%></td>
-				<td><%=aluguer.getCustoFinal() != null ? aluguer.getCustoFinal() : "N/A"%></td>
+				<td><%=Cliente.conversao(custoPrevisto, aluguer.getMoedaPref()).setScale(2, BigDecimal.ROUND_CEILING)%></td>
+				<td><%=aluguer.getCustoFinal() != null ? Cliente.conversao(aluguer.getCustoFinal(), aluguer.getMoedaPref()).setScale(2, BigDecimal.ROUND_CEILING)  : "N/A"%></td>
 				<td>
 					<form method="post" action="AtualizarQualidadeServicoServlet">
 						<input type="hidden" name="dhInicio"

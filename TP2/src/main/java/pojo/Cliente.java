@@ -1,5 +1,7 @@
 package pojo;
 
+import java.math.BigDecimal;
+
 public class Cliente {
 	private int clienteNIF;
 	private String moedaPref;
@@ -145,5 +147,15 @@ public class Cliente {
 
 	public void setAvaliacaoCliente(double avaliacaoCliente) {
 		this.avaliacaoCliente = avaliacaoCliente;
+	}
+	
+	public static BigDecimal conversao(BigDecimal custo, String moeda) {
+		if (moeda.equalsIgnoreCase("Dol")) {
+			return custo.multiply(new BigDecimal(1.02));
+		}
+		if (moeda.equalsIgnoreCase("Lib")) {
+			return custo.multiply(new BigDecimal(0.83));
+		}
+		return custo;
 	}
 }

@@ -38,7 +38,7 @@ public class EntregarVeiculoServlet extends HttpServlet {
 
             if (lugarAtualizado && dataEntregaAtualizada) {
                 // Redireciona para o perfil após o sucesso
-                response.sendRedirect("perfil2.jsp");
+                response.sendRedirect("QualidadeServico_form.jsp");
             } else {
                 // Exibe mensagem de erro
                 response.getWriter().println("<h1>Erro ao atualizar o registro no banco de dados.</h1>");
