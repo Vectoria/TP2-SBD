@@ -291,6 +291,79 @@ function searchClient() {
 	}
 	%>
 
+	<h1>Introduzir Veículo Novo da Empresa</h1>
+	<%
+	try {
+		db.VeiculoDao veiculoDao = new db.VeiculoDao();
+		List<pojo.Veiculo> veiculos = veiculoDao.getAll();
+
+		List<pojo.Veiculo> veiculosNovos = new ArrayList<>();
+		for (pojo.Veiculo veiculo : veiculos) {
+			if (veiculoDao.veiculoNovo(veiculo.getMatricula()) != null) {
+		veiculosNovos.add(veiculo);
+			}
+		}
+
+		if (!veiculosNovos.isEmpty()) {
+	%>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Matrícula</th>
+				<th>Modelo</th>
+				<th>Marca</th>
+				<th>Cor</th>
+				<th>Localidade</th>
+				<th>Piso</th>
+				<th>Fila</th>
+				<th>Posição</th>
+				<th>Ação</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%
+			for (pojo.Veiculo veiculo : veiculosNovos) {
+			%>
+			<tr>
+				<td><%=veiculo.getMatricula()%></td>
+				<td><%=veiculo.getNomeMod()%></td>
+				<td><%=veiculo.getNomeMarca()%></td>
+				<td><%=veiculo.getCor()%></td>
+				<form method="post" action="IntroduzirVeiculoServlet">
+					<td><input type="text" name="localidade" required
+						placeholder="Localidade" /></td>
+					<td><input type="number" name="piso" required
+						placeholder="Piso" /></td>
+					<td><input type="text" name="fila" required maxlength="2"
+						pattern="[a-zA-Z-]+" placeholder="Fila" /></td>
+					<td><input type="number" name="posFila" required min="1"
+						placeholder="Posição na Fila" /></td>
+					<td><input type="hidden" name="matricula"
+						value="<%=veiculo.getMatricula()%>" />
+						<button type="submit">Introduzir</button></td>
+				</form>
+			</tr>
+			<%
+			}
+			%>
+		</tbody>
+	</table>
+	<%
+	} else {
+	%>
+	<p>Não há veículos novos disponíveis para introdução.</p>
+	<%
+	}
+	} catch (Exception e) {
+	%>
+	<p style="color: red;">Erro ao carregar veículos novos. Tente
+		novamente mais tarde.</p>
+	<%
+	e.printStackTrace();
+	}
+	%>
+
+
 
 	<br />
 	<input title="Go back" type="button" value="Back"

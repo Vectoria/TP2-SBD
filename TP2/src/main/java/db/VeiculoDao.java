@@ -123,6 +123,29 @@ public class VeiculoDao {
 		return list;
 	}
 
+	public Veiculo veiculoNovo(String matricula) {
+		String sql = "SELECT v.matricula, v.nomeMarca, v.nomeMod, v.cor " + "FROM Veiculo v " + "WHERE v.matricula = ? "
+				+ "AND NOT EXISTS ( " + "    SELECT 1 " + "    FROM Lugar_Veiculo lv "
+				+ "    WHERE lv.matricula = v.matricula " + ") " + "AND NOT EXISTS ( " + "    SELECT 1 "
+				+ "    FROM Aluguer a " + "    WHERE a.matricula = v.matricula AND a.dhEntrega IS NULL " + ")";
+
+		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, matricula); // Substituir pela matrícula fornecida
+
+			try (ResultSet rs = ps.executeQuery()) {
+				VeiculoDao veiculoDao = new VeiculoDao();
+				if (rs.next()) {
+					Veiculo veiculo = veiculoDao.getById(matricula); 
+					return veiculo; // Retornar o veículo encontrado
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace(); // Log de erro
+		}
+
+		return null; // Retorna null caso nenhum veículo atenda às condições
+	}
+
 	public List<String> getAllMarcas() {
 		List<String> marcas = new ArrayList<>();
 		String sql = "SELECT DISTINCT nomeMarca FROM Veiculo ORDER BY nomeMarca";
