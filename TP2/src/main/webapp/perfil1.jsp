@@ -135,7 +135,7 @@ select {
 	<p>Você possui um aluguel em andamento. É necessário finalizar o
 		aluguel atual antes de buscar novos veículos.</p>
 	<%
-	} else{
+	} else {
 	%>
 
 	<h1>Buscar Veículos</h1>
@@ -314,7 +314,7 @@ select {
 	</div>
 
 	<!-- Tabela de Comentários e Avaliações -->
-	<h3>Comentários e Avaliações</h3>
+	<h3>Comentários de Avaliações dos seus condutores</h3>
 	<table class="table">
 		<thead>
 			<tr>
@@ -356,6 +356,7 @@ select {
 	}
 	%>
 
+	<h2>Seus alugeuis</h2>
 	<table class="table">
 		<thead>
 			<tr>
@@ -382,7 +383,9 @@ select {
 				<td><%=aluguer.getDhFim()%></td>
 				<td><%=aluguer.getDhEntrega() != null ? aluguer.getDhEntrega() : "N/A"%></td>
 				<td><%=Cliente.conversao(custoPrevisto, aluguer.getMoedaPref()).setScale(2, BigDecimal.ROUND_CEILING)%></td>
-				<td><%=aluguer.getCustoFinal() != null ? Cliente.conversao(aluguer.getCustoFinal(), aluguer.getMoedaPref()).setScale(2, BigDecimal.ROUND_CEILING)  : "N/A"%></td>
+				<td><%=aluguer.getCustoFinal() != null
+		? Cliente.conversao(aluguer.getCustoFinal(), aluguer.getMoedaPref()).setScale(2, BigDecimal.ROUND_CEILING)
+		: "N/A"%></td>
 				<td>
 					<form method="post" action="AtualizarQualidadeServicoServlet">
 						<input type="hidden" name="dhInicio"
@@ -416,7 +419,7 @@ select {
 
 
 	<h2>Descontos</h2>
-	<h4>Aproveita estes descontos, mas alguns já podem estar invalidos</h4>
+	<h4>Aproveita estes descontos, antes que alguém pega!</h4>
 	<table class="table">
 		<thead>
 			<tr>

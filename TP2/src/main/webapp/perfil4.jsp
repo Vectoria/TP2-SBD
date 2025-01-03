@@ -159,7 +159,7 @@ button:hover {
 			%>
 			<tr>
 				<td><%=linha.get("nomeMarca")%></td>
-				<td><%=linha.get("lucro_total")%></td>
+				<td><%=linha.get("lucro_total") != null ? linha.get("lucro_total") : 0%></td>
 			</tr>
 			<%
 			}
@@ -185,7 +185,7 @@ button:hover {
 			<tr>
 				<td><%=linha.get("nomeMod")%></td>
 				<td><%=linha.get("nomeMarca")%></td>
-				<td><%=linha.get("avaliacaoSemanaPassada")%></td>
+				<td><%=linha.get("avaliacaoSemanaPassada") != null ? linha.get("avaliacaoSemanaPassada") : 0%></td>
 			</tr>
 			<%
 			}
@@ -209,7 +209,7 @@ button:hover {
 			%>
 			<tr>
 				<td><%=linha.get("matricula")%></td>
-				<td><%=linha.get("total_km")%></td>
+				<td><%=linha.get("total_km") != null ? linha.get("total_km") : 0%></td>
 			</tr>
 			<%
 			}

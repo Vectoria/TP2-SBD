@@ -163,26 +163,39 @@ public class Db {
 					+ "('rush','p11','Natacha','Caetano Prego','Nat.Prego@mail.es'),"
 					+ "('bird','p12','Isabela','Peres da Ponte','Isa.Ponte@mail.pt')";
 			stmt.executeUpdate(sql);
-			
 
 			// Perfis 1
 			stmt.executeUpdate("INSERT INTO user (username, password, firstname, lastname, email, nif, profile) VALUES "
 					+ "('joao123','p1','João','Silva','joao@example.com', 304020033, 1),"
 					+ "('manel456','p2','Manel','Pereira','manel@gmail.com', 304020032, 1),"
 					+ "('ze789','p3','Ze','Ferreira','mano@gmail.com', 409376182, 1),"
-					+ "('gervasio001','p4','Gervasio','Antunes','maril82403@luxyss.com', 290123876, 1),"
-					+ "('roberto111','p5','Roberto','Lopes','roberto@gmail.com', 304020031, 1)");
+					+ "('gervasio1','p4','Gervasio','Antunes','maril82403@luxyss.com', 290123876, 1),"
+					+ "('roberto1','p5','Roberto','Lopes','roberto@gmail.com', 304020031, 1)");
 
 			// Perfis 2
 			stmt.executeUpdate("INSERT INTO user (username, password, firstname, lastname, email, nif, profile) VALUES "
-					+ "('cond1','p1','Carlos','Vieira','carlos.v@example.com', 209837123, 2),"
-					+ "('cond2','p2','António','Sousa','antonio.s@example.com', 304020030, 2),"
+					+ "('cond1','p1','Carlos','Vieira','carlos.@example.com', 209837123, 2),"
+					+ "('cond2','p2','António','Sousa','antonio.@example.com', 304020030, 2),"
 					+ "('cond3','p3','Ana','Monteiro','ana.monteiro@example.com', 120398654, 2),"
 					+ "('cond4','p4','Paulo','Silva','paulo.silva@example.com', 120918267, 2)");
 
+			// Novos condutores (perfil 2)
+			stmt.executeUpdate("INSERT INTO user (username, password, firstname, lastname, email, nif, profile) VALUES "
+					+ "('cond5','p5','Jose','Vieira','jose.@example.com', 304020060, 2),"
+					+ "('cond6','p6','Jeronimo','Sousa','jeronimo.@example.com', 304020061, 2),"
+					+ "('cond7','p7','Lidia','Monteiro','lidia.monteiro@example.com', 304020062, 2),"
+					+ "('cond8','p8','Ulisses','Silva','ulisses.silva@example.com', 304020063, 2)");
+
+			// Novos clientes (perfil 1)
+			stmt.executeUpdate("INSERT INTO user (username, password, firstname, lastname, email, nif, profile) VALUES "
+					+ "('jorge1','p1','Jorge','Vale de Água','jorge@example.com', 304020051, 1),"
+					+ "('paulo2','p2','Paulo','Cemitério','paulo@example.com', 304020052, 1),"
+					+ "('oscar3','p3','Oscar','Escola Secundária','oscar@example.com', 304020053, 1),"
+					+ "('mickey4','p4','Mickey','Mercado','mickey@example.com', 304020054, 1)");
+
 			stmt.executeUpdate("UPDATE user SET profile=0, blocked=false WHERE username = 'opera'");
 			stmt.executeUpdate("UPDATE user SET profile=1, blocked=false WHERE email like '%.pt%'");
-			stmt.executeUpdate("UPDATE user SET  blocked=false WHERE email like '%.com%'");
+			stmt.executeUpdate("UPDATE user SET blocked=false WHERE email like '%.com%'");
 			stmt.executeUpdate("UPDATE user SET profile=2, blocked=false WHERE email like '%.es%'");
 			stmt.executeUpdate("UPDATE user SET profile=3, blocked=false WHERE email like '%.us%'");
 			stmt.executeUpdate("UPDATE user SET profile=4, blocked=false WHERE username = 'pegasus'");
@@ -214,7 +227,7 @@ public class Db {
 	public static void main(String[] args) throws SQLException {
 		Db.init(true, false); // força a criação da BD com senha em claro
 		// Db.init(true, true); // força a criação da BD com senha cifrada
-		
+
 	}
 
 }
