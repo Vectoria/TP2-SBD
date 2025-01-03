@@ -12,43 +12,9 @@ try {
 <head>
 <meta charset="UTF-8">
 <title>Registar Intervenção</title>
-<style>
-body {
-	font-family: Arial, sans-serif;
-	margin: 20px;
-}
-
-form {
-	max-width: 400px;
-	margin: 0 auto;
-}
-
-label {
-	display: block;
-	margin-top: 10px;
-}
-
-input, select, button {
-	width: 100%;
-	padding: 8px;
-	margin-top: 5px;
-	margin-bottom: 15px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-}
-
-button {
-	background-color: #4CAF50;
-	color: white;
-	border: none;
-	cursor: pointer;
-}
-
-button:hover {
-	background-color: #45a049;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="css/forms.css">
 </head>
+
 <body>
 	<h1>Registar Intervenção</h1>
 	<form action="SaveServletIntervencao" method="post">

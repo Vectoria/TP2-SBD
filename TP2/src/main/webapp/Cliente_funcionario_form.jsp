@@ -11,6 +11,7 @@ try {
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="css/forms.css">
 <title>Formulário de Avaliação do Cliente</title>
 </head>
 <body>

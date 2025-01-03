@@ -11,6 +11,7 @@ try {
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="css/forms.css">
 <title>Formulário de Avaliação do Condutor</title>
 </head>
 <body>
@@ -27,22 +28,16 @@ try {
 	<h1>Avaliação do Condutor</h1>
 	<form action="SaveServletCondutorFuncionario" method="post">
 		<!-- NIF do Condutor -->
-		<fieldset>
-			<legend>Identificação do Condutor</legend>
-			<label for="condutorNIF">NIF do Condutor:</label> <input type="text"
-				id="condutorNIF" name="condutorNIF" readonly
-				value="<%=condutor != null ? condutor.getCondutorNIF() : ""%>" />
-			<br />
-		</fieldset>
+		<label for="condutorNIF">NIF do Condutor:</label> <input type="text"
+			id="condutorNIF" name="condutorNIF" readonly
+			value="<%=condutor != null ? condutor.getCondutorNIF() : ""%>" /> <br />
 
 		<!-- Avaliação do Condutor -->
-		<fieldset>
-			<legend>Avaliação</legend>
-			<label for="avaliacaoCondutor">Avaliação (0 a 10):</label> <input
-				type="number" id="avaliacaoCondutor" name="avaliacaoCondutor"
-				required min="0" max="10" step="0.01"
-				value="<%=condutor != null ? condutor.getReputacao() : ""%>" /> <br />
-		</fieldset>
+		<label for="avaliacaoCondutor">Avaliação (0 a 10):</label> <input
+			type="number" id="avaliacaoCondutor" name="avaliacaoCondutor"
+			required min="0" max="10" step="0.01"
+			value="<%=condutor != null ? condutor.getReputacao() : ""%>" /> <br />
+
 
 		<input type="submit" value="Salvar Avaliação" />
 	</form>

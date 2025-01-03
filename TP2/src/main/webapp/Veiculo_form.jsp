@@ -12,6 +12,7 @@ try {
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="css/forms.css">
 <title>Formulário de Veículo</title>
 </head>
 <body>

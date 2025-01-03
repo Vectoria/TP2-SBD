@@ -14,31 +14,7 @@ try {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Gerenciar Carta de Condução e Condutor</title>
-<style>
-table {
-	margin: 20px;
-	border-spacing: 0 10px;
-}
-
-td {
-	padding: 5px;
-}
-
-input[type="text"], input[type="date"] {
-	padding: 5px;
-	width: 200px;
-}
-
-input[type="submit"] {
-	margin-top: 20px;
-	padding: 10px 20px;
-}
-
-h3 {
-	color: #333;
-	margin-top: 20px;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="css/forms.css">
 </head>
 <body>
 	<%
@@ -72,12 +48,7 @@ h3 {
 	}
 	%>
 
-	<h1>
-		<%=titulo%>&nbsp; <input title="Ver registros" type="button"
-			value="Ver" onClick="javascript:window.open('index.jsp')" />&nbsp; <input
-			title="Voltar" type="button" value="Voltar"
-			onclick="javascript:window.history.back()" />
-	</h1>
+
 
 	<form action="<%=accao%>" method="post">
 		<input type="hidden" name="from" value="perfil0.jsp" />
@@ -136,6 +107,10 @@ h3 {
 			</tr>
 		</table>
 	</form>
+	<br>
+	<input
+			title="Voltar" type="button" value="Voltar"
+			onclick="javascript:window.history.back()" />
 </body>
 </html>
 <%

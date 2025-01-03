@@ -12,28 +12,7 @@ try {
 <html>
 <head>
 <title>Formulário de Cliente</title>
-<style>
-fieldset {
-	margin: 20px 0;
-	padding: 20px;
-}
-
-label {
-	display: inline-block;
-	width: 180px;
-	margin: 5px 0;
-}
-
-input, select {
-	margin: 5px 0;
-	padding: 5px;
-}
-
-input[type="submit"] {
-	margin-top: 20px;
-	padding: 10px 20px;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="css/forms.css">
 </head>
 <body>
 	<%
@@ -133,7 +112,7 @@ input[type="submit"] {
 		<input type="submit"
 			value="<%=clienteNIF != null ? "Salvar Alterações" : "Adicionar Cliente"%>" />
 		<input type="button" value="Voltar" onclick="history.back()"
-			style="margin-left: 10px;" />
+			 />
 	</form>
 </body>
 </html>
