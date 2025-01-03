@@ -7,8 +7,8 @@ import java.util.List;
 
 public class DescontoDao {
 
-	private static final String INSERT_SQL = "INSERT INTO Desconto (codigo, valor, nVezesUsadas) VALUES (?, ?, ?)";
-	private static final String UPDATE_SQL = "UPDATE Desconto SET valor = ?, nVezesUsadas = ? WHERE codigo = ?";
+	private static final String INSERT_SQL = "INSERT INTO Desconto (codigo, valor) VALUES (?, ?)";
+	private static final String UPDATE_SQL = "UPDATE Desconto SET valor = ? WHERE codigo = ?";
 	private static final String DELETE_SQL = "DELETE FROM Desconto WHERE codigo = ?";
 	private static final String SELECT_ALL_SQL = "SELECT * FROM Desconto";
 	private static final String SELECT_BY_PK_SQL = "SELECT * FROM Desconto WHERE codigo = ?";
@@ -17,7 +17,6 @@ public class DescontoDao {
 		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(INSERT_SQL)) {
 			ps.setInt(1, desconto.getCodigo());
 			ps.setDouble(2, desconto.getValor());
-			ps.setInt(3, desconto.getNVezesUsadas());
 			return ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -28,8 +27,7 @@ public class DescontoDao {
 	public int update(Desconto desconto) {
 		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
 			ps.setDouble(1, desconto.getValor());
-			ps.setInt(2, desconto.getNVezesUsadas());
-			ps.setInt(3, desconto.getCodigo());
+			ps.setInt(2, desconto.getCodigo());
 			return ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -56,7 +54,6 @@ public class DescontoDao {
 				Desconto desconto = new Desconto();
 				desconto.setCodigo(rs.getInt("codigo"));
 				desconto.setValor(rs.getDouble("valor"));
-				desconto.setNVezesUsadas(rs.getInt("nVezesUsadas"));
 				list.add(desconto);
 			}
 		} catch (SQLException e) {
@@ -73,7 +70,6 @@ public class DescontoDao {
 					Desconto desconto = new Desconto();
 					desconto.setCodigo(rs.getInt("codigo"));
 					desconto.setValor(rs.getDouble("valor"));
-					desconto.setNVezesUsadas(rs.getInt("nVezesUsadas"));
 					return desconto;
 				}
 			}

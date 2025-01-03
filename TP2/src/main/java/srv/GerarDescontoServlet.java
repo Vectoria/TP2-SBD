@@ -28,7 +28,6 @@ public class GerarDescontoServlet extends HttpServlet {
 			Desconto desconto = new Desconto();
 			desconto.setCodigo(codigo);
 			desconto.setValor(Math.round(valor * 100.0) / 100.0); // Arredondar para 2 casas decimais
-			desconto.setNVezesUsadas(0);
 
 			// Salvar no banco de dados
 			DescontoDao descontoDao = new DescontoDao();

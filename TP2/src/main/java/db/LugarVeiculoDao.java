@@ -123,9 +123,10 @@ public class LugarVeiculoDao {
 	public List<Veiculo> getVeiculosPorLocalidadeEModelo(String localidade, String modelo) {
 		List<Veiculo> veiculos = new ArrayList<>();
 
-		String sql = "SELECT v.matricula, v.nomeMarca, v.nomeMod, v.cor, v.numLugares, v.capacidadeCarga, v.numPortas, v.numEixos, v.potencia, v.combustivel "
-				+ "FROM Veiculo v " + "JOIN Lugar_Veiculo lv ON v.matricula = lv.matricula "
-				+ "WHERE lv.localidade = ? " + "AND v.nomeMod = ? " + "ORDER BY v.matricula";
+		String sql = "SELECT v.matricula, v.nomeMarca, v.nomeMod, v.cor " + "FROM Veiculo v "
+				+ "JOIN Lugar_Veiculo lv ON v.matricula = lv.matricula " + "WHERE lv.localidade = ? "
+				+ "AND v.nomeMod = ? " + "AND NOT EXISTS ( " + "    SELECT 1 " + "    FROM Aluguer a "
+				+ "    WHERE a.matricula = v.matricula AND a.dhEntrega IS NULL " + ") " + "ORDER BY v.matricula";
 
 		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
 			// Definir parâmetros
@@ -137,10 +138,8 @@ public class LugarVeiculoDao {
 				// Processar os resultados
 				while (rs.next()) {
 					String matricula = rs.getString("matricula");
-					Veiculo veiculo = veiculoDao.getById(matricula); // Busca o veículo completo usando a matrícula
-					if (veiculo != null) {
-						veiculos.add(veiculo); // Adiciona à lista se encontrado
-					}
+					Veiculo veiculo = veiculoDao.getById(matricula); 
+					veiculos.add(veiculo); // Adiciona à lista
 				}
 			}
 		} catch (SQLException e) {
