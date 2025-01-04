@@ -30,7 +30,7 @@
 -->
 </head>
 <body>
-	<%
+<%-- 	<%
 String old_username = request.getParameter("old_username");
 if(old_username==null || old_username.isBlank())
 	old_username = request.getParameter("username");
@@ -184,7 +184,7 @@ function go(name, to) {
 					onClick="javascript:window.history.back()" /></td>
 			</tr>
 		</table>
-	</form>
+	</form> --%>
 
 </body>
 </html>

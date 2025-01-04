@@ -34,18 +34,7 @@ try {
 <meta name="lastupdate" content="11dec2023">
 <meta http-equiv="Pragma" content="no-cache">
 <title>Condutor</title>
-<style>
-@font-face {
-	font-family: ChristmasFont;
-	src: url(fonts/MountainsofChristmas-Regular.ttf);
-}
-
-p {
-	font-size: 2em;
-	font-family: 'ChristmasFont', serif;
-	margin: 5px;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="css/perfis.css">
 </head>
 <body>
 	<h2>
@@ -85,7 +74,7 @@ p {
 			style="display: inline;">
 			<input type="hidden" name="matricula"
 				value="<%=veiculopendente.getMatricula()%>">
-			<button type="submit">Levantar Veículo</button>
+			<button type="submit" class="small-button">Levantar Veículo</button>
 		</form>
 	</h3>
 	<br />
@@ -115,7 +104,7 @@ p {
 				<input type="hidden" name="posFila" value="<%=lugar.getPosFila()%>">
 				<input type="hidden" name="condutorNIF"
 					value="<%=condutor.getCondutorNIF()%>">
-				<button type="submit">Inserir Veículo</button>
+				<button type="submit" class="small-button">Finalizar Aluguer</button>
 			</form></li>
 		<%
 		}

@@ -74,7 +74,7 @@ button:hover {
 	 <h2>(<%=x.getProfile()%>) <%=x.welcome()%></h2> 
 	<br />
 	<p>Congratulations on taking the next big step in your career. Best
-		wishes for your time at [new company] — they're lucky to have you.</p>
+		wishes for your time at WanterLust — they're lucky to have you.</p>
 	<p style="font-family: verdana">
 		Gerente<br /> 1 – Apresentar histórico de um determinado veículo,
 		avaliações e intervenções existentes no registo cronológico.<br /> 2

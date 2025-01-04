@@ -26,21 +26,20 @@ try {
 		action="<%=matricula != null ? "EditServletVeiculo" : "SaveServletVeiculo"%>"
 		method="post">
 		<!-- Dados do Veículo -->
-		<fieldset>
-			<legend>Dados do Veículo</legend>
-			<label for="matricula">Matrícula:</label> <input type="text"
-				id="matricula" name="matricula"
-				value="<%=veiculo.getMatricula() != null ? veiculo.getMatricula() : ""%>"
-				required maxlength="6" pattern="[A-Z0-9]{6}"
-				<%=matricula != null ? "readonly" : ""%> /> <br> <label
-				for="cor">Cor:</label> <input type="text" id="cor" name="cor"
-				value="<%=veiculo.getCor() != null ? veiculo.getCor() : ""%>"
-				required maxlength="30" /> <br> <label for="nomeMod">Nome
-				do Modelo:</label> <input type="text" id="nomeMod" name="nomeMod"
-				value="<%=veiculo.getNomeMod() != null ? veiculo.getNomeMod() : ""%>"
-				required maxlength="100" /> <br>
-		</fieldset>
-		<input type="submit"
+		<label for="matricula">Matrícula:</label> <input type="text"
+			id="matricula" name="matricula"
+			value="<%=veiculo.getMatricula() != null ? veiculo.getMatricula() : ""%>"
+			required maxlength="6" pattern="[A-Z0-9]{6}"
+			<%=matricula != null ? "readonly" : ""%> /> <br> <label
+			for="cor">Cor:</label> <input type="text" id="cor" name="cor"
+			value="<%=veiculo.getCor() != null ? veiculo.getCor() : ""%>"
+			required maxlength="30" /> <br> <label for="nomeMod">Nome
+			do Modelo:</label> <input type="text" id="nomeMod" name="nomeMod"
+			value="<%=veiculo.getNomeMod() != null ? veiculo.getNomeMod() : ""%>"
+			required maxlength="100" /> <br> 
+			
+			
+			<input type="submit"
 			value="<%=matricula != null ? "Salvar Alterações" : "Adicionar Veículo"%>" />
 	</form>
 </body>

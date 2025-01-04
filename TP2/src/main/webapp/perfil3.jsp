@@ -27,53 +27,7 @@ try {
 <meta name="lastupdate" content="11dec2023">
 <meta http-equiv="Pragma" content="no-cache">
 <title>Funcionário</title>
-<style>
-@font-face {
-	font-family: ChristmasFont;
-	src: url(fonts/MountainsofChristmas-Regular.ttf);
-}
-
-p {
-	font-size: 2em;
-	font-family: 'ChristmasFont', serif;
-	margin: 5px;
-}
-
-.table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-bottom: 20px;
-}
-
-.table th, .table td {
-	border: 1px solid #ccc;
-	padding: 10px;
-	text-align: left;
-}
-
-.table th {
-	background-color: #f2f2f2;
-}
-
-.search-bar {
-	width: 100%;
-	padding: 8px;
-	margin-bottom: 20px;
-}
-
-button {
-	padding: 8px 15px;
-	background-color: #4CAF50;
-	color: white;
-	border: none;
-	cursor: pointer;
-	border-radius: 5px;
-}
-
-button:hover {
-	background-color: #45a049;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="css/perfis.css">
 <script>
 function searchClient() {
     const input = document.getElementById('clientSearch').value.toLowerCase();
@@ -88,7 +42,7 @@ function searchClient() {
 <body>
 	<br />
 	<p>Congratulations on taking the next big step in your career. Best
-		wishes for your time at [new company] — they're lucky to have you.</p>
+		wishes for your time at WanderLust — they're lucky to have you.</p>
 	<p style="font-family: verdana">
 		Funcionário<br /> 1 - Atribuir veículos às reservas pendentes.<br />
 		2 - Localizar um determinado veículo.<br /> 3 - Registar intervenção

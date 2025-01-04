@@ -1,0 +1,76 @@
+input[type="button"], button {
+	padding: 8px 12px;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+input[type="button"]:hover, button:hover {
+	background-color: #45a049;
+}
+
+select {
+	padding: 5px;
+}
+
+@font-face {
+	font-family: ChristmasFont;
+	src: url(fonts/MountainsofChristmas-Regular.ttf);
+}
+
+p {
+	font-size: 2em;
+	font-family: 'ChristmasFont', serif;
+	margin: 5px;
+}
+
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 20px;
+}
+
+.table th, .table td {
+	border: 1px solid #ccc;
+	padding: 10px;
+	text-align: left;
+}
+
+.table th {
+	background-color: #f2f2f2;
+}
+
+.search-bar {
+	width: 100%;
+	padding: 8px;
+	margin-bottom: 20px;
+}
+
+button {
+	padding: 8px 15px;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+button:hover {
+	background-color: #45a049;
+}
+
+.small-button {
+	padding: 5px 10px;
+	font-size: 0.9em;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+.small-button:hover {
+	background-color: #45a049;
+}

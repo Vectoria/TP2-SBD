@@ -83,44 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-<style>
-p {
-	font-size: 1.2em;
-}
-
-.table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-top: 20px;
-}
-
-.table th, .table td {
-	border: 1px solid #ccc;
-	padding: 10px;
-	text-align: left;
-}
-
-.table th {
-	background-color: #f2f2f2;
-}
-
-input[type="button"], button {
-	padding: 8px 12px;
-	background-color: #4CAF50;
-	color: white;
-	border: none;
-	cursor: pointer;
-	border-radius: 5px;
-}
-
-input[type="button"]:hover, button:hover {
-	background-color: #45a049;
-}
-
-select {
-	padding: 5px;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="css/perfis.css">
 </head>
 <body>
 	<h2>
@@ -277,7 +240,7 @@ select {
 					pattern="\d{6}" maxlength="6" placeholder="Opcional"><br>
 
 				<strong>Custo Previsto:</strong>
-				<%=Cliente.conversao(custoPrevisto, cliente.getMoedaPref()).setScale(2, BigDecimal.ROUND_CEILING)%>€<br>
+				<%=Cliente.conversao(custoPrevisto, cliente.getMoedaPref()).setScale(2, BigDecimal.ROUND_CEILING)%><%=cliente.getMoedaPref()%><br>
 
 				<!-- Campos ocultos para enviar os dados necessários, os valores já vêm de tras -->
 				<input type="hidden" name="matricula"
@@ -372,8 +335,8 @@ select {
 				<th>Data e Hora de Início</th>
 				<th>Data e Hora de Fim</th>
 				<th>Data e Hora de Entrega</th>
-				<th>Custo Previsto (€)</th>
-				<th>Custo Final (€)</th>
+				<th>Custo Previsto </th>
+				<th>Custo Final</th>
 				<th>Qualidade do Serviço</th>
 			</tr>
 		</thead>
@@ -388,11 +351,11 @@ select {
 				<td><%=aluguer.getMatricula()%></td>
 				<td><%=aluguer.getDhInicio()%></td>
 				<td><%=aluguer.getDhFim()%></td>
-				<td><%=aluguer.getDhEntrega() != null ? aluguer.getDhEntrega() : "N/A"%></td>
-				<td><%=Cliente.conversao(custoPrevisto, aluguer.getMoedaPref()).setScale(2, BigDecimal.ROUND_CEILING)%></td>
+				<td><%=aluguer.getDhEntrega() != null ? aluguer.getDhEntrega() : "Pentende"%></td>
+				<td><%=Cliente.conversao(custoPrevisto, aluguer.getMoedaPref()).setScale(2, BigDecimal.ROUND_CEILING)%><%=aluguer.getMoedaPref()%></td>
 				<td><%=aluguer.getCustoFinal() != null
-		? Cliente.conversao(aluguer.getCustoFinal(), aluguer.getMoedaPref()).setScale(2, BigDecimal.ROUND_CEILING)
-		: "N/A"%></td>
+		? Cliente.conversao(aluguer.getCustoFinal(), aluguer.getMoedaPref()).setScale(2, BigDecimal.ROUND_CEILING) 
+		: "N/A"%><%=aluguer.getMoedaPref()%></td>
 				<td>
 					<form method="post" action="AtualizarQualidadeServicoServlet">
 						<input type="hidden" name="dhInicio"

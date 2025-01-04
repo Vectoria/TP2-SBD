@@ -33,3 +33,22 @@ button {
 button:hover {
 	background-color: #45a049;
 }
+
+input[type="submit"] {
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	cursor: pointer;
+	border-radius: 4px;
+	padding: 8px 15px;
+	font-size: 1em;
+	text-align: center;
+}
+
+input[type="submit"]:hover {
+	background-color: #45a049;
+}
+
+h1{
+	text-align: center;
+}

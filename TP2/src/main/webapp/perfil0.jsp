@@ -80,6 +80,9 @@ input[type="button"]:hover, button:hover, a.button:hover {
 	<h2>
 		(<%=x.getProfile()%>)
 		<%=x.welcome()%></h2>
+	<p>Best wishes for this exciting new job! We'll always remember you
+		as a great boss.</p>
+	<br>
 	<p>
 		Administrador<br> 1 – Criar/Atualizar dados/fichas dos clientes e
 		dos respetivos condutores.<br> 2 – Criar/Atualizar dados dos
@@ -129,6 +132,7 @@ input[type="button"]:hover, button:hover, a.button:hover {
 		}
 		%>
 	</table>
+	<br>
 	<a href="Cliente_form.jsp" class="button">Criar Cliente</a>
 
 	<!-- Tabela de Condutores -->
@@ -163,6 +167,7 @@ input[type="button"]:hover, button:hover, a.button:hover {
 		}
 		%>
 	</table>
+	<br>
 	<a href="Condutor_form.jsp" class="button">Criar Condutor</a>
 
 	<!-- Tabela de Veículos -->
