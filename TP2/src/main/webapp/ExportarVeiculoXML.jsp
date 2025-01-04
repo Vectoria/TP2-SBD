@@ -12,7 +12,7 @@ if (matricula != null && !matricula.isEmpty()) {
 
 	if (veiculo != null) {
 		response.setContentType("application/xml");
-		response.setHeader("Content-Disposition", "attachment; filename=veiculo_" + matricula + ".xml");
+		response.setHeader("Content-Disposition", "attachment; filename=veiculo_" + matricula + ".xml"); //nome do ficheiro
 
 		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 		out.println("<veiculo>");

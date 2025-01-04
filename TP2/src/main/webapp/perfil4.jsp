@@ -71,7 +71,7 @@ button:hover {
 </style>
 </head>
 <body>
-	<%-- <h2>(<%=x.getProfile()%>) <%=x.welcome()%></h2> --%>
+	 <h2>(<%=x.getProfile()%>) <%=x.welcome()%></h2> 
 	<br />
 	<p>Congratulations on taking the next big step in your career. Best
 		wishes for your time at [new company] — they're lucky to have you.</p>
@@ -143,6 +143,8 @@ button:hover {
 	}
 	}
 	%>
+	
+	
 	<!-- Ranking das 3 marcas de veículos menos lucrativas -->
 	<h2>2 - Marcas com Menor Lucro</h2>
 	<table class="table">
@@ -166,6 +168,8 @@ button:hover {
 			%>
 		</tbody>
 	</table>
+
+
 
 	<!-- Ranking dos 5 modelos mais bem avaliados na semana passada -->
 	<h2>3 - Modelos Mais Bem Avaliados na Semana Passada</h2>
@@ -193,6 +197,8 @@ button:hover {
 		</tbody>
 	</table>
 
+
+
 	<!-- Ranking dos 10 veículos com menor quilometragem no último trimestre -->
 	<h2>4 - Veículos com Menor Quilometragem no Último Trimestre</h2>
 	<table class="table">
@@ -217,7 +223,9 @@ button:hover {
 		</tbody>
 	</table>
 
-	<!-- Filtro por Freguesia -->
+
+
+	<!-- Filtro por Freguesia, sem servlet, precisa digitar -->
 	<h2>5 - Filtro por Freguesia</h2>
 	<form method="post" action="perfil4.jsp">
 		<label for="freguesia">Digite o nome da freguesia:</label> <input
@@ -226,13 +234,10 @@ button:hover {
 	</form>
 
 	<%
-	// Captura o nome da freguesia inserido pelo usuário
 	String freguesia = request.getParameter("freguesia");
 	if (freguesia != null && !freguesia.isEmpty()) {
 		try {
-			// Obtém os clientes filtrados pela freguesia
 			List<Map<String, Object>> clientes = gerente.getClientesPorFreguesia(freguesia);
-
 			if (!clientes.isEmpty()) {
 	%>
 	<table class="table">

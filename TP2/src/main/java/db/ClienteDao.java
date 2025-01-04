@@ -135,6 +135,7 @@ public class ClienteDao {
 		return null;
 	}
 
+	// para o funcionario por a avaliacao
 	public int updateAvaliacao(int clienteNIF, double avaliacaoCliente) {
 		String UPDATE_AVALIACAO_SQL = "UPDATE Cliente SET avaliacaoCliente = ? WHERE clienteNIF = ?";
 		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(UPDATE_AVALIACAO_SQL)) {

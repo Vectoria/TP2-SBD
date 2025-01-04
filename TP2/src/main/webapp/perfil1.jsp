@@ -27,7 +27,14 @@ try {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="Content-Language" content="pt-PT, en-US">
-<title>Perfil</title>
+<meta name="keywords" content="ISEL, DEETC, JSP, Users">
+<meta name="description" content="Edição de Utilizadores">
+<meta name="owner" content="ISEL/DEETC - Doutor Porfírio Filipe">
+<meta name="copyright" content="ISEL/DEETC/2022">
+<meta name="createdate" content="20nov2022">
+<meta name="lastupdate" content="11dec2023">
+<meta http-equiv="Pragma" content="no-cache">
+<title>Cliente</title>
 <script>
 function updateModelos() {
     const marca = document.getElementById('marca').value;
@@ -272,7 +279,7 @@ select {
 				<strong>Custo Previsto:</strong>
 				<%=Cliente.conversao(custoPrevisto, cliente.getMoedaPref()).setScale(2, BigDecimal.ROUND_CEILING)%>€<br>
 
-				<!-- Campos ocultos para enviar os dados necessários -->
+				<!-- Campos ocultos para enviar os dados necessários, os valores já vêm de tras -->
 				<input type="hidden" name="matricula"
 					value="<%=veiculo.getMatricula()%>"> <input type="hidden"
 					name="dhInicio"

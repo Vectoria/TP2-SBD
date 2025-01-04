@@ -8,18 +8,18 @@ public class Aluguer {
 	private LocalDateTime dhInicio;
 	private LocalDateTime dhFim;
 	private int clienteNIF;
-	private Integer condutorNIF; // Nullable
+	private Integer condutorNIF; 
 	private String matricula;
 	private String localidade;
-	private LocalDateTime dhEntrega; // Nullable
-	private BigDecimal custoFinal; // Nullable
-	private String moedaPref; // Nullable
-	private Integer codigo; // Nullable
-	private LocalDate dataTarifa; // Nullable
-	private BigDecimal valorDiaUtil; // Nullable
-	private BigDecimal valorDiaNaoUtil; // Nullable
-	private String qualidadeServicoAluguer; // Nullable
-
+	private LocalDateTime dhEntrega; 
+	private BigDecimal custoFinal; 
+	private String moedaPref; 
+	private Integer codigo; 
+	private LocalDate dataTarifa; 
+	private BigDecimal valorDiaUtil; 
+	private BigDecimal valorDiaNaoUtil; 
+	private String qualidadeServicoAluguer; 
+	
 	// Getters e Setters
 	public LocalDateTime getDhInicio() {
 		return dhInicio;

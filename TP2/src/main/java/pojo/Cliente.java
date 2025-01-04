@@ -148,7 +148,8 @@ public class Cliente {
 	public void setAvaliacaoCliente(double avaliacaoCliente) {
 		this.avaliacaoCliente = avaliacaoCliente;
 	}
-	
+
+	// conversor de dinheiro
 	public static BigDecimal conversao(BigDecimal custo, String moeda) {
 		if (moeda.equalsIgnoreCase("Dol")) {
 			return custo.multiply(new BigDecimal(1.02));

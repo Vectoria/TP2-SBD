@@ -123,6 +123,7 @@ public class VeiculoDao {
 		return list;
 	}
 
+	// verifica se o veiculo é novo, ou seja, não esta estacionado e em nenhum aluguer
 	public Veiculo veiculoNovo(String matricula) {
 		String sql = "SELECT v.matricula, v.nomeMarca, v.nomeMod, v.cor " + "FROM Veiculo v " + "WHERE v.matricula = ? "
 				+ "AND NOT EXISTS ( " + "    SELECT 1 " + "    FROM Lugar_Veiculo lv "
@@ -130,20 +131,20 @@ public class VeiculoDao {
 				+ "    FROM Aluguer a " + "    WHERE a.matricula = v.matricula AND a.dhEntrega IS NULL " + ")";
 
 		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setString(1, matricula); // Substituir pela matrícula fornecida
+			ps.setString(1, matricula); 
 
 			try (ResultSet rs = ps.executeQuery()) {
 				VeiculoDao veiculoDao = new VeiculoDao();
 				if (rs.next()) {
 					Veiculo veiculo = veiculoDao.getById(matricula); 
-					return veiculo; // Retornar o veículo encontrado
+					return veiculo; 
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace(); // Log de erro
+			e.printStackTrace();
 		}
 
-		return null; // Retorna null caso nenhum veículo atenda às condições
+		return null; 
 	}
 
 	public List<String> getAllMarcas() {
@@ -168,17 +169,17 @@ public class VeiculoDao {
 		String sql = "SELECT DISTINCT nomeMod FROM Veiculo WHERE nomeMarca = ? ORDER BY nomeMod";
 
 		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setString(1, marca); // Marca do veículo passada como parâmetro
+			ps.setString(1, marca); 
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
-					modelos.add(rs.getString("nomeMod")); // Adicionar o modelo à lista
+					modelos.add(rs.getString("nomeMod")); 
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace(); // Log de erro
+			e.printStackTrace(); 
 		}
 
-		return modelos; // Retorna os modelos encontrados
+		return modelos; 
 	}
 
 }

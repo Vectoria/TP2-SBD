@@ -1,4 +1,5 @@
 package db;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,17 +109,18 @@ public class CondutorDao {
 		}
 		return null;
 	}
-	
+
+	// para o funcionario por a avaliacao
 	public int updateAvaliacao(int condutorNIF, double avaliacaoCondutor) {
-	    String UPDATE_AVALIACAO_SQL = "UPDATE Condutor SET reputacao = ? WHERE condutorNIF = ?";
-	    try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(UPDATE_AVALIACAO_SQL)) {
-	        ps.setDouble(1, avaliacaoCondutor);
-	        ps.setInt(2, condutorNIF);
-	        return ps.executeUpdate();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	    return 0;
+		String UPDATE_AVALIACAO_SQL = "UPDATE Condutor SET reputacao = ? WHERE condutorNIF = ?";
+		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(UPDATE_AVALIACAO_SQL)) {
+			ps.setDouble(1, avaliacaoCondutor);
+			ps.setInt(2, condutorNIF);
+			return ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 }

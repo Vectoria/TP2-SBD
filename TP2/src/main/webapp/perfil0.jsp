@@ -6,7 +6,6 @@
 <%@page language="java" contentType="text/html; charset=UTF-8"%>
 
 <%
-// Lógica de Backend antes da saída HTML
 User x = Check.login(request, response, 0);
 try {
 	if (x != null) {
@@ -23,8 +22,16 @@ try {
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Perfil Administrativo</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Language" content="pt-PT, en-US">
+<meta name="keywords" content="ISEL, DEETC, JSP, Users">
+<meta name="description" content="Edição de Utilizadores">
+<meta name="owner" content="ISEL/DEETC - Doutor Porfírio Filipe">
+<meta name="copyright" content="ISEL/DEETC/2022">
+<meta name="createdate" content="20nov2022">
+<meta name="lastupdate" content="11dec2023">
+<meta http-equiv="Pragma" content="no-cache">
+<title>Admin</title>
 <style>
 @font-face {
 	font-family: ChristmasFont;

@@ -99,6 +99,7 @@ public class LugarVeiculoDao {
 		return null;
 	}
 
+	// procura o veiculo nos lugares
 	public LugarVeiculo getByMatricula(String matricula) {
 		String sql = "SELECT * FROM Lugar_Veiculo WHERE matricula = ?";
 		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -120,6 +121,7 @@ public class LugarVeiculoDao {
 		return null;
 	}
 
+	// devolve os veiculos de um determinado modelo numa localidade especifica
 	public List<Veiculo> getVeiculosPorLocalidadeEModelo(String localidade, String modelo) {
 		List<Veiculo> veiculos = new ArrayList<>();
 
@@ -129,17 +131,15 @@ public class LugarVeiculoDao {
 				+ "    WHERE a.matricula = v.matricula AND a.dhEntrega IS NULL " + ") " + "ORDER BY v.matricula";
 
 		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			// Definir parâmetros
-			ps.setString(1, localidade); // Localidade
-			ps.setString(2, modelo); // Modelo do veículo
+			ps.setString(1, localidade);
+			ps.setString(2, modelo);
 
 			try (ResultSet rs = ps.executeQuery()) {
 				VeiculoDao veiculoDao = new VeiculoDao();
-				// Processar os resultados
 				while (rs.next()) {
 					String matricula = rs.getString("matricula");
-					Veiculo veiculo = veiculoDao.getById(matricula); 
-					veiculos.add(veiculo); // Adiciona à lista
+					Veiculo veiculo = veiculoDao.getById(matricula);
+					veiculos.add(veiculo);
 				}
 			}
 		} catch (SQLException e) {
@@ -165,6 +165,7 @@ public class LugarVeiculoDao {
 		return localidades;
 	}
 
+	// testar
 	public static void main(String[] args) {
 		LugarVeiculoDao lugarVeiculoDao = new LugarVeiculoDao();
 		List<Veiculo> veiculos = lugarVeiculoDao.getVeiculosPorLocalidadeEModelo("Parque Central de Coimbra", "BMW_X5");
@@ -174,6 +175,7 @@ public class LugarVeiculoDao {
 		}
 	}
 
+	//retira o veiculo do lugar
 	public boolean removerMatriculaPorLugar(String matricula) {
 		String sql = "UPDATE Lugar_Veiculo SET matricula = NULL WHERE matricula = ?";
 
@@ -181,11 +183,11 @@ public class LugarVeiculoDao {
 			ps.setString(1, matricula);
 
 			int rowsAffected = ps.executeUpdate();
-			return rowsAffected > 0; // Retorna true se pelo menos uma linha foi afetada
+			return rowsAffected > 0; // Retorna true se acontecesseu a remoção
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return false; // Retorna false em caso de erro
+		return false; 
 	}
 
 	public List<LugarVeiculo> getLugaresVazios() {
@@ -222,7 +224,7 @@ public class LugarVeiculoDao {
 			ps.setString(4, fila);
 			ps.setInt(5, posFila);
 
-			return ps.executeUpdate() > 0; // Retorna true se pelo menos uma linha foi afetada
+			return ps.executeUpdate() > 0; // Retorna true se atualizou
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

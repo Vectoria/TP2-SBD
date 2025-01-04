@@ -26,7 +26,7 @@ try {
 <meta name="createdate" content="20nov2022">
 <meta name="lastupdate" content="11dec2023">
 <meta http-equiv="Pragma" content="no-cache">
-<title>Example</title>
+<title>Funcionário</title>
 <style>
 @font-face {
 	font-family: ChristmasFont;
@@ -147,13 +147,12 @@ function searchClient() {
 	%>
 	
 	
-	<!-- Button to Intervencao Form -->
 	<div style="margin-top: 20px;">
 		<button onclick="location.href='Intervencao_form.jsp'">
 			Registrar Intervenção</button>
 	</div>
 
-	<!-- Client Table with Search -->
+	<!-- Pesquisar o cliente autocomplete para filtrar a tabela -->
 	<h2>Clientes</h2>
 	<input type="text" id="clientSearch" class="search-bar"
 		placeholder="Procurar cliente pelo nome..." onkeyup="searchClient()" />
@@ -185,7 +184,7 @@ function searchClient() {
 					<form method="get" action="Cliente_funcionario_form.jsp">
 						<input type="hidden" name="clienteNIF"
 							value="<%=cliente.getClienteNIF()%>" />
-						<button type="submit">Editar</button>
+						<button type="submit">Editar avaliação</button>
 					</form>
 				</td>
 			</tr>
@@ -195,7 +194,7 @@ function searchClient() {
 		</tbody>
 	</table>
 
-	<!-- Driver Table -->
+	<!-- Tabela dos condutores -->
 	<h2>Condutores</h2>
 	<table id="driverTable" class="table">
 		<thead>
@@ -218,7 +217,7 @@ function searchClient() {
 					<form method="get" action="Condutor_funcionario_form.jsp">
 						<input type="hidden" name="condutorNIF"
 							value="<%=condutor.getCondutorNIF()%>" />
-						<button type="submit">Editar</button>
+						<button type="submit">Editar avaliação</button>
 					</form>
 				</td>
 			</tr>
@@ -251,6 +250,7 @@ function searchClient() {
 	</div>
 
 
+	<!-- Sem servlets -->
 	<h1>Identificar Condutor de um Veículo</h1>
 	<form method="post" action="perfil3.jsp">
 		<label for="matricula">Matrícula do Veículo:</label> <input
@@ -261,7 +261,6 @@ function searchClient() {
 		<button type="submit">Identificar Condutor</button>
 	</form>
 
-	<%-- Processamento da Lógica no JSP --%>
 	<%
 	String matricula = request.getParameter("matricula");
 	String dateStr = request.getParameter("date");
@@ -292,7 +291,8 @@ function searchClient() {
 	}
 	}
 	%>
-
+	
+	<!-- Tabela de veículos novos  -->
 	<h1>Introduzir Veículo Novo da Empresa</h1>
 	<%
 	try {

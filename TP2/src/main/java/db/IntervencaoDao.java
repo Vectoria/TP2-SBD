@@ -93,6 +93,7 @@ public class IntervencaoDao {
 		return null;
 	}
 
+	// devolve a lista de intervenções de um veiculo
 	public List<Intervencao> getByMatricula(String matricula) {
 		List<Intervencao> list = new ArrayList<>();
 		String query = "SELECT * FROM Intervencao WHERE matricula = ?";

@@ -15,6 +15,8 @@ public class AluguerDao {
 	private static final String DELETE_SQL = "DELETE FROM Aluguer WHERE dhInicio = ? AND dhFim = ? AND clienteNIF = ?";
 	private static final String SELECT_ALL_SQL = "SELECT * FROM Aluguer";
 	private static final String SELECT_BY_PK_SQL = "SELECT * FROM Aluguer WHERE dhInicio = ? AND dhFim = ? AND clienteNIF = ?";
+	private static final String FIND_CONDUCTOR_SQL = "SELECT condutorNIF FROM Aluguer "
+			+ "WHERE matricula = ? AND ? BETWEEN dhInicio AND dhFim";
 
 	public int save(Aluguer aluguer) {
 		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(INSERT_SQL)) {
@@ -85,6 +87,7 @@ public class AluguerDao {
 		return list;
 	}
 
+	// obter pela chave primaria
 	public Aluguer getById(Timestamp dhInicio, Timestamp dhFim, int clienteNIF) {
 		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(SELECT_BY_PK_SQL)) {
 			ps.setTimestamp(1, dhInicio);
@@ -101,6 +104,7 @@ public class AluguerDao {
 		return null;
 	}
 
+	// mostra todos aluguers de x cliente
 	public List<Aluguer> getByClienteNIF(int clienteNIF) {
 		List<Aluguer> alugueres = new ArrayList<>();
 		String query = "SELECT * FROM Aluguer WHERE clienteNIF = ?";
@@ -156,24 +160,23 @@ public class AluguerDao {
 		return aluguer;
 	}
 
-	private static final String FIND_CONDUCTOR_SQL = "SELECT condutorNIF FROM Aluguer "
-			+ "WHERE matricula = ? AND ? BETWEEN dhInicio AND dhFim";
-
+	// encontrar o condutor pela matricula e dh
 	public Integer findConductorByVehicleAndDate(String matricula, LocalDateTime date) {
 		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(FIND_CONDUCTOR_SQL)) {
 			ps.setString(1, matricula);
 			ps.setTimestamp(2, Timestamp.valueOf(date));
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
-					return rs.getObject("condutorNIF", Integer.class); // Nullable
+					return rs.getObject("condutorNIF", Integer.class); // retorna o nif do condutor
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null; // No conductor found
+		return null;
 	}
 
+	// faz o custo previsto usando a função do sql
 	public BigDecimal calcularCustoPrevisto(LocalDateTime dhInicio, LocalDateTime dhFim, BigDecimal valorDiaUtil,
 			BigDecimal valorDiaNaoUtil) {
 		String query = "SELECT custo(?, ?, ?, ?) AS custoPrevisto";
@@ -208,17 +211,14 @@ public class AluguerDao {
 	}
 
 	public Veiculo procurarVeiculoCondutorPendente(int condutorNIF) {
-
 		String sql = "SELECT a.matricula, v.nomeMod, v.nomeMarca, v.cor, v.numLugares, v.capacidadeCarga "
 				+ "FROM Aluguer a " + "JOIN Veiculo v ON a.matricula = v.matricula "
 				+ "WHERE a.condutorNIF = ? AND a.dhEntrega IS NULL";
 
 		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			// Configurar o parâmetro do NIF do condutor
 			ps.setInt(1, condutorNIF);
 
 			try (ResultSet rs = ps.executeQuery()) {
-				// Processar o resultado da consulta
 				while (rs.next()) {
 					VeiculoDao veiculoDao = new VeiculoDao();
 					Veiculo veiculo = veiculoDao.getById(rs.getString("matricula"));
@@ -237,18 +237,13 @@ public class AluguerDao {
 		String sql = "SELECT 1 " + "FROM Aluguer " + "WHERE clienteNIF = ? AND dhEntrega IS NULL";
 
 		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			// Configurar o parâmetro do NIF do cliente
 			ps.setInt(1, clienteNIF);
 
 			try (ResultSet rs = ps.executeQuery()) {
-				// Retorna true se houver pelo menos um resultado
-				return rs.next();
+				return rs.next(); // se houver, é true
 			}
 		} catch (SQLException e) {
-			e.printStackTrace(); // Registrar erro
 		}
-
-		// Retorna false em caso de exceção ou nenhum resultado encontrado
 		return false;
 	}
 
@@ -256,15 +251,15 @@ public class AluguerDao {
 		String sql = "UPDATE Aluguer SET dhEntrega = ? WHERE matricula = ? AND condutorNIF = ? AND dhEntrega IS NULL";
 
 		try (Connection conn = Db.getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setTimestamp(1, Timestamp.valueOf(dataEntrega)); // Define a data de entrega
-			ps.setString(2, matricula); // Define a matrícula
-			ps.setInt(3, condutorNIF); // Define o NIF do condutor
+			ps.setTimestamp(1, Timestamp.valueOf(dataEntrega));
+			ps.setString(2, matricula);
+			ps.setInt(3, condutorNIF);
 
-			return ps.executeUpdate() > 0; // Retorna true se ao menos uma linha foi atualizada
+			return ps.executeUpdate() > 0; // Retorna true se atualizou
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return false; // Retorna false em caso de erro
+		return false;
 	}
 
 }

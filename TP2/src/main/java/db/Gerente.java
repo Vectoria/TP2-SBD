@@ -11,6 +11,7 @@ public class Gerente {
 		this.conn = Db.getConn();
 	}
 
+	// devolve o nome da coluna e o seu valor associado na linha, do historico do veiculo
 	public List<Map<String, Object>> getHistoricoVeiculo(String matricula) {
 		String query = "SELECT " + "    v.matricula, " + "    i.numKm AS numKm, " + "    i.dhRegisto AS dhRegisto, "
 				+ "    i.tipoInt AS tipoInt, " + "    i.custoInt AS custoInt, " + "    NULL AS dhInicio, "
@@ -81,6 +82,7 @@ public class Gerente {
 		return executeQuery(query);
 	}
 
+	// devolve a coluna e o valor associado dos melhores clientes da freguesia
 	public List<Map<String, Object>> getClientesPorFreguesia(String freguesia) {
 		String query = "SELECT clienteNIF AS id_cliente, nome, avaliacaoCliente, nomeFreguesia " + "FROM Cliente "
 				+ "WHERE nomeFreguesia = ? " + "ORDER BY avaliacaoCliente DESC " + "LIMIT 100;";
@@ -103,6 +105,7 @@ public class Gerente {
 		return result;
 	}
 
+	//generalização onde captura o nome da coluna, e associa o valor por linha
 	private List<Map<String, Object>> executeQuery(String query) {
 		List<Map<String, Object>> result = new ArrayList<>();
 		try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
