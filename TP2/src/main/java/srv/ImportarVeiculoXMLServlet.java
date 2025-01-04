@@ -50,7 +50,7 @@ public class ImportarVeiculoXMLServlet extends HttpServlet {
 				Document document = builder.parse(new ByteArrayInputStream(xml.getBytes()));
 				document.getDocumentElement().normalize();
 
-				// Extract Vehicle Data
+				// Extrai a tag veiculo e o atribui os valores
 				Element veiculoElement = (Element) document.getElementsByTagName("veiculo").item(0);
 
 				Veiculo veiculo = new Veiculo();
@@ -62,7 +62,7 @@ public class ImportarVeiculoXMLServlet extends HttpServlet {
 						Integer.parseInt(veiculoElement.getElementsByTagName("potencia").item(0).getTextContent()));
 				veiculo.setCombustivel(veiculoElement.getElementsByTagName("combustivel").item(0).getTextContent());
 
-				// Extract Interventions
+				// extrai as tags intervencao
 				NodeList intervencaoNodes = veiculoElement.getElementsByTagName("intervencao");
 				List<Intervencao> intervencoes = new ArrayList<>();
 
@@ -76,7 +76,6 @@ public class ImportarVeiculoXMLServlet extends HttpServlet {
 								.parseInt(intervencaoElement.getElementsByTagName("numKm").item(0).getTextContent()));
 						String dhRegistoStr = intervencaoElement.getElementsByTagName("dhRegisto").item(0)
 								.getTextContent();
-						// Convert from format "2024-08-20T11:00" to "2024-08-20 11:00:00"
 						dhRegistoStr = dhRegistoStr.replace('T', ' ') + ":00";
 						intervencao.setDhRegisto(Timestamp.valueOf(dhRegistoStr).toLocalDateTime());
 						intervencao.setTipoInt(
@@ -89,7 +88,7 @@ public class ImportarVeiculoXMLServlet extends HttpServlet {
 					}
 				}
 
-				// Save to Database
+				// carrega-se a base de dados
 				VeiculoDao veiculoDao = new VeiculoDao();
 				IntervencaoDao intervencaoDao = new IntervencaoDao();
 
@@ -98,7 +97,6 @@ public class ImportarVeiculoXMLServlet extends HttpServlet {
 					intervencaoDao.save(intervencao);
 				}
 
-				// Redirect to perfil0.jsp after success
 				response.sendRedirect("perfil0.jsp");
 			}
 		} catch (Exception e) {

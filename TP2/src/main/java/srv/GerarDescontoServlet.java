@@ -19,21 +19,18 @@ public class GerarDescontoServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			// Gerar código e valor aleatórios
+			// Gerar código aleatorio e valor
 			Random random = new Random();
-			int codigo = 100000 + random.nextInt(900000); // Código de 6 dígitos
+			int codigo = 100000 + random.nextInt(900000); 
 			double valor = 0.05 + (0.30 - 0.05) * random.nextDouble(); // Valor entre 0.05 e 0.30
 
-			// Criar objeto de desconto
 			Desconto desconto = new Desconto();
 			desconto.setCodigo(codigo);
-			desconto.setValor(Math.round(valor * 100.0) / 100.0); // Arredondar para 2 casas decimais
+			desconto.setValor(Math.round(valor * 100.0) / 100.0); 
 
-			// Salvar no banco de dados
 			DescontoDao descontoDao = new DescontoDao();
 			int result = descontoDao.save(desconto);
 
-			// Redirecionar com mensagem
 			if (result > 0) {
 				response.sendRedirect("perfil3.jsp");
 			} else {

@@ -19,11 +19,9 @@ public class LevantarVeiculoServlet extends HttpServlet {
 		if (matricula != null && !matricula.isEmpty()) {
 			try {
 				LugarVeiculoDao lugarVeiculoDao = new LugarVeiculoDao();
-				// Atualiza a coluna matricula para NULL
 				boolean sucesso = lugarVeiculoDao.removerMatriculaPorLugar(matricula);
 
 				if (sucesso) {
-					// Redireciona de volta para perfil2.jsp
 					response.sendRedirect("perfil2.jsp");
 				} else {
 					response.getWriter().println("<h1>Erro: Não foi possível levantar o veículo.</h1>");

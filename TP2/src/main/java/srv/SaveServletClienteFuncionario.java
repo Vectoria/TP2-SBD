@@ -15,11 +15,8 @@ public class SaveServletClienteFuncionario extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("text/html");
 		try {
-			// Retrieve form parameters
 			String nifStr = request.getParameter("clienteNIF");
 			String avaliacaoStr = request.getParameter("avaliacaoCliente");
-
-			// Parse and validate inputs
 			int clienteNIF = Integer.parseInt(nifStr);
 			double avaliacaoCliente = Double.parseDouble(avaliacaoStr);
 
@@ -27,12 +24,10 @@ public class SaveServletClienteFuncionario extends HttpServlet {
 				throw new IllegalArgumentException("Avaliação deve estar entre 0 e 10.");
 			}
 
-			// Update the database
 			ClienteDao clienteDao = new ClienteDao();
 			int result = clienteDao.updateAvaliacao(clienteNIF, avaliacaoCliente);
 
 			if (result > 0) {
-				//response.getWriter().println("<h1>Avaliação salva com sucesso!</h1>");
 				response.sendRedirect("perfil3.jsp");
 			} else {
 				response.getWriter().println("<h1>Erro: Cliente não encontrado!</h1>");

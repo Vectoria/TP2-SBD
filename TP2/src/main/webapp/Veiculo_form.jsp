@@ -3,7 +3,6 @@
 <%@ page import="pojo.Veiculo, db.VeiculoDao"%>
 <%@page import="usr.*"%>
 <%
-// Lógica de Backend antes da saída HTML
 User x = Check.login(request, response, 0);
 try {
 	if (x != null) {

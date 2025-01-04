@@ -23,7 +23,7 @@ public class GetModelosServlet extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 
 		String marca = request.getParameter("marca");
-		System.out.println("Marca recebida: " + marca); // Log para debug
+		//System.out.println("Marca recebida: " + marca); 
 
 		PrintWriter out = response.getWriter();
 		try {
@@ -31,7 +31,7 @@ public class GetModelosServlet extends HttpServlet {
 				VeiculoDao veiculoDao = new VeiculoDao();
 				List<String> modelos = veiculoDao.getModelosByMarca(marca);
 
-				System.out.println("Modelos encontrados: " + modelos); // Log para debug
+				//System.out.println("Modelos encontrados: " + modelos); 
 
 				// Usar StringBuilder para construir o JSON
 				StringBuilder json = new StringBuilder("[");
@@ -43,7 +43,7 @@ public class GetModelosServlet extends HttpServlet {
 				}
 				json.append("]");
 
-				out.print(json.toString());
+				out.print(json.toString()); //construiu o json para o dropbox
 			} else {
 				out.print("[]");
 			}

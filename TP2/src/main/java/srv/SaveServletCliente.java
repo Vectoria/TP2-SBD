@@ -23,11 +23,8 @@ public class SaveServletCliente extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		try {
-			// Criar DAO
 			ClienteDao clienteDao = new ClienteDao();
 			MoradaDao moradaDao = new MoradaDao();
-
-			// Preencher a morada
 			Morada morada = new Morada();
 			morada.setRua(request.getParameter("rua"));
 			morada.setCodigoPostalP1(Integer.parseInt(request.getParameter("codigoPostalP1")));
@@ -36,15 +33,11 @@ public class SaveServletCliente extends HttpServlet {
 			morada.setNomeFreguesia(request.getParameter("nomeFreguesia"));
 			morada.setNomeConcelho(request.getParameter("nomeConcelho"));
 			morada.setNomeDistrito(request.getParameter("nomeDistrito"));
-
-			// Salvar a morada
-			moradaDao.save(morada);
-
-			// Preencher o cliente
+			moradaDao.save(morada);  // salva a morada
 			Cliente cliente = new Cliente();
 			cliente.setClienteNIF(Integer.parseInt(request.getParameter("clienteNIF")));
-			cliente.setMoedaPref(request.getParameter("moedaPref")); // Captura moeda preferida
-			cliente.setPrefLingCult(request.getParameter("prefLingCult")); // Captura língua preferida
+			cliente.setMoedaPref(request.getParameter("moedaPref"));
+			cliente.setPrefLingCult(request.getParameter("prefLingCult"));
 			cliente.setContactoTel(Integer.parseInt(request.getParameter("contactoTel")));
 			cliente.setEmail(request.getParameter("email"));
 			cliente.setNome(request.getParameter("nome"));
@@ -57,15 +50,14 @@ public class SaveServletCliente extends HttpServlet {
 			cliente.setNomeConcelho(morada.getNomeConcelho());
 			cliente.setNomeDistrito(morada.getNomeDistrito());
 
-			// Salvar o cliente
 			clienteDao.save(cliente);
 
 			response.sendRedirect("perfil0.jsp");
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			//response.sendRedirect("Cliente_form.jsp");
-			response.getWriter().println("<h1>Erro: " + e.getMessage() + "</h1>");
+			// response.sendRedirect("Cliente_form.jsp");
+			response.getWriter().println("<h1>Erro de introdução dos dados " + e.getMessage() + "</h1>");
 		}
 	}
 }

@@ -20,26 +20,24 @@ public class EditServletCliente extends HttpServlet {
 			throws ServletException, IOException {
 
 		try {
-			// Criar DAOs
 			ClienteDao clienteDao = new ClienteDao();
 			MoradaDao moradaDao = new MoradaDao();
 
-			// Obter dados da morada do request
+			// Obter dados
 			String rua = request.getParameter("rua");
 			int codigoPostalP1 = Integer.parseInt(request.getParameter("codigoPostalP1"));
 			int codigoPostalP2 = Integer.parseInt(request.getParameter("codigoPostalP2"));
 			int numeroPorta = Integer.parseInt(request.getParameter("numeroPorta"));
 
-			// Obter a morada existente
 			Morada morada = moradaDao.getById(rua, codigoPostalP1, codigoPostalP2, numeroPorta);
 
-			// Se a morada existir, atualizar seus dados
+			// Se a morada existir, atualizaros dados
 			if (morada != null) {
 				morada.setNomeFreguesia(request.getParameter("nomeFreguesia"));
 				morada.setNomeConcelho(request.getParameter("nomeConcelho"));
 				morada.setNomeDistrito(request.getParameter("nomeDistrito"));
 
-				// Atualizar a morada na base de dados
+				// Atualiza
 				int moradaResult = moradaDao.update(morada);
 				if (moradaResult == 0) {
 					throw new Exception("Falha ao atualizar a morada");
@@ -48,13 +46,11 @@ public class EditServletCliente extends HttpServlet {
 				throw new Exception("Morada não encontrada");
 			}
 
-			// Obter o cliente existente
 			int clienteNIF = Integer.parseInt(request.getParameter("clienteNIF"));
 			Cliente cliente = clienteDao.getById(clienteNIF);
 
-			// Se o cliente existir, atualizar seus dados
 			if (cliente != null) {
-				// Atualizar dados básicos do cliente
+				// prepara para atualizar
 				cliente.setMoedaPref(request.getParameter("moedaPref"));
 				cliente.setPrefLingCult(request.getParameter("prefLingCult"));
 				cliente.setContactoTel(Integer.parseInt(request.getParameter("contactoTel")));
@@ -74,13 +70,12 @@ public class EditServletCliente extends HttpServlet {
 				cliente.setCodigo(cliente.getCodigo());
 				cliente.setAvaliacaoCliente(cliente.getAvaliacaoCliente());
 
-				// Atualizar o cliente na base de dados
+				// Atualiza
 				int clienteResult = clienteDao.update(cliente);
 				if (clienteResult == 0) {
 					response.getWriter().println("<h1>Erro:</h1>");
 					throw new Exception("Falha ao atualizar o cliente");
 				} else {
-					// Se tudo correu bem, redirecionar para a página principal
 					response.sendRedirect("perfil0.jsp");
 				}
 			} else {
@@ -93,7 +88,6 @@ public class EditServletCliente extends HttpServlet {
 			request.getRequestDispatcher("Cliente_form.jsp").forward(request, response);
 			response.getWriter().println("<h1>Erro: " + e.getMessage() + "</h1>");
 		} catch (Exception e) {
-			// Log do erro para debugging
 			e.printStackTrace();
 
 			// Enviar mensagem de erro para a página
@@ -105,7 +99,6 @@ public class EditServletCliente extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// Redirecionar GET requests para o formulário
 		response.sendRedirect("Cliente_form.jsp");
 	}
 }

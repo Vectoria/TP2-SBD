@@ -3,7 +3,6 @@
 <%@ page import="pojo.Cliente, pojo.Morada, db.ClienteDao, db.MoradaDao"%>
 <%@page import="usr.*"%>
 <%
-// Lógica de Backend antes da saída HTML
 User x = Check.login(request, response, 0);
 try {
 	if (x != null) {
@@ -19,7 +18,7 @@ try {
 	String clienteNIF = request.getParameter("clienteNIF");
 	String titulo = clienteNIF != null ? "Editar Cliente" : "Adicionar Novo Cliente";
 
-	// Fetch client data if editing
+	
 	Cliente cliente = null;
 	Morada morada = null;
 	if (clienteNIF != null) {
@@ -38,8 +37,6 @@ try {
 		action="<%=clienteNIF != null ? "EditServletCliente" : "SaveServletCliente"%>"
 		method="post">
 		<!-- Dados do Cliente -->
-		<fieldset>
-			<legend>Dados do Cliente</legend>
 			<label for="clienteNIF">NIF do Cliente:</label> <input type="text"
 				id="clienteNIF" name="clienteNIF"
 				value="<%=cliente != null ? cliente.getClienteNIF() : ""%>" required
@@ -77,11 +74,8 @@ try {
 				id="condutorNIF" name="condutorNIF"
 				value="<%=cliente != null ? cliente.getCondutorNIF() : ""%>"
 				required maxlength="9" pattern="\d{9}" /><br>
-		</fieldset>
 
 		<!-- Dados da Morada -->
-		<fieldset>
-			<legend>Morada</legend>
 			<label for="rua">Rua:</label> <input type="text" id="rua" name="rua"
 				value="<%=morada != null ? morada.getRua() : ""%>" required
 				maxlength="200" /><br> <label for="codigoPostalP1">Código
@@ -107,7 +101,6 @@ try {
 			<input type="text" id="nomeDistrito" name="nomeDistrito"
 				value="<%=morada != null ? morada.getNomeDistrito() : ""%>"
 				maxlength="20" /><br>
-		</fieldset>
 
 		<input type="submit"
 			value="<%=clienteNIF != null ? "Salvar Alterações" : "Adicionar Cliente"%>" />

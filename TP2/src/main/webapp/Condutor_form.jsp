@@ -18,17 +18,16 @@ try {
 </head>
 <body>
 	<%
-	// Get parameters and initialize DAOs
 	String condutorNIF = request.getParameter("condutorNIF");
-	String titulo = "";
-	String accao = "";
+	String titulo = ""; //se é atualizar ou adicionar
+	String accao = ""; // edit ou save
 
 	CartaConducaoDao cartaDao = new CartaConducaoDao();
 	CondutorDao condutorDao = new CondutorDao();
 	CartaConducao carta = null;
 	Condutor condutor = null;
 
-	// Fetch existing data if editing
+	// Se já redirecionar com nif preenhido ou nao, onde afeta se edita ou da save
 	if (condutorNIF != null && !condutorNIF.isEmpty()) {
 		try {
 			condutor = condutorDao.getById(Integer.parseInt(condutorNIF));

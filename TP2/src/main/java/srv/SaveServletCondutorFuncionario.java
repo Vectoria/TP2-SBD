@@ -15,11 +15,9 @@ public class SaveServletCondutorFuncionario extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("text/html");
 		try {
-			// Retrieve form parameters
 			String nifStr = request.getParameter("condutorNIF");
 			String avaliacaoStr = request.getParameter("avaliacaoCondutor");
 
-			// Parse and validate inputs
 			int condutorNIF = Integer.parseInt(nifStr);
 			double avaliacaoCondutor = Double.parseDouble(avaliacaoStr);
 
@@ -27,7 +25,6 @@ public class SaveServletCondutorFuncionario extends HttpServlet {
 				throw new IllegalArgumentException("Avaliação deve estar entre 0 e 10.");
 			}
 
-			// Update the database
 			CondutorDao condutorDao = new CondutorDao();
 			int result = condutorDao.updateAvaliacao(condutorNIF, avaliacaoCondutor);
 

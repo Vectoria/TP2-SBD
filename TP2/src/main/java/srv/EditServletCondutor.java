@@ -49,25 +49,23 @@ public class EditServletCondutor extends HttpServlet {
 				}
 			}
 
-			// Get the birth date from the form
 			String dataNascimento = request.getParameter("dataNascimento");
 			LocalDate birthDate = null;
 			if (dataNascimento != null && !dataNascimento.isEmpty()) {
 				birthDate = LocalDate.parse(dataNascimento);
 			}
 
-			// Update Condutor
 			Condutor condutor = condutorDao.getById(nif);
 			if (condutor != null) {
+				// preprara atualizar
 				condutor.setNumID(numID);
-				condutor.setDataNascimento(birthDate); // Set the birth date
+				condutor.setDataNascimento(birthDate); 
 
-				// Keep existing values for other fields
 				condutor.setTipoHab(carta.getTipoHab());
 				condutor.setDataEmissao(carta.getDataEmissao());
 				condutor.setDataValidade(carta.getDataValidade());
 
-				if (condutorDao.update(condutor) <= 0) {
+				if (condutorDao.update(condutor) <= 0) { //se nao atualizar
 					throw new Exception("Failed to update condutor");
 				}
 			}

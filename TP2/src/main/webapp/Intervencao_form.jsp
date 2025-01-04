@@ -4,7 +4,6 @@
 	pageEncoding="UTF-8"%>
 <%@page import="usr.*"%>
 <%
-// Lógica de Backend antes da saída HTML
 User x = Check.login(request, response, 3);
 try {
 	if (x != null) {

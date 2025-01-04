@@ -145,6 +145,13 @@ function searchClient() {
 	}
 	}
 	%>
+	
+	
+	<!-- Button to Intervencao Form -->
+	<div style="margin-top: 20px;">
+		<button onclick="location.href='Intervencao_form.jsp'">
+			Registrar Intervenção</button>
+	</div>
 
 	<!-- Client Table with Search -->
 	<h2>Clientes</h2>
@@ -243,11 +250,6 @@ function searchClient() {
 		%>
 	</div>
 
-	<!-- Button to Intervencao Form -->
-	<div style="margin-top: 20px;">
-		<button onclick="location.href='Intervencao_form.jsp'">
-			Registrar Intervenção</button>
-	</div>
 
 	<h1>Identificar Condutor de um Veículo</h1>
 	<form method="post" action="perfil3.jsp">

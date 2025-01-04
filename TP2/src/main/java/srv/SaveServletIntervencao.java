@@ -20,18 +20,14 @@ public class SaveServletIntervencao extends HttpServlet {
 		response.setContentType("text/html");
 
 		try {
-			// Parse input parameters
 			String matricula = request.getParameter("matricula");
 			String dhRegistoStr = request.getParameter("dhRegisto");
 			String tipoInt = request.getParameter("tipoInt");
 			double custoInt = Double.parseDouble(request.getParameter("custoInt"));
 			int numKM = Integer.parseInt(request.getParameter("numKM"));
-
-			// Convert data and time
 			LocalDateTime dhRegisto = LocalDateTime.parse(dhRegistoStr,
 					DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
 
-			// Create and populate Intervencao object
 			Intervencao intervencao = new Intervencao();
 			intervencao.setNumKM(numKM);
 			intervencao.setMatricula(matricula);
@@ -39,15 +35,12 @@ public class SaveServletIntervencao extends HttpServlet {
 			intervencao.setTipoInt(tipoInt);
 			intervencao.setCustoInt(custoInt);
 
-			// Save to database
 			IntervencaoDao intervencaoDao = new IntervencaoDao();
 			int result = intervencaoDao.save(intervencao);
 
-			// Redirect based on result
 			if (result > 0) {
-				response.sendRedirect("perfil3.jsp"); // Replace with the appropriate success page
+				response.sendRedirect("perfil3.jsp"); 
 			} else {
-				//response.sendRedirect("Intervencao_form.jsp?error=save_failed");
 				response.getWriter().println("<h1>Erro</h1>");
 			}
 
