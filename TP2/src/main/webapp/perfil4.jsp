@@ -24,51 +24,7 @@ try {
 <meta name="lastupdate" content="11dec2023">
 <meta http-equiv="Pragma" content="no-cache">
 <title>Gerente - Relatórios</title>
-<style>
-@font-face {
-	font-family: ChristmasFont;
-	src: url(fonts/MountainsofChristmas-Regular.ttf);
-}
-
-p {
-	font-size: 2em;
-	font-family: 'ChristmasFont', serif;
-	margin: 5px;
-}
-
-.table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-top: 20px;
-}
-
-.table th, .table td {
-	border: 1px solid #ccc;
-	padding: 10px;
-	text-align: left;
-}
-
-.table th {
-	background-color: #f2f2f2;
-}
-
-input[type="text"], button {
-	padding: 8px;
-	margin: 10px 0;
-}
-
-button {
-	background-color: #4CAF50;
-	color: white;
-	border: none;
-	cursor: pointer;
-	border-radius: 5px;
-}
-
-button:hover {
-	background-color: #45a049;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="css/perfis.css">
 </head>
 <body>
 	 <h2>(<%=x.getProfile()%>) <%=x.welcome()%></h2> 
@@ -282,7 +238,7 @@ button:hover {
 	%>
 
 	<br />
-	<input title="Go back" type="button" value="Back"
+	<input type="button" value="Voltar"
 		onClick="javascript:window.history.back()" />
 </body>
 </html>

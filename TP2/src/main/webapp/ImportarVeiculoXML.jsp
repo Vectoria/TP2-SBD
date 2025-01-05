@@ -1,3 +1,9 @@
+<%@page import="usr.*"%>
+<%
+User x = Check.login(request, response, 0);
+try {
+	if (x != null) {
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,3 +40,12 @@ body {
 	</form>
 </body>
 </html>
+<%
+} else {
+out.println("<div style='color: red;'># NIF inválido ou não logado.</div>");
+}
+} catch (Exception e) {
+e.printStackTrace();
+out.println("<div style='color: red;'>Ocorreu um erro ao processar a solicitação.</div>");
+}
+%>

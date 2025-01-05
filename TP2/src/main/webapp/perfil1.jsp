@@ -102,8 +102,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (duranteAluguer) {
 	%>
 	<h2>Aluguer Pendente</h2>
-	<p>Você possui um aluguel em andamento. É necessário finalizar o
-		aluguel atual antes de buscar novos veículos.</p>
+	<h3>Você possui um aluguel em andamento. É necessário finalizar o
+		aluguel atual antes de buscar novos veículos.</h3>
 	<%
 	} else {
 	%>
