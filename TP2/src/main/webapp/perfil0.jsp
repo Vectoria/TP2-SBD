@@ -197,12 +197,11 @@ input[type="button"]:hover, button:hover, a.button:hover {
 				</form>
 			</td>
 			<td>
-				<form method="get" action="ExportarVeiculoXML.jsp">
+				<form method="get" action="ExportarVeiculoXMLServlet">
 					<input type="hidden" name="matricula"
 						value="<%=veiculo.getMatricula()%>">
-					<button type="submit">Exportar XML</button>
+					<button type="submit">Exportar XML</button>	
 				</form>
-			</td>
 		</tr>
 		<%
 		}
