@@ -100,7 +100,7 @@ function searchClient() {
 	}
 	%>
 	
-	
+	<h1>Registrar Intervenção em algum veículo</h1>
 	<div style="margin-top: 20px;">
 		<button onclick="location.href='Intervencao_form.jsp'">
 			Registrar Intervenção</button>

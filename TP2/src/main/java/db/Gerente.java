@@ -50,16 +50,6 @@ public class Gerente {
 		return executeQuery(query);
 	}
 
-	public void atualizarAvaliacoesModelos() {
-		String query = "SET SQL_SAFE_UPDATES = 0; " + "UPDATE Modelo m " + "SET m.avaliacaoModelo = ("
-				+ "    SELECT AVG(" + "        CASE " + "            WHEN a.qualidadeServicoAluguer = 'adorei' THEN 10 "
-				+ "            WHEN a.qualidadeServicoAluguer = 'gostei' THEN 5 "
-				+ "            WHEN a.qualidadeServicoAluguer = 'não vou voltar' THEN 0 " + "            ELSE NULL "
-				+ "        END" + "    ) " + "    FROM Aluguer a "
-				+ "    WHERE a.matricula IN (SELECT v.matricula FROM Veiculo v WHERE v.nomeMod = m.nomeMod)" + ") "
-				+ "WHERE m.nomeMod IS NOT NULL; " + "SET SQL_SAFE_UPDATES = 1;";
-		executeUpdate(query);
-	}
 
 	public List<Map<String, Object>> getModelosMaisBemAvaliadosSemanaPassada() {
 		String query = "SELECT " + "    m.nomeMod, " + "    m.nomeMarca, " + "    AVG( " + "        CASE "
@@ -123,11 +113,4 @@ public class Gerente {
 		return result;
 	}
 
-	private void executeUpdate(String query) {
-		try (Statement stmt = conn.createStatement()) {
-			stmt.executeUpdate(query);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 }
